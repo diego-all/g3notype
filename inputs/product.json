@@ -1,0 +1,22 @@
+[
+    {
+      "tipo": "Product",
+      "atributos": {
+        "nombre": {
+          "tipoDato": "string"
+        },
+        "descripcion": {
+          "tipoDato": "string"
+        },
+        "precio": {
+          "tipoDato": "integer"
+        },
+        "stock": {
+          "tipoDato": "integer"
+        },
+        "IVA": {
+          "tipoDato": "integer"
+        }
+      }
+    }
+  ]
