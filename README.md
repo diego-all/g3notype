@@ -34,5 +34,7 @@ Usage:
   my-cli-app init [nombre del proyecto] [flags]
 
 
-  go run github.com/diego-all/run-from-gh@latest init --db postgres my-ska
+    go run github.com/diego-all/run-from-gh@latest init --db postgres my-ska
 
+
+    go run github.com/diego-all/run-from-github@latest init --db postgres --config /ruta/al/archivo/config.json my-ska
