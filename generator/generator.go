@@ -72,6 +72,7 @@ import (
 // 	return config, nil
 // }
 
+// EXTRAE EN MAP
 type Attribute struct {
 	TipoDato string `json:"tipoDato"`
 }
@@ -83,6 +84,8 @@ type Entity struct {
 
 func Generate(projectName, dbType, configFile string) {
 	fmt.Printf("Generando proyecto '%s' con base de datos '%s'\n", projectName, dbType)
+
+	fmt.Println("LEYENDO CONFIG")
 	config, err := readConfig(configFile)
 	if err != nil {
 		fmt.Printf("Error leyendo el archivo de configuración: %s\n", err)
@@ -90,6 +93,17 @@ func Generate(projectName, dbType, configFile string) {
 	}
 	fmt.Printf("Configuración leída: %+v\n", config)
 	// Aquí puedes agregar la lógica para generar el proyecto
+
+	fmt.Println("extraer data")
+
+	for _, entity := range config {
+		fmt.Printf("Tipo: %s\n", entity.Tipo)
+		for atributo, detalles := range entity.Atributos {
+			fmt.Printf(" Atributo: %s, Tipo de Dato: %s\n", atributo, detalles.TipoDato)
+		}
+
+	}
+
 }
 
 func readConfig(configFile string) ([]Entity, error) {
@@ -111,3 +125,5 @@ func readConfig(configFile string) ([]Entity, error) {
 
 	return config, nil
 }
+
+// EXTRAE EN MAP

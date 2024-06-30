@@ -32,7 +32,7 @@ Duda orden en los parametros.
 
     go run main.go init --db postgres --config /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/config.json projectTest
 
-Recordar si se usa el de GitHub se debe de tener el repo actualizado.
+Recordar si se usa el de GitHub se debe de tener el repo actualizado. Creo que debe de estar en una rama especifica o una version especifica (tag).
 
     go run github.com/diego-all/run-from-gh@latest init --db postgres --config /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/config.json projectTest
 
