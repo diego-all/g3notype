@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+
+	"github.com/diego-all/run-from-gh/models"
 )
 
 // func Generate(projectName, dbType string, jsonPath string) {
@@ -86,7 +88,7 @@ func Generate(projectName, dbType, configFile string) {
 	fmt.Printf("Generando proyecto '%s' con base de datos '%s'\n", projectName, dbType)
 
 	fmt.Println("LEYENDO CONFIG")
-	config, err := readConfig(configFile)
+	config, err := leerConfig(configFile)
 	if err != nil {
 		fmt.Printf("Error leyendo el archivo de configuración: %s\n", err)
 		os.Exit(1)
@@ -127,3 +129,62 @@ func readConfig(configFile string) ([]Entity, error) {
 }
 
 // EXTRAE EN MAP
+
+// ESTE ES EL QUE ANDO UNIENDO CON EL DE G3NERATOR
+func leerConfig(configFile string) ([]Entity, error) {
+	jsonData, err := os.Open(configFile)
+	if err != nil {
+		return nil, err
+	}
+	defer jsonData.Close()
+
+	fmt.Println("JSONDATA ES:", jsonData)
+
+	bytes, err := ioutil.ReadAll(jsonData)
+	if err != nil {
+		return nil, err
+	}
+
+	var tipos []models.Tipo
+	if err := json.Unmarshal(bytes, &tipos); err != nil {
+		return nil, err
+	}
+
+	fmt.Println("TIPOS ES:", tipos)
+
+	// PROVISIONAL [Solo 1 Tipo del JSON]
+	mapAtributos := make(map[string]string)
+
+	// Iterar sobre cada tipo y sus atributos
+	for _, tipo := range tipos {
+		fmt.Println("Clase:", tipo.Tipo)
+		fmt.Println("Atributos:")
+		for nombreAtributo, atributo := range tipo.Atributos {
+
+			fmt.Printf(" - %s: %s\n", nombreAtributo, atributo.TipoDato)
+
+			// PROVISIONAL [Solo 1 Tipo del JSON]
+			mapAtributos[nombreAtributo] = atributo.TipoDato
+		}
+
+		// PROVISIONAL [Solo 1 Tipo del JSON]
+		oneType := true
+		if oneType == true {
+			break
+		}
+	}
+
+	// PROVISIONAL [Solo 1 Tipo del JSON]
+	fmt.Println("mapAtributos es: ", mapAtributos)
+
+	return nil, nil
+	//return config, nil
+}
+
+// func createFolderStructure() {
+
+// }
+
+// func createModels() {
+
+// }
