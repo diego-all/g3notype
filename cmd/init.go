@@ -10,6 +10,8 @@ var (
 	jsonPath string
 )
 
+// init use a posicional argument (projectName)
+
 var initCmd = &cobra.Command{
 	Use:   "init [nombre del proyecto]",
 	Short: "Inicializa un nuevo proyecto",
@@ -21,9 +23,17 @@ var initCmd = &cobra.Command{
 	},
 }
 
+// func init() {
+// 	rootCmd.AddCommand(initCmd)
+// 	initCmd.Flags().StringVarP(&db, "db", "d", "", "Tipo de base de datos (requerido)")
+// 	//initCmd.Flags().StringVarP(&jsonPath, "config", "c", "", "Ruta del archivo JSON de configuración (opcional)")
+// 	initCmd.Flags().StringVarP(&jsonPath, "config", "c", "inputs/classes.json", "Ruta del archivo JSON de configuración (opcional)")
+// 	initCmd.MarkFlagRequired("db")
+// }
+
 func init() {
 	rootCmd.AddCommand(initCmd)
 	initCmd.Flags().StringVarP(&db, "db", "d", "", "Tipo de base de datos (requerido)")
-	initCmd.Flags().StringVarP(&jsonPath, "config", "c", "", "Ruta del archivo JSON de configuración (opcional)")
 	initCmd.MarkFlagRequired("db")
+	initCmd.Flags().StringVarP(&jsonPath, "config", "c", "inputs/classes.json", "Ruta del archivo JSON de configuración")
 }

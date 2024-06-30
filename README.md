@@ -38,3 +38,33 @@ Usage:
 
 
     go run github.com/diego-all/run-from-github@latest init --db postgres --config /ruta/al/archivo/config.json my-ska
+
+
+Con este dice que le sobra un parametro
+
+    go run github.com/diego-all/run-from-gh@latest init --db postgres /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/config.json my-skakkkk (primera)
+    
+    go run github.com/diego-all/run-from-github@latest init --db postgres --config path/to/your/config.json my-ska  (segunfa)
+
+
+    go run github.com/diego-all/run-from-gh@latest init --db postgres --config /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/config.json my-skakkkk (segunda)
+
+
+    go run github.com/diego-all/run-from-gh@latest init --db postgres --config /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/config.json my-skakkkk
+
+
+LOCAL
+
+    go run main.go init --db postgres my-ska
+
+
+
+
+
+Con este funciona bien y dice generando proyecto
+
+    go run main.go init --db postgres --config /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/config.json projectTest   (MAS CERCANO)
+
+    go run github.com/diego-all/run-from-gh@latest init --db postgres /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/config.json
+
+    go run github.com/diego-all/run-from-gh@latest init --db postgres --config /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/config.json my-skakkkk
