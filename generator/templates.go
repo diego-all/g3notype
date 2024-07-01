@@ -35,12 +35,6 @@ type TemplateData struct {
 }
 
 func createFolderStructure(appName string, class string) {
-	// Solicitar el nombre de la aplicación y la entidad al usuario
-	//var appName, entity string
-	//fmt.Println("Ingresa el nombre de la aplicación:")
-	//fmt.Scanln(&appName)
-	//fmt.Println("Ingresa el nombre de la entidad (ej. product):")
-	//fmt.Scanln(&entity)
 
 	// Convertir la entidad a plural
 	entityPlural := class + "s"
