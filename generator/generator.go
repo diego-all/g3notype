@@ -33,6 +33,8 @@ func Generate(projectName, dbType, configFile string) {
 
 	// Generate folder structure
 
+	createFolderStructure(projectName, class)
+
 }
 
 // func leerConfig(configFile string) ([]models.Tipo, error) {

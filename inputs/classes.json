@@ -1,6 +1,6 @@
 [
     {
-      "tipo": "Product",
+      "tipo": "Book",
       "atributos": {
         "nombre": {
           "tipoDato": "string"

@@ -1,6 +1,6 @@
 [
     {
-      "tipo": "Product",
+      "tipo": "Random",
       "atributos": {
         "nombre": {
           "tipoDato": "string"
