@@ -37,3 +37,30 @@ Recordar si se usa el de GitHub se debe de tener el repo actualizado. Creo que d
     go run github.com/diego-all/run-from-gh@latest init --db postgres --config /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/config.json projectTest
 
 
+## Mejor forma de representar un sistema de archivos y carpetas
+
+
+
+El por naturaleza seria un arbol.
+Tambien se podria utilizar un JSON
+
+Por aca en este post https://stackoverflow.com/questions/12657365/extracting-directory-hierarchy-using-go-language proponen lo siguiente:
+
+Este man tiene algo interesante con arboles:
+
+https://github.com/marcinwyszynski/directory_tree/blob/master/examples/find.go
+
+
+Chatgpt propone un map
+
+la estructura de datos más adecuada es un mapa (map) en Go, donde las claves representan las rutas de los archivos y los valores representan el contenido de los archivos. Esta estructura te permitirá acceder fácilmente a cada archivo y su contenido, facilitando la modificación y generación de la estructura de directorios completa.
+
+
+Analisis Diego
+
+
+si el contenido de los archivos es muy extenso, no es práctico almacenarlo directamente en el mapa como valores
+
+
+
+
