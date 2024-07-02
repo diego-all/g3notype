@@ -83,8 +83,17 @@ func createFolderStructure(appName string, class string) {
 
 		// Si hay contenido de plantilla, procesarlo
 		if templatePath != "" {
-			fmt.Println("entro al if del content")
-			tmpl, err := template.New("fileContent").Parse(templatePath)
+
+			fmt.Println("entro al if del content\n")
+
+			content, err := ioutil.ReadFile(templatePath)
+			if err != nil {
+				fmt.Println("Error al leer la plantilla:", err)
+				continue
+			}
+
+			tmpl, err := template.New("fileContent").Parse(string(content))
+			fmt.Println("tmpl es:", tmpl)
 			if err != nil {
 				fmt.Println("Error al parsear la plantilla:", err)
 				continue
