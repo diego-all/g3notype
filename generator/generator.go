@@ -22,18 +22,18 @@ type Entity struct {
 func Generate(projectName, dbType, configFile string) {
 	fmt.Printf("Generando proyecto '%s' con base de datos '%s'\n", projectName, dbType)
 
-	class, config, err := readConfigMetadata(configFile)
+	class, classMetadata, err := readConfigMetadata(configFile)
 	if err != nil {
 		fmt.Printf("Error leyendo el archivo de configuración: %s\n", err)
 		fmt.Println("la clase es:", class)
 		os.Exit(1)
 	}
-	fmt.Printf("Configuración leída: %+v\n %+v\n", class, config)
+	fmt.Printf("Configuración leída: %+v\n %+v\n", class, classMetadata)
 	// Aquí puedes agregar la lógica para generar el proyecto
 
 	// Generate folder structure
 
-	createFolderStructure(projectName, class)
+	createFolderStructure(projectName, class, classMetadata)
 
 }
 

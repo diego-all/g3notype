@@ -35,23 +35,23 @@ type TemplateData struct {
 	Entity        string
 	EntityPlural  string
 	AppName       string
-	ClassMetadata string
+	ClassMetadata map[string]string
 }
 
-func createFolderStructure(appName string, class string) {
+func createFolderStructure(appName string, class string, classMetadata map[string]string) {
 
 	// Convertir la entidad a plural
 	entityPlural := class + "s"
 
 	// TODO Class ClassMetadata
-	metadata := "hola"
+	//metadata := classMetadata
 
 	// Datos para las plantillas
 	data := TemplateData{
 		Entity:        class,
 		EntityPlural:  entityPlural,
 		AppName:       appName,
-		ClassMetadata: metadata,
+		ClassMetadata: classMetadata,
 	}
 
 	// Crear la estructura de archivos y carpetas
@@ -83,8 +83,6 @@ func createFolderStructure(appName string, class string) {
 
 		// Si hay contenido de plantilla, procesarlo
 		if templatePath != "" {
-
-			fmt.Println("entro al if del content\n")
 
 			content, err := ioutil.ReadFile(templatePath)
 			if err != nil {
