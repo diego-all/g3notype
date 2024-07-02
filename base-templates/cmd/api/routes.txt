@@ -1,0 +1,22 @@
+package main
+
+import (
+	"net/http"
+
+	"github.com/go-chi/chi"
+)
+
+func (app *application) routes() http.Handler {
+	mux := chi.NewRouter()
+
+	mux.Get("/health", app.Health)
+
+	// {{.Entity}}
+	mux.Post("/EntityPlural", app.Create{{.Entity}})
+	mux.Get("/EntityPlural/get/{id}", app.Get{{.Entity}})
+	mux.Put("/EntityPlural/update/{id}", app.Update{{.Entity}})
+	mux.Get("/EntityPlural/all", app.All{{.Entity}})
+	mux.Delete("/EntityPlural/delete/{id}", app.Delete{{.Entity}})
+
+	return mux
+}

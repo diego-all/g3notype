@@ -63,4 +63,39 @@ si el contenido de los archivos es muy extenso, no es práctico almacenarlo dire
 
 
 
+## A generar o modificar 
+
+por ahora sustituir
+
+	Entity       string
+	EntityPlural string
+	AppName      string
+
+En los siguientes archivos o carpetas.
+
+    base-template/cmd/api
+    handlers-{{.Entity}}.go   Al interior {{.Entity}} {{.EntityPlural}} ClassMetadata
+    routes.go   {{.Entity}} {{.EntityPlural}}
+
+    base-template/database
+    up.sql  ClassMetadata  Para el final
+
+    base-template/internal
+    models.go
+    {{.EntityPlural}}.go
+
+    data.sqlite (Analizar luego)
+    go.mod (Analizar luego)
+    go.sum (Analizar luego) 
+
+
+
+
+
+
+
+
+
+
+
 

@@ -8,30 +8,33 @@ import (
 	"text/template"
 )
 
+// "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/handlers.txt",
+
 // Estructura de archivos y carpetas
 var estructura = map[string]string{
-	"cmd/api/handlers.go":             "",
-	"cmd/api/handlers-{{.Entity}}.go": "package api\n\n// Handler para {{.Entity}}",
-	"cmd/api/main.go":                 "",
-	"cmd/api/routes.go":               "",
-	"cmd/api/util.go":                 "",
-	"database/connection.go":          "",
-	"database/up.sql":                 "",
-	"data.sqlite":                     "",
-	"golang-CRUD-{{.Entity}}-API.postman_collection.json": "",
-	"go.mod":                        "",
-	"go.sum":                        "",
-	"internal/models.go":            "",
-	"internal/{{.EntityPlural}}.go": "package internal\n\n// Código relacionado con {{.EntityPlural}}",
-	"product_classDiagram.png":      "",
-	"README.md":                     "",
+	"cmd/api/handlers.go":             "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/handlers.txt",
+	"cmd/api/handlers-{{.Entity}}.go": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/handlers-{{.Entity}}.txt",
+	"cmd/api/main.go":                 "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/main.txt",
+	"cmd/api/routes.go":               "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/routes.txt",
+	"cmd/api/util.go":                 "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/util.txt",
+	"database/connection.go":          "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/database/connection.txt",
+	"database/up.sql":                 "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/database/up.sql",
+	"data.sqlite":                     "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/database/data.sqlite",
+	"golang-CRUD-{{.Entity}}-API.postman_collection.json": "/base-templates",
+	"go.mod":                        "/base-templates",
+	"go.sum":                        "/base-templates",
+	"internal/models.go":            "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/internal/models.txt",
+	"internal/{{.EntityPlural}}.go": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/internal/Entities.txt",
+	"product_classDiagram.png":      "/base-templates",
+	"README.md":                     "/base-templates",
 }
 
 // Datos para las plantillas
 type TemplateData struct {
-	Entity       string
-	EntityPlural string
-	AppName      string
+	Entity        string
+	EntityPlural  string
+	AppName       string
+	ClassMetadata string
 }
 
 func createFolderStructure(appName string, class string) {
@@ -39,11 +42,15 @@ func createFolderStructure(appName string, class string) {
 	// Convertir la entidad a plural
 	entityPlural := class + "s"
 
+	// TODO Class ClassMetadata
+	metadata := "hola"
+
 	// Datos para las plantillas
 	data := TemplateData{
-		Entity:       class,
-		EntityPlural: entityPlural,
-		AppName:      appName,
+		Entity:        class,
+		EntityPlural:  entityPlural,
+		AppName:       appName,
+		ClassMetadata: metadata,
 	}
 
 	// Crear la estructura de archivos y carpetas
