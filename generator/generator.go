@@ -31,8 +31,14 @@ func Generate(projectName, dbType, configFile string) {
 	fmt.Printf("Configuración leída: %+v\n %+v\n", class, classMetadata)
 	// Aquí puedes agregar la lógica para generar el proyecto
 
-	// Generate folder structure
+	// fmt.Println("En generate\n")
+	// fmt.Println("Class metadata", classMetadata)
+	// longitud := len(classMetadata)
+	// fmt.Println("longitud del map es:", longitud)
 
+	generateClassTags(classMetadata)
+
+	// Generate folder structure
 	createFolderStructure(projectName, class, classMetadata)
 
 }

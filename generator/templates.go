@@ -38,6 +38,47 @@ type TemplateData struct {
 	ClassMetadata map[string]string
 }
 
+func generateClassTags(classMetadata map[string]string) {
+
+	fmt.Println("Desde generateClassTags")
+
+	fmt.Println("Class metadata", classMetadata)
+	longitud := len(classMetadata)
+	fmt.Println("longitud del map es:", longitud)
+
+	var aux string
+	var tags []string
+
+	for attribute, value := range classMetadata {
+
+		fmt.Printf("Clave: %s, Valor: %s\n", attribute, value)
+		// aux = aux + attribute + value + "`json:"+ attribute + "`
+		aux = attribute + "\t" + value + "\t" + "`json:\"" + attribute + "\"`"
+		fmt.Println(aux) // \t
+		tags = append(tags, aux)
+
+		// strings.ToLower(s)
+
+		// preciointeger`json:"precio"`
+		// nombrestring`json:"nombre"`
+		// descripcionstring`json:"descripcion"`
+
+		// type {{.Entity}}Request struct {
+		// 	Name        string  `json:"name"`
+		// 	Description string  `json:"description"`
+		// 	Price       float64 `json:"price"`
+		// }
+
+	}
+
+	fmt.Println("Array de tags: ", tags)
+
+	// Name        string  `json:"name"`
+	// Description string  `json:"description"`
+	// Price       float64 `json:"price"`
+
+}
+
 func createFolderStructure(appName string, class string, classMetadata map[string]string) {
 
 	// Convertir la entidad a plural
