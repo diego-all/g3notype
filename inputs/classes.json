@@ -10,6 +10,9 @@
         },
         "precio": {
           "tipoDato": "integer"
+        },
+        "cantidad": {
+          "tipoDato": "integer"
         }
       }
     },

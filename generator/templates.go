@@ -38,6 +38,7 @@ type TemplateData struct {
 	ClassMetadata map[string]string
 }
 
+// quizas sea generar Tipos o algo asi, todas las estructuras que dependen de la metadata de clases (atributos)
 func generateClassTags(classMetadata map[string]string) {
 
 	fmt.Println("Desde generateClassTags")
@@ -47,15 +48,19 @@ func generateClassTags(classMetadata map[string]string) {
 	fmt.Println("longitud del map es:", longitud)
 
 	var aux string
-	var tags []string
+	var tagsTypes []string
 
 	for attribute, value := range classMetadata {
 
 		fmt.Printf("Clave: %s, Valor: %s\n", attribute, value)
-		// aux = aux + attribute + value + "`json:"+ attribute + "`
+		fmt.Println((strings.Title(strings.ToLower(attribute))))
+		//capitalized := cases.Title(language.English).String(strings.ToLower(attribute)) // Requiere utilizar golang.org/x/text/cases (al parecer no es estandar)
+		//fmt.Println("CAPITALIZED", capitalized) // Requiere utilizar golang.org/x/text/cases (al parecer no es estandar)
+		fmt.Println("alternativa nativa: ", strings.ToUpper(string(attribute[0]))+string(attribute[1:])) // toco esto para no usar mas dependencias.
+
 		aux = attribute + "\t" + value + "\t" + "`json:\"" + attribute + "\"`"
 		fmt.Println(aux) // \t
-		tags = append(tags, aux)
+		tagsTypes = append(tagsTypes, aux)
 
 		// strings.ToLower(s)
 
@@ -70,12 +75,16 @@ func generateClassTags(classMetadata map[string]string) {
 		// }
 
 	}
-
-	fmt.Println("Array de tags: ", tags)
+	fmt.Println("\n")
+	fmt.Println("Array de tags: ", tagsTypes)
 
 	// Name        string  `json:"name"`
 	// Description string  `json:"description"`
 	// Price       float64 `json:"price"`
+
+}
+
+func modifyBaseTemplates() {
 
 }
 

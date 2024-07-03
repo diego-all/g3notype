@@ -38,6 +38,8 @@ func Generate(projectName, dbType, configFile string) {
 
 	generateClassTags(classMetadata)
 
+	modifyBaseTemplates()
+
 	// Generate folder structure
 	createFolderStructure(projectName, class, classMetadata)
 

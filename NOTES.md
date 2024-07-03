@@ -90,6 +90,36 @@ En los siguientes archivos o carpetas.
 
 
 
+## Capitalizar strings
+
+		fmt.Printf("Clave: %s, Valor: %s\n", attribute, value)
+		fmt.Println((strings.Title(strings.ToLower(attribute))))
+		capitalized := cases.Title(language.English).String(strings.ToLower(attribute))
+		fmt.Println("CAPITALIZED", capitalized)
+
+
+## Generar los tipos
+
+Identificar todos los tipos, por ahora se hara la prueba en cmd/api/handlers-{{.Attributes}}.go
+
+ **NO SE PUEDEN COLOCAR TAGS QUE NO HAYAN A SER SUSTITUIDOS**
+
+
+type {{.Entity}}Request struct {
+	//{{.Attributes}}
+	Name        string  `json:"name"`
+	Description string  `json:"description"`
+	Price       float64 `json:"price"`
+}
+
+type {{.Entity}}Response struct {
+	//{{.Attributes}}
+	Name        string  `json:"name"`
+	Description string  `json:"description"`
+	Price       float64 `json:"price"`
+}
+
+
 
 
 

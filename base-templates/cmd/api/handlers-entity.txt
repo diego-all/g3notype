@@ -55,3 +55,30 @@ func (app *application) Create{{.Entity}}(w http.ResponseWriter, r *http.Request
 	_ = app.writeJSON(w, http.StatusAccepted, payload)
 }
 
+func (app *application) Get{{.Entity}}(w http.ResponseWriter, r *http.Request) {
+	productID, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	product, err := app.models.{{.Entity}}.GetOneById(productID)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	var productResponse = productResponse{
+		Name:        product.Name,
+		Description: product.Description,
+		Price:       product.Price,
+	}
+
+	payload := jsonResponse{
+		Error:   false,
+		Message: "Product successfully obtained",
+		Data:    envelope{"product": productResponse},
+	}
+
+	_ = app.writeJSON(w, http.StatusOK, payload)
+}
