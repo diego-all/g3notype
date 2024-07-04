@@ -36,7 +36,7 @@ func Generate(projectName, dbType, configFile string) {
 	// longitud := len(classMetadata)
 	// fmt.Println("longitud del map es:", longitud)
 
-	generateClassTags(classMetadata)
+	generateClassTags(class, classMetadata)
 
 	modifyBaseTemplates()
 

@@ -39,7 +39,7 @@ type TemplateData struct {
 }
 
 // quizas sea generar Tipos o algo asi, todas las estructuras que dependen de la metadata de clases (atributos)
-func generateClassTags(classMetadata map[string]string) {
+func generateClassTags(class string, classMetadata map[string]string) {
 
 	fmt.Println("Desde generateClassTags")
 
@@ -49,6 +49,7 @@ func generateClassTags(classMetadata map[string]string) {
 
 	var aux string
 	var tagsTypes []string
+	var multilineAux string
 
 	for attribute, value := range classMetadata {
 
@@ -59,7 +60,7 @@ func generateClassTags(classMetadata map[string]string) {
 		fmt.Println("alternativa nativa: ", strings.ToUpper(string(attribute[0]))+string(attribute[1:])) // toco esto para no usar mas dependencias.
 
 		aux = attribute + "\t" + value + "\t" + "`json:\"" + attribute + "\"`"
-		fmt.Println(aux) // \t
+		fmt.Println("AUX", aux) // \t
 		tagsTypes = append(tagsTypes, aux)
 
 		// strings.ToLower(s)
@@ -73,7 +74,7 @@ func generateClassTags(classMetadata map[string]string) {
 		// 	Description string  `json:"description"`
 		// 	Price       float64 `json:"price"`
 		// }
-
+		// multilineAux = multilineAux + aux //Pendiente
 	}
 	fmt.Println("\n")
 	fmt.Println("Array de tags: ", tagsTypes)
@@ -81,6 +82,33 @@ func generateClassTags(classMetadata map[string]string) {
 	// Name        string  `json:"name"`
 	// Description string  `json:"description"`
 	// Price       float64 `json:"price"`
+
+	fmt.Println("\n")
+
+	for i, j := range tagsTypes {
+
+		fmt.Println("Valor de i", i, "Valor de j", j)
+		//multilineAux = j +"\n"
+		multilineAux = multilineAux + tagsTypes[i] + "\n"
+	}
+
+	fmt.Println("multilineAux: \n ", multilineAux)
+	fmt.Println("\n")
+
+	var multiline string
+
+	// type {{.Entity}}Request struct {
+	multiline = "type {{.Entity}}Request struct {" + "\n" + multilineAux + "}"
+	fmt.Println("\n")
+	fmt.Println("multilineFinal: \n ", multiline)
+
+	message := `This is a 
+	Multi-line Text String
+	Because it uses the raw-string back ticks 
+	instead of quotes.
+`
+
+	fmt.Printf("%s", message)
 
 }
 
