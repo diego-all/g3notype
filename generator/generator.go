@@ -29,19 +29,19 @@ func Generate(projectName, dbType, configFile string) {
 		os.Exit(1)
 	}
 	fmt.Printf("Configuración leída: %+v\n %+v\n", class, classMetadata)
-	// Aquí puedes agregar la lógica para generar el proyecto
 
-	// fmt.Println("En generate\n")
-	// fmt.Println("Class metadata", classMetadata)
-	// longitud := len(classMetadata)
-	// fmt.Println("longitud del map es:", longitud)
+	tipoGenerado := generateClassTags(class, classMetadata)
 
-	generateClassTags(class, classMetadata)
+	fmt.Println("TIPO GENERADO:", tipoGenerado)
+	fmt.Println("hola")
+
+	// SUGERENCIA: OBTENER VALOR POR VALOR Y LLENAR  data := TemplateData{} para sustituir las plantillas, quizas se requieran archivos intermedios.
 
 	modifyBaseTemplates()
 
 	// Generate folder structure
-	createFolderStructure(projectName, class, classMetadata)
+	//createFolderStructure(projectName, class, classMetadata, generateClassTags(class, classMetadata))
+	createFolderStructure(projectName, class, classMetadata, tipoGenerado)
 
 }
 

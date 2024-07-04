@@ -121,6 +121,32 @@ type {{.Entity}}Response struct {
 
 
 
+Al parecer no es capaz de aplicar un "nested template" 
+
+
+Es decir generar la data a ser llenada desde la classMetadata que forma a {{.GeneratedType}}
+no es capaz de agregar la entidad
+
+se puede corroborar que la entidad si es aplicada cuando se asigna el tag.
+
+type {{.Entity}}Request struct {
+descripcion	string	`json:"descripcion"`
+precio	integer	`json:"precio"`
+cantidad	integer	`json:"cantidad"`
+nombre	string	`json:"nombre"`
+}
+
+type BookRequest struct {
+	Name        string  `json:"name"`
+	Description string  `json:"description"`
+	Price       float64 `json:"price"`
+}
+
+SERA QUE SI SE PUEDE HACER ASI EN CALIENTE GENERANDO EL TAG?
+PUEDO DIVIDIRLO EN DOS?
+
+O QUIZAS DEBA TENER UN ARCHIVO TEMPORAL INTERMEDIO?
+
 
 
 

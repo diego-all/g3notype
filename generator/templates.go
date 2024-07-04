@@ -31,15 +31,18 @@ var estructura = map[string]string{
 }
 
 // Datos para las plantillas
+// !!!!!!!!!!!!!!!!!!!!! Al parecer es necesario crear una estructura temporal ya que TemplateData no puede modificarse en tiempo de ejecucion con el fin de generar los tipos para Request y Response
+// generateClassTags(class, classMetadata)
 type TemplateData struct {
 	Entity        string
 	EntityPlural  string
 	AppName       string
 	ClassMetadata map[string]string
+	GeneratedType string
 }
 
 // quizas sea generar Tipos o algo asi, todas las estructuras que dependen de la metadata de clases (atributos)
-func generateClassTags(class string, classMetadata map[string]string) {
+func generateClassTags(class string, classMetadata map[string]string) string {
 
 	fmt.Println("Desde generateClassTags")
 
@@ -50,6 +53,7 @@ func generateClassTags(class string, classMetadata map[string]string) {
 	var aux string
 	var tagsTypes []string
 	var multilineAux string
+	var multiline string
 
 	for attribute, value := range classMetadata {
 
@@ -95,9 +99,6 @@ func generateClassTags(class string, classMetadata map[string]string) {
 	fmt.Println("multilineAux: \n ", multilineAux)
 	fmt.Println("\n")
 
-	var multiline string
-
-	// type {{.Entity}}Request struct {
 	multiline = "type {{.Entity}}Request struct {" + "\n" + multilineAux + "}"
 	fmt.Println("\n")
 	fmt.Println("multilineFinal: \n ", multiline)
@@ -110,16 +111,19 @@ func generateClassTags(class string, classMetadata map[string]string) {
 
 	fmt.Printf("%s", message)
 
+	return multiline
 }
 
 func modifyBaseTemplates() {
 
 }
 
-func createFolderStructure(appName string, class string, classMetadata map[string]string) {
+func createFolderStructure(appName string, class string, classMetadata map[string]string, generatedType string) {
 
 	// Convertir la entidad a plural
 	entityPlural := class + "s"
+
+	fmt.Println("GENERATED TYPE ES desde createFolder:", generatedType)
 
 	// TODO Class ClassMetadata
 	//metadata := classMetadata
@@ -130,6 +134,7 @@ func createFolderStructure(appName string, class string, classMetadata map[strin
 		EntityPlural:  entityPlural,
 		AppName:       appName,
 		ClassMetadata: classMetadata,
+		GeneratedType: generatedType,
 	}
 
 	// Crear la estructura de archivos y carpetas
