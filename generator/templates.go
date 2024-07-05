@@ -42,7 +42,10 @@ type TemplateData struct {
 }
 
 // quizas sea generar Tipos o algo asi, todas las estructuras que dependen de la metadata de clases (atributos)
+// structs or vars// {{.Entity}}Request  {{.Entity}}Response
 func generateClassTags(class string, classMetadata map[string]string) string {
+
+	// Aca ñuego hay que jugar con mayusculas y minusculas para las entidades en tipos y variables
 
 	fmt.Println("Desde generateClassTags")
 
@@ -51,9 +54,13 @@ func generateClassTags(class string, classMetadata map[string]string) string {
 	fmt.Println("longitud del map es:", longitud)
 
 	var aux string
+	var auxCreateEntModels string
 	var tagsTypes []string
+	var createEntModels []string
 	var multilineAux string
 	var multiline string
+	var multilineAuxCEntModels string
+	var multilineCEntModels string
 
 	for attribute, value := range classMetadata {
 
@@ -64,8 +71,13 @@ func generateClassTags(class string, classMetadata map[string]string) string {
 		fmt.Println("alternativa nativa: ", strings.ToUpper(string(attribute[0]))+string(attribute[1:])) // toco esto para no usar mas dependencias.
 
 		aux = attribute + "\t" + value + "\t" + "`json:\"" + attribute + "\"`"
+		auxCreateEntModels = attribute + ":\t" + "{{.Entity}}Req." + attribute + ","
+
 		fmt.Println("AUX", aux) // \t
+		fmt.Println("AUXCREATEENTMODELS", auxCreateEntModels)
+
 		tagsTypes = append(tagsTypes, aux)
+		createEntModels = append(createEntModels, auxCreateEntModels)
 
 		// strings.ToLower(s)
 
@@ -82,10 +94,18 @@ func generateClassTags(class string, classMetadata map[string]string) string {
 	}
 	fmt.Println("\n")
 	fmt.Println("Array de tags: ", tagsTypes)
+	fmt.Println("Array de createEntModels: ", createEntModels)
 
 	// Name        string  `json:"name"`
 	// Description string  `json:"description"`
 	// Price       float64 `json:"price"`
+
+	// createEntModels
+	// var product = models.Product{
+	// 	Name:        productReq.Name,
+	// 	Description: productReq.Description,
+	// 	Price:       productReq.Price,
+	// }
 
 	fmt.Println("\n")
 
@@ -99,17 +119,24 @@ func generateClassTags(class string, classMetadata map[string]string) string {
 	fmt.Println("multilineAux: \n ", multilineAux)
 	fmt.Println("\n")
 
+	//Tambien puede servir para el {{.Entity}}Response
 	multiline = "type {{.Entity}}Request struct {" + "\n" + multilineAux + "}"
 	fmt.Println("\n")
 	fmt.Println("multilineFinal: \n ", multiline)
 
-	message := `This is a 
-	Multi-line Text String
-	Because it uses the raw-string back ticks 
-	instead of quotes.
-`
+	// Para createEntModels
+	for i, j := range createEntModels {
+		fmt.Println("Valor de i", i, "Valor de j", j)
+		multilineAuxCEntModels = multilineAuxCEntModels + createEntModels[i] + "\n"
 
-	fmt.Printf("%s", message)
+	}
+
+	fmt.Println("multilineAuxCEntModels: \n ", multilineAuxCEntModels)
+	fmt.Println("\n")
+
+	multilineCEntModels = "var {{.Entity}} = models.{{.Entity}}{" + "\n" + multilineAuxCEntModels + "}"
+	fmt.Println("\n")
+	fmt.Println("var CreateEntityModels: \n ", multilineCEntModels)
 
 	return multiline
 }
