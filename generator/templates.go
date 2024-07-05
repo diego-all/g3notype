@@ -114,10 +114,6 @@ func generateClassTags(class string, classMetadata map[string]string) string {
 	return multiline
 }
 
-func modifyBaseTemplates() {
-
-}
-
 func createFolderStructure(appName string, class string, classMetadata map[string]string, generatedType string) {
 
 	// Convertir la entidad a plural

@@ -37,7 +37,7 @@ func Generate(projectName, dbType, configFile string) {
 
 	// SUGERENCIA: OBTENER VALOR POR VALOR Y LLENAR  data := TemplateData{} para sustituir las plantillas, quizas se requieran archivos intermedios.
 
-	modifyBaseTemplates()
+	modifyBaseTemplates(class, classMetadata) // Pueden variar
 
 	// Generate folder structure
 	//createFolderStructure(projectName, class, classMetadata, generateClassTags(class, classMetadata))
