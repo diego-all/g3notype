@@ -61,6 +61,8 @@ func generateClassTags(class string, classMetadata map[string]string) string {
 	var multiline string
 	var multilineAuxCEntModels string
 	var multilineCEntModels string
+	var multilineUEntModels string
+	var multilineREntResponse string
 
 	for attribute, value := range classMetadata {
 
@@ -107,6 +109,22 @@ func generateClassTags(class string, classMetadata map[string]string) string {
 	// 	Price:       productReq.Price,
 	// }
 
+	//UpdateEntModels
+	// var product = models.Product{
+	// 	Name:        productReq.Name,
+	// 	Description: productReq.Description,
+	// 	Price:       productReq.Price,
+	// 	UpdatedAt:   time.Now(),
+	// 	Id:          productID,
+	// }
+
+	//
+	// var productResponse = productResponse{
+	// 	Name:        product.Name,
+	// 	Description: product.Description,
+	// 	Price:       product.Price,
+	// }
+
 	fmt.Println("\n")
 
 	for i, j := range tagsTypes {
@@ -137,6 +155,13 @@ func generateClassTags(class string, classMetadata map[string]string) string {
 	multilineCEntModels = "var {{.Entity}} = models.{{.Entity}}{" + "\n" + multilineAuxCEntModels + "}"
 	fmt.Println("\n")
 	fmt.Println("var CreateEntityModels: \n ", multilineCEntModels)
+
+	multilineUEntModels = "var {{.Entity}} = models.{{.Entity}}{" + "\n" + multilineAuxCEntModels + "UpdatedAt:   time.Now()," + "\n" + "Id:          productID," + "\n" + "}"
+	fmt.Println("\n")
+	fmt.Println("var UpdateEntityModels: \n ", multilineUEntModels)
+
+	// EN construccion
+	multilineREntResponse = "var {{.Entity}}Response = {{.Entity}}Response{"
 
 	return multiline
 }
