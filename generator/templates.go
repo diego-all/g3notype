@@ -41,158 +41,13 @@ type TemplateData struct {
 	GeneratedType string
 }
 
-// quizas sea generar Tipos o algo asi, todas las estructuras que dependen de la metadata de clases (atributos)
-// structs or vars// {{.Entity}}Request  {{.Entity}}Response
-func generateClassTags(class string, classMetadata map[string]string) string {
-
-	// Aca ñuego hay que jugar con mayusculas y minusculas para las entidades en tipos y variables
-
-	fmt.Println("Desde generateClassTags")
-
-	fmt.Println("Class metadata", classMetadata)
-	longitud := len(classMetadata)
-	fmt.Println("longitud del map es:", longitud)
-
-	var aux string
-	var auxCreateEntModels string //Se uso para Update, solo se adicionan 2 campos
-	var auxReadEntResponse string
-	var tagsTypes []string
-	var createEntModels []string
-	var readEntResponse []string
-	var multilineAux string
-	var multiline string
-	var multilineAuxCEntModels string
-	var multilineAuxREntResponse string
-	var multilineCEntModels string
-	var multilineUEntModels string
-	var multilineREntResponse string
-
-	for attribute, value := range classMetadata {
-
-		fmt.Printf("Clave: %s, Valor: %s\n", attribute, value)
-		fmt.Println((strings.Title(strings.ToLower(attribute))))
-		//capitalized := cases.Title(language.English).String(strings.ToLower(attribute)) // Requiere utilizar golang.org/x/text/cases (al parecer no es estandar)
-		//fmt.Println("CAPITALIZED", capitalized) // Requiere utilizar golang.org/x/text/cases (al parecer no es estandar)
-		fmt.Println("alternativa nativa: ", strings.ToUpper(string(attribute[0]))+string(attribute[1:])) // toco esto para no usar mas dependencias.
-
-		aux = attribute + "\t" + value + "\t" + "`json:\"" + attribute + "\"`"
-		auxCreateEntModels = attribute + ":\t" + "{{.Entity}}Req." + attribute + ","
-		auxReadEntResponse = attribute + ":\t" + "{{.Entity}}." + attribute + ","
-
-		fmt.Println("AUX", aux) // \t
-		fmt.Println("AUXCREATEENTMODELS", auxCreateEntModels)
-		fmt.Println("AUXREADENTRESPONSE", auxReadEntResponse)
-
-		tagsTypes = append(tagsTypes, aux)
-		createEntModels = append(createEntModels, auxCreateEntModels)
-		readEntResponse = append(readEntResponse, auxReadEntResponse)
-
-		// strings.ToLower(s)
-
-		// preciointeger`json:"precio"`
-		// nombrestring`json:"nombre"`
-		// descripcionstring`json:"descripcion"`
-
-		// type {{.Entity}}Request struct {
-		// 	Name        string  `json:"name"`
-		// 	Description string  `json:"description"`
-		// 	Price       float64 `json:"price"`
-		// }
-		// multilineAux = multilineAux + aux //Pendiente
-	}
-	fmt.Println("\n")
-	fmt.Println("Array de tags: ", tagsTypes)
-	fmt.Println("Array de createEntModels: ", createEntModels)
-	fmt.Println("Array de readEntResponse: ", readEntResponse)
-
-	// Name        string  `json:"name"`
-	// Description string  `json:"description"`
-	// Price       float64 `json:"price"`
-
-	// createEntModels
-	// var product = models.Product{
-	// 	Name:        productReq.Name,
-	// 	Description: productReq.Description,
-	// 	Price:       productReq.Price,
-	// }
-
-	//UpdateEntModels
-	// var product = models.Product{
-	// 	Name:        productReq.Name,
-	// 	Description: productReq.Description,
-	// 	Price:       productReq.Price,
-	// 	UpdatedAt:   time.Now(),
-	// 	Id:          productID,
-	// }
-
-	//
-	// var productResponse = productResponse{
-	// 	Name:        product.Name,
-	// 	Description: product.Description,
-	// 	Price:       product.Price,
-	// }
-
-	fmt.Println("\n")
-
-	for i, j := range tagsTypes {
-
-		fmt.Println("Valor de i", i, "Valor de j", j)
-		//multilineAux = j +"\n"
-		multilineAux = multilineAux + tagsTypes[i] + "\n"
-	}
-
-	fmt.Println("multilineAux: \n ", multilineAux)
-	fmt.Println("\n")
-
-	//Tambien puede servir para el {{.Entity}}Response
-	multiline = "type {{.Entity}}Request struct {" + "\n" + multilineAux + "}"
-	fmt.Println("\n")
-	fmt.Println("multilineFinal: \n ", multiline)
-
-	// Para createEntModels
-	for i, j := range createEntModels {
-		fmt.Println("Valor de i", i, "Valor de j", j)
-		multilineAuxCEntModels = multilineAuxCEntModels + createEntModels[i] + "\n"
-
-	}
-
-	fmt.Println("multilineAuxCEntModels: \n ", multilineAuxCEntModels)
-	fmt.Println("\n")
-
-	//para create
-	multilineCEntModels = "var {{.Entity}} = models.{{.Entity}}{" + "\n" + multilineAuxCEntModels + "}"
-	fmt.Println("\n")
-	fmt.Println("var CreateEntityModels: \n ", multilineCEntModels)
-
-	// Para update
-	multilineUEntModels = "var {{.Entity}} = models.{{.Entity}}{" + "\n" + multilineAuxCEntModels + "UpdatedAt:   time.Now()," + "\n" + "Id:          productID," + "\n" + "}"
-	fmt.Println("\n")
-	fmt.Println("var UpdateEntityModels: \n ", multilineUEntModels)
-
-	// EN construccion
-
-	for i, j := range readEntResponse {
-		fmt.Println("Valor de i", i, "Valor de j", j)
-		multilineAuxREntResponse = multilineAuxREntResponse + readEntResponse[i] + "\n"
-
-	}
-
-	fmt.Println("multilineAuxREntResponse: \n ", multilineAuxREntResponse)
-	fmt.Println("\n")
-
-	multilineREntResponse = "var {{.Entity}}Response = {{.Entity}}Response{\n" + multilineAuxREntResponse + "}"
-	fmt.Println("\n")
-	fmt.Println("var ReadEntityResponse: \n ", multilineREntResponse)
-
-	return multiline
-}
-
-func createFolderStructure(appName string, class string, classMetadata map[string]string, generatedType string) {
+func createFolderStructure(appName string, class string, classMetadata map[string]string) {
+	//func createFolderStructure(appName string, class string, classMetadata map[string]string, generatedType string) {
 
 	// Convertir la entidad a plural
 	entityPlural := class + "s"
 
-	fmt.Println("GENERATED TYPE ES desde createFolder:", generatedType)
+	//fmt.Println("GENERATED TYPE ES desde createFolder:", generatedType)
 
 	// TODO Class ClassMetadata
 	//metadata := classMetadata
@@ -203,7 +58,7 @@ func createFolderStructure(appName string, class string, classMetadata map[strin
 		EntityPlural:  entityPlural,
 		AppName:       appName,
 		ClassMetadata: classMetadata,
-		GeneratedType: generatedType,
+		//GeneratedType: generatedType,
 	}
 
 	// Crear la estructura de archivos y carpetas
