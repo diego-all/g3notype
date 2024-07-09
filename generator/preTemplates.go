@@ -2,7 +2,10 @@ package generator
 
 import (
 	"fmt"
+	"io/ioutil"
+	"os"
 	"strings"
+	"text/template"
 )
 
 // Los que no son Req o Res van para la DB
@@ -13,6 +16,13 @@ var TypesVars = map[string]string{
 	"handlers-varCreateEntityModels": "",
 	"handlers-varGetEntResponse":     "",
 	"handlers-varUpdateEntityModels": "",
+}
+
+var preTemplates = map[string]string{
+	"cmd/api/handlers.go":             "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/handlers.txt",
+	"cmd/api/handlers-{{.Entity}}.go": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/handlers-entity.txt",
+	//"cmd/api/handlers-{{.Entity}}.go": "/home/diegoall/base-templates/cmd/api/handlers-{{.Entity}}.txt",
+	//"cmd/api/handlers-{{.Entity}}.go": "/base-templates/cmd/api/handlers-{{.Entity}}.txt",
 }
 
 // quizas sea generar Tipos o algo asi, todas las estructuras que dependen de la metadata de clases (atributos)
@@ -136,45 +146,64 @@ func generateClassTags(class string, classMetadata map[string]string) map[string
 	//return multiline // antes retornaba el primer type EntityRequest
 }
 
-// func modifyBaseTemplates(class string, classMetadata map[string]string) {
+func modifyBaseTemplates(preGeneratedTypes map[string]string) {
 
-// 	fmt.Println("Desde modifyBaseTemplates")
+	fmt.Println("Desde modifyBaseTemplates")
 
-// 	fmt.Println("Class metadata", classMetadata)
-// 	longitud := len(classMetadata)
-// 	fmt.Println("longitud del map es:", longitud)
+	preData := TemplateData{
+		//Entity: class,
+		//GeneratedType: generatedType,
+	}
 
-// 	// var aux string
-// 	// var tagsTypes []string
-// 	// var multilineAux string
-// 	// var multiline string
+	fmt.Println(preData)
 
-// 	for attribute, value := range classMetadata {
+	// 	for attribute, value := range preGeneratedTypes {
+	for projectFile, templatePath := range preTemplates {
 
-// 		fmt.Printf("Clave: %s, Valor: %s\n", attribute, value)
+		//fmt.Printf("Clave: %s, Valor: %s\n", projectFile, templatePath)
+		fmt.Println("Path y Content es: ", projectFile, templatePath)
 
-// 	}
+		// Crear el archivo
+		file, err := os.Create(templatePath)
+		// file, err := os.Create(fullPath)
 
-// 	preData := TemplateData{
-// 		Entity: class,
-// 		//GeneratedType: generatedType,
-// 	}
+		fmt.Println("Creando archivo: ", file, templatePath)
+		// fmt.Println("Creando archivo: ", file, fullPath)
+		if err != nil {
+			fmt.Println("Error al crear el archivo:", err)
+			continue
+		}
+		defer file.Close()
 
-// 	fmt.Println(preData)
+		// Si hay contenido de plantilla, procesarlo
+		if templatePath != "" {
 
-// }
+			content, err := ioutil.ReadFile(templatePath)
+			if err != nil {
+				fmt.Println("Error al leer la plantilla:", err)
+				continue
+			}
 
-// preData := TemplateData{
-// 	Entity:        class,
-// 	EntityPlural:  entityPlural,
-// 	AppName:       appName,
-// 	ClassMetadata: classMetadata,
-// 	GeneratedType: generatedType,
-// }
+			tmpl, err := template.New("fileContent").Parse(string(content))
+			fmt.Println("tmpl es:", tmpl)
+			if err != nil {
+				fmt.Println("Error al parsear la plantilla:", err)
+				continue
+			}
+			if err := tmpl.Execute(file, preData); err != nil {
+				fmt.Println("Error al ejecutar la plantilla:", err)
+				continue
+			}
+		}
 
-// type {{.Entity}}Request struct {
-// 	nombre	string	`json:"nombre"`
-// 	descripcion	string	`json:"descripcion"`
-// 	precio	integer	`json:"precio"`
-// 	cantidad	integer	`json:"cantidad"`
-// 	}
+	}
+
+	fmt.Println("\n")
+
+	//	preData := TemplateData{
+	//		Entity:        class,
+	//		EntityPlural:  entityPlural,
+	//		AppName:       appName,
+	//		ClassMetadata: classMetadata,
+	//		GeneratedType: generatedType,
+}
