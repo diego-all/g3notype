@@ -149,7 +149,12 @@ O QUIZAS DEBA TENER UN ARCHIVO TEMPORAL INTERMEDIO?
 
 
 
+## VOY ACA
 
+
+        {{.handlers_typeEntityRequest}}
+tmpl es: &{fileContent 0xc00013a900 0xc000146190  }
+Error al ejecutar la plantilla: template: fileContent:8:3: executing "fileContent" at <.handlers_typeEntityRequest>: handlers_typeEntityRequest is an unexported field of struct type generator.preTemplateData
 
 
 

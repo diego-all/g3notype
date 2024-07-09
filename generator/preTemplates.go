@@ -19,10 +19,16 @@ var TypesVars = map[string]string{
 }
 
 var preTemplates = map[string]string{
-	"cmd/api/handlers.go":             "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/handlers.txt",
-	"cmd/api/handlers-{{.Entity}}.go": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/handlers-entity.txt",
-	//"cmd/api/handlers-{{.Entity}}.go": "/home/diegoall/base-templates/cmd/api/handlers-{{.Entity}}.txt",
-	//"cmd/api/handlers-{{.Entity}}.go": "/base-templates/cmd/api/handlers-{{.Entity}}.txt",
+	"cmd/api/handlers-entity-base.go": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/handlers-entity-base.txt",
+	//"cmd/api/handlers-{{.Entity}}.go": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/handlers-entity.txt",
+}
+
+type preTemplateData struct {
+	handlers_typeEntityRequest     string
+	handlers_typeEntityResponse    string
+	handlers_varCreateEntityModels string
+	handlers_varGetEntResponse     string
+	handlers_varUpdateEntityModels string
 }
 
 // quizas sea generar Tipos o algo asi, todas las estructuras que dependen de la metadata de clases (atributos)
@@ -146,14 +152,33 @@ func generateClassTags(class string, classMetadata map[string]string) map[string
 	//return multiline // antes retornaba el primer type EntityRequest
 }
 
+// var generatedType = `var productResponse = {{.Entitrin}} productResponse{
+// 	Name:        product.Name,
+// 	Description: product.Description,
+// 	Price:       product.Price,
+// }`
+
 func modifyBaseTemplates(preGeneratedTypes map[string]string) {
 
 	fmt.Println("Desde modifyBaseTemplates")
 
-	preData := TemplateData{
-		//Entity: class,
+	//var generatedType = "buenasnoches"
+
+	// data := TemplateData{
+	// 	Entity:        class,
+	// 	EntityPlural:  entityPlural,
+	// 	AppName:       appName,
+	// 	ClassMetadata: classMetadata,
+	// 	//GeneratedType: generatedType,
+	// }
+
+	preData := preTemplateData{
+		handlers_typeEntityRequest:  preGeneratedTypes["handlers-typeEntityRequest"],
+		handlers_typeEntityResponse: preGeneratedTypes["handlers-typeEntityResponse"],
 		//GeneratedType: generatedType,
 	}
+
+	//preData := preGeneratedTypes
 
 	fmt.Println(preData)
 
@@ -162,18 +187,6 @@ func modifyBaseTemplates(preGeneratedTypes map[string]string) {
 
 		//fmt.Printf("Clave: %s, Valor: %s\n", projectFile, templatePath)
 		fmt.Println("Path y Content es: ", projectFile, templatePath)
-
-		// Crear el archivo
-		file, err := os.Create(templatePath)
-		// file, err := os.Create(fullPath)
-
-		fmt.Println("Creando archivo: ", file, templatePath)
-		// fmt.Println("Creando archivo: ", file, fullPath)
-		if err != nil {
-			fmt.Println("Error al crear el archivo:", err)
-			continue
-		}
-		defer file.Close()
 
 		// Si hay contenido de plantilla, procesarlo
 		if templatePath != "" {
@@ -184,26 +197,34 @@ func modifyBaseTemplates(preGeneratedTypes map[string]string) {
 				continue
 			}
 
+			fmt.Println("CONTENT:", string(content))
+
 			tmpl, err := template.New("fileContent").Parse(string(content))
 			fmt.Println("tmpl es:", tmpl)
 			if err != nil {
 				fmt.Println("Error al parsear la plantilla:", err)
 				continue
 			}
+
+			// Crear o abrir el archivo de destino en modo escritura
+			file, err := os.Create(templatePath)
+			//file, err := os.Create(projectFile)
+			if err != nil {
+				fmt.Println("Error al crear el archivo:", err)
+				continue
+			}
+			defer file.Close()
+
 			if err := tmpl.Execute(file, preData); err != nil {
 				fmt.Println("Error al ejecutar la plantilla:", err)
 				continue
 			}
+			fmt.Println("Archivo procesado correctamente:", projectFile)
+
 		}
 
 	}
 
 	fmt.Println("\n")
 
-	//	preData := TemplateData{
-	//		Entity:        class,
-	//		EntityPlural:  entityPlural,
-	//		AppName:       appName,
-	//		ClassMetadata: classMetadata,
-	//		GeneratedType: generatedType,
 }
