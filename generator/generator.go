@@ -30,10 +30,10 @@ func Generate(projectName, dbType, configFile string) {
 	}
 	fmt.Printf("Configuración leída: %+v\n %+v\n", class, classMetadata)
 
-	tipoGenerado := generateClassTags(class, classMetadata)
-
-	fmt.Println("TIPO GENERADO:", tipoGenerado)
-	fmt.Println("hola")
+	tiposGenerados := generateClassTags(class, classMetadata)
+	fmt.Println("Longitud de tiposGenerados: (generator/Generate)", len(tiposGenerados))
+	//fmt.Println("TIPO GENERADO:", tipoGenerado) // el mismo del retorno de la funcion
+	fmt.Println("\n")
 
 	// SUGERENCIA: OBTENER VALOR POR VALOR Y LLENAR  data := TemplateData{} para sustituir las plantillas, quizas se requieran archivos intermedios.
 

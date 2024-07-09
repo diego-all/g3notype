@@ -92,10 +92,10 @@ En los siguientes archivos o carpetas.
 
 ## Capitalizar strings
 
-		fmt.Printf("Clave: %s, Valor: %s\n", attribute, value)
-		fmt.Println((strings.Title(strings.ToLower(attribute))))
-		capitalized := cases.Title(language.English).String(strings.ToLower(attribute))
-		fmt.Println("CAPITALIZED", capitalized)
+		fmt.Println((strings.Title(strings.ToLower(attribute))))  // strings.Title is deprecated: The rule Title uses for word boundaries does not handle Unicode punctuation properly. Use golang.org/x/text/cases instead.
+		//capitalized := cases.Title(language.English).String(strings.ToLower(attribute)) // Requiere utilizar golang.org/x/text/cases (al parecer no es estandar)
+		//fmt.Println("CAPITALIZED", capitalized) // Requiere utilizar golang.org/x/text/cases (al parecer no es estandar)
+		fmt.Println("Capitalize alternativa nativa: ", strings.ToUpper(string(attribute[0]))+string(attribute[1:])) // toco esto para no usar mas dependencias.
 
 
 ## Generar los tipos
