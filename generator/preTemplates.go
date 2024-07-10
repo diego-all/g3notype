@@ -23,9 +23,9 @@ var preTemplates = map[string]string{
 	//"cmd/api/handlers-{{.Entity}}.go": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/handlers-entity.txt",
 }
 
-type preTemplateData struct {
-	handlers_typeEntityRequest     string
-	handlers_typeEntityResponse    string
+type PreTemplateData struct {
+	Handlers_typeEntityRequest     string
+	Handlers_typeEntityResponse    string
 	handlers_varCreateEntityModels string
 	handlers_varGetEntResponse     string
 	handlers_varUpdateEntityModels string
@@ -172,13 +172,24 @@ func modifyBaseTemplates(preGeneratedTypes map[string]string) {
 	// 	//GeneratedType: generatedType,
 	// }
 
-	preData := preTemplateData{
-		handlers_typeEntityRequest:  preGeneratedTypes["handlers-typeEntityRequest"],
-		handlers_typeEntityResponse: preGeneratedTypes["handlers-typeEntityResponse"],
+	// //Error al ejecutar la plantilla: template: fileContent:8:2: executing "fileContent" at <.handlers_typeEntityRequest>: handlers_typeEntityRequest is an unexported field of struct type generator.preTemplateData
+	preData := PreTemplateData{
+		Handlers_typeEntityRequest:  preGeneratedTypes["handlers-typeEntityRequest"],
+		Handlers_typeEntityResponse: preGeneratedTypes["handlers-typeEntityResponse"],
 		//GeneratedType: generatedType,
 	}
 
 	//preData := preGeneratedTypes
+
+	// preData := PreTemplateData{
+	// 	Handlers_typeEntityRequest:  "OELO",
+	// 	Handlers_typeEntityResponse: "parc3r0e",
+	// }
+
+	// type preTemplateData struct {
+	// 	HandlersTypeEntityRequest  string
+	// 	HandlersTypeEntityResponse string
+	// }
 
 	fmt.Println(preData)
 
