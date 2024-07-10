@@ -1,0 +1,90 @@
+package main
+
+import (
+	"net/http"
+	"strconv"
+	"time"
+
+	models "github.com/diego-all/{{.Entity}}-API/internal"
+
+	"github.com/go-chi/chi"
+)
+
+{{.GeneratedType}}
+{{.Handlers_typeEntityRequest}}
+
+type {{.Entity}}Request struct {
+	Name        string  `json:"name"`
+	Description string  `json:"description"`
+	Price       float64 `json:"price"`
+}
+
+
+{{.Handlers_typeEntityResponse}}
+
+type {{.Entity}}Response struct {
+	Name        string  `json:"name"`
+	Description string  `json:"description"`
+	Price       float64 `json:"price"`
+}
+
+func (app *application) Create{{.Entity}}(w http.ResponseWriter, r *http.Request) {
+
+	var {{.Entity}}Req {{.Entity}}Request
+	var payload jsonResponse
+
+	err := app.readJSON(w, r, &{{.Entity}}Req)
+	if err != nil {
+		app.errorLog.Println(err)
+		payload.Error = true
+		payload.Message = "invalid json supplied, or json missing entirely"
+		_ = app.writeJSON(w, http.StatusBadRequest, payload)
+	}
+
+	var {{.Entity}} = models.{{.Entity}}{
+		Name:        {{.Entity}}Req.Name,
+		Description: {{.Entity}}.Description,
+		Price:       {{.Entity}}.Price,
+	}
+	_, err = app.models.{{.Entity}}.Insert({{.Entity}})
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	payload = jsonResponse{
+		Error:   false,
+		Message: "{{.Entity}} successfully created",
+		Data:    envelope{"{{.Entity}}": {{.Entity}}.Name},
+	}
+
+	_ = app.writeJSON(w, http.StatusAccepted, payload)
+}
+
+func (app *application) Get{{.Entity}}(w http.ResponseWriter, r *http.Request) {
+	{{.Entity}}ID, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	{{.Entity}}, err := app.models.{{.Entity}}.GetOneById({{.Entity}}ID)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	var {{.Entity}}Response = {{.Entity}}Response{
+		Name:        {{.Entity}}.Name,
+		Description: {{.Entity}}.Description,
+		Price:       {{.Entity}}.Price,
+	}
+
+	payload := jsonResponse{
+		Error:   false,
+		Message: "{{.Entity}} successfully obtained",
+		Data:    envelope{"{{.Entity}}": {{.Entity}}Response},
+	}
+
+	_ = app.writeJSON(w, http.StatusOK, payload)
+}
