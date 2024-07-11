@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"reflect"
 	"strings"
 	"text/template"
 )
@@ -28,8 +27,8 @@ type PreTemplateData struct {
 	Handlers_typeEntityRequest     string
 	Handlers_typeEntityResponse    string
 	Handlers_varCreateEntityModels string
-	handlers_varGetEntResponse     string
-	handlers_varUpdateEntityModels string
+	Handlers_varGetEntResponse     string
+	Handlers_varUpdateEntityModels string
 	Entity                         string
 }
 
@@ -166,36 +165,16 @@ func modifyBaseTemplates(preGeneratedTypes map[string]string) {
 
 	//var generatedType = "buenasnoches"
 
-	// data := TemplateData{
-	// 	Entity:        class,
-	// 	EntityPlural:  entityPlural,
-	// 	AppName:       appName,
-	// 	ClassMetadata: classMetadata,
-	// 	//GeneratedType: generatedType,
-	// }
-
 	// //Error al ejecutar la plantilla: template: fileContent:8:2: executing "fileContent" at <.handlers_typeEntityRequest>: handlers_typeEntityRequest is an unexported field of struct type generator.preTemplateData
 	preData := PreTemplateData{
 		Handlers_typeEntityRequest:     preGeneratedTypes["handlers-typeEntityRequest"],
 		Handlers_typeEntityResponse:    preGeneratedTypes["handlers-typeEntityResponse"],
 		Handlers_varCreateEntityModels: preGeneratedTypes["handlers-varCreateEntityModels"],
-		// handlers_varGetEntResponse: preGeneratedTypes["handlers-varGetEntResponse"],
-		// handlers_varUpdateEntityModels: preGeneratedTypes["handlers-varUpdateEntityModels"],
-		Entity: "{{.Entity}}",
-		//GeneratedType: generatedType,
+		Handlers_varGetEntResponse:     preGeneratedTypes["handlers-varGetEntResponse"],
+		Handlers_varUpdateEntityModels: preGeneratedTypes["handlers-varUpdateEntityModels"],
+		Entity:                         "{{.Entity}}",
+		//entity:  "{{.entity}}",   // NO funciona con minusculas seguir indagando
 	}
-
-	//preData := preGeneratedTypes
-
-	// preData := PreTemplateData{
-	// 	Handlers_typeEntityRequest:  "OELO",
-	// 	Handlers_typeEntityResponse: "parc3r0e",
-	// }
-
-	// type preTemplateData struct {
-	// 	HandlersTypeEntityRequest  string
-	// 	HandlersTypeEntityResponse string
-	// }
 
 	fmt.Println(preData)
 
@@ -231,8 +210,6 @@ func modifyBaseTemplates(preGeneratedTypes map[string]string) {
 				continue
 			}
 			defer file.Close()
-
-			fmt.Println(fmt.Println("El tipo de preData es:", reflect.TypeOf(preData)))
 
 			if err := tmpl.Execute(file, preData); err != nil {
 				fmt.Println("Error al ejecutar la plantilla:", err)
