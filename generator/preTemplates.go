@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"reflect"
 	"strings"
 	"text/template"
 )
@@ -26,9 +27,10 @@ var preTemplates = map[string]string{
 type PreTemplateData struct {
 	Handlers_typeEntityRequest     string
 	Handlers_typeEntityResponse    string
-	handlers_varCreateEntityModels string
+	Handlers_varCreateEntityModels string
 	handlers_varGetEntResponse     string
 	handlers_varUpdateEntityModels string
+	Entity                         string
 }
 
 // quizas sea generar Tipos o algo asi, todas las estructuras que dependen de la metadata de clases (atributos)
@@ -174,8 +176,12 @@ func modifyBaseTemplates(preGeneratedTypes map[string]string) {
 
 	// //Error al ejecutar la plantilla: template: fileContent:8:2: executing "fileContent" at <.handlers_typeEntityRequest>: handlers_typeEntityRequest is an unexported field of struct type generator.preTemplateData
 	preData := PreTemplateData{
-		Handlers_typeEntityRequest:  preGeneratedTypes["handlers-typeEntityRequest"],
-		Handlers_typeEntityResponse: preGeneratedTypes["handlers-typeEntityResponse"],
+		Handlers_typeEntityRequest:     preGeneratedTypes["handlers-typeEntityRequest"],
+		Handlers_typeEntityResponse:    preGeneratedTypes["handlers-typeEntityResponse"],
+		Handlers_varCreateEntityModels: preGeneratedTypes["handlers-varCreateEntityModels"],
+		// handlers_varGetEntResponse: preGeneratedTypes["handlers-varGetEntResponse"],
+		// handlers_varUpdateEntityModels: preGeneratedTypes["handlers-varUpdateEntityModels"],
+		Entity: "{{.Entity}}",
 		//GeneratedType: generatedType,
 	}
 
@@ -225,6 +231,8 @@ func modifyBaseTemplates(preGeneratedTypes map[string]string) {
 				continue
 			}
 			defer file.Close()
+
+			fmt.Println(fmt.Println("El tipo de preData es:", reflect.TypeOf(preData)))
 
 			if err := tmpl.Execute(file, preData); err != nil {
 				fmt.Println("Error al ejecutar la plantilla:", err)

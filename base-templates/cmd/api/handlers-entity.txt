@@ -11,8 +11,6 @@ import (
 )
 
 
-{{.GeneratedType}}
-
 type {{.Entity}}Request struct {
 	Name        string  `json:"name"`
 	Description string  `json:"description"`

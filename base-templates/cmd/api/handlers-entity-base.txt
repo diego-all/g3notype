@@ -10,10 +10,19 @@ import (
 	"github.com/go-chi/chi"
 )
 
-{{.Handlers_typeEntityRequest}}
+type {{.Entity}}Request struct {
+Nombre	string	`json:"nombre"`
+Descripcion	string	`json:"descripcion"`
+Precio	integer	`json:"precio"`
+Cantidad	integer	`json:"cantidad"`
+}
 
-{{.Handlers_typeEntityResponse}}
-
+type {{.Entity}}Response struct {
+Nombre	string	`json:"nombre"`
+Descripcion	string	`json:"descripcion"`
+Precio	integer	`json:"precio"`
+Cantidad	integer	`json:"cantidad"`
+}
 
 
 func (app *application) Create{{.Entity}}(w http.ResponseWriter, r *http.Request) {
@@ -29,9 +38,20 @@ func (app *application) Create{{.Entity}}(w http.ResponseWriter, r *http.Request
 		_ = app.writeJSON(w, http.StatusBadRequest, payload)
 	}
 
+	var {{.Entity}} = models.{{.Entity}}{
+		Name:        {{.Entity}}Req.Name,
+		Description: {{.Entity}}.Description,
+		Price:       {{.Entity}}.Price,
+	}
 
-	{{.Handlers_varCreateEntityModels}}
 
+	var {{.entity}} = models.{{.Entity}}{
+Nombre:	{{.entity}}Req.Nombre,
+Descripcion:	{{.entity}}Req.Descripcion,
+Precio:	{{.entity}}Req.Precio,
+Cantidad:	{{.entity}}Req.Cantidad,
+}
+	
 	_, err = app.models.{{.Entity}}.Insert({{.Entity}})
 	if err != nil {
 		app.errorJSON(w, err)
@@ -45,32 +65,4 @@ func (app *application) Create{{.Entity}}(w http.ResponseWriter, r *http.Request
 	}
 
 	_ = app.writeJSON(w, http.StatusAccepted, payload)
-}
-
-func (app *application) Get{{.Entity}}(w http.ResponseWriter, r *http.Request) {
-	{{.Entity}}ID, err := strconv.Atoi(chi.URLParam(r, "id"))
-	if err != nil {
-		app.errorJSON(w, err)
-		return
-	}
-
-	{{.Entity}}, err := app.models.{{.Entity}}.GetOneById({{.Entity}}ID)
-	if err != nil {
-		app.errorJSON(w, err)
-		return
-	}
-
-	var {{.Entity}}Response = {{.Entity}}Response{
-		Name:        {{.Entity}}.Name,
-		Description: {{.Entity}}.Description,
-		Price:       {{.Entity}}.Price,
-	}
-
-	payload := jsonResponse{
-		Error:   false,
-		Message: "{{.Entity}} successfully obtained",
-		Data:    envelope{"{{.Entity}}": {{.Entity}}Response},
-	}
-
-	_ = app.writeJSON(w, http.StatusOK, payload)
 }
