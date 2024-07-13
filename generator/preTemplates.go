@@ -73,7 +73,7 @@ func generateClassTags(class string, classMetadata map[string]string) map[string
 		//auxReqRes = attribute + "\t" + value + "\t" + "`json:\"" + attribute + "\"`"
 		auxReqRes = strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + "\t" + value + "\t" + "`json:\"" + attribute + "\"`"
 		auxCreateEntModels = strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + ":\t" + "{{.LowerEntity}}Req." + strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + ","
-		auxGetEntResponse = strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + ":\t" + "{{.entity}}." + strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + ","
+		auxGetEntResponse = strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + ":\t" + "{{.LowerEntity}}." + strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + ","
 
 		//fmt.Println("auxReqRes", auxReqRes)
 		//fmt.Println("auxCreateEntModels", auxCreateEntModels)
@@ -123,7 +123,7 @@ func generateClassTags(class string, classMetadata map[string]string) map[string
 	fmt.Println("handlers_varCreateEntityModels: \n ", handlers_varCreateEntityModels)
 
 	// Para update handlers_varUpdateEntResponse
-	handlers_varUpdateEntityModels = "var {{.entity}} = models.{{.Entity}}{" + "\n" + multilineAuxCEntModels + "UpdatedAt:   time.Now()," + "\n" + "Id:          productID," + "\n" + "}"
+	handlers_varUpdateEntityModels = "var {{.LowerEntity}} = models.{{.Entity}}{" + "\n" + multilineAuxCEntModels + "UpdatedAt:   time.Now()," + "\n" + "Id:          {{.LowerEntity}}ID," + "\n" + "}"
 	fmt.Println("\n")
 	fmt.Println("handlers_varUpdateEntityModels: \n ", handlers_varUpdateEntityModels)
 
@@ -135,7 +135,7 @@ func generateClassTags(class string, classMetadata map[string]string) map[string
 	//fmt.Println("multilineAuxGEntResponse: \n ", multilineAuxGEntResponse)
 	fmt.Println("\n")
 
-	handlers_varGetEntResponse = "var {{.entity}}Response = {{.entity}}Response{\n" + multilineAuxGEntResponse + "}"
+	handlers_varGetEntResponse = "var {{.LowerEntity}}Response = {{.LowerEntity}}Response{\n" + multilineAuxGEntResponse + "}"
 	fmt.Println("\n")
 	fmt.Println("handlers_varGetEntResponse: \n ", handlers_varGetEntResponse)
 

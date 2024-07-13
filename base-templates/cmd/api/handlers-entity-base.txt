@@ -5,25 +5,24 @@ import (
 	"strconv"
 	"time"
 
-	models "github.com/diego-all/{{.LowerEntity}}-API/internal"  // (pilas con el plural)
+	models "github.com/diego-all/{{.LowerEntity}}s-API/internal"  // (pilas con el plural)
 
 	"github.com/go-chi/chi"
 )
 
 type {{.LowerEntity}}Request struct {
+Nombre	string	`json:"nombre"`
 Descripcion	string	`json:"descripcion"`
 Precio	integer	`json:"precio"`
 Cantidad	integer	`json:"cantidad"`
-Nombre	string	`json:"nombre"`
 }
 
 type {{.LowerEntity}}Response struct {
+Nombre	string	`json:"nombre"`
 Descripcion	string	`json:"descripcion"`
 Precio	integer	`json:"precio"`
 Cantidad	integer	`json:"cantidad"`
-Nombre	string	`json:"nombre"`
 }
-
 
 
 func (app *application) Create{{.Entity}}(w http.ResponseWriter, r *http.Request) {
@@ -41,10 +40,10 @@ func (app *application) Create{{.Entity}}(w http.ResponseWriter, r *http.Request
 
 
 	var {{.LowerEntity}} = models.{{.Entity}}{
+Nombre:	{{.LowerEntity}}Req.Nombre,
 Descripcion:	{{.LowerEntity}}Req.Descripcion,
 Precio:	{{.LowerEntity}}Req.Precio,
 Cantidad:	{{.LowerEntity}}Req.Cantidad,
-Nombre:	{{.LowerEntity}}Req.Nombre,
 }
 
 	_, err = app.models.{{.Entity}}.Insert({{.LowerEntity}})
@@ -60,4 +59,122 @@ Nombre:	{{.LowerEntity}}Req.Nombre,
 	}
 
 	_ = app.writeJSON(w, http.StatusAccepted, payload)
+}
+
+func (app *application) Get{{.Entity}}(w http.ResponseWriter, r *http.Request) {
+	{{.LowerEntity}}ID, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	{{.LowerEntity}}, err := app.models.{{.Entity}}.GetOneById({{.LowerEntity}}ID)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+		var {{.LowerEntity}}Response = {{.LowerEntity}}Response{
+Nombre:	{{.LowerEntity}}.Nombre,
+Descripcion:	{{.LowerEntity}}.Descripcion,
+Precio:	{{.LowerEntity}}.Precio,
+Cantidad:	{{.LowerEntity}}.Cantidad,
+}
+
+	payload := jsonResponse{
+		Error:   false,
+		Message: "{{.Entity}} successfully obtained",
+		Data:    envelope{"{{.LowerEntity}}": {{.LowerEntity}}Response},
+	}
+
+	_ = app.writeJSON(w, http.StatusOK, payload)
+}
+
+
+func (app *application) Update{{.Entity}}(w http.ResponseWriter, r *http.Request) {
+
+	var {{.LowerEntity}}Req {{.LowerEntity}}Request
+	var payload jsonResponse
+
+	err := app.readJSON(w, r, &{{.LowerEntity}}Req)
+	if err != nil {
+		app.errorLog.Println(err)
+		payload.Error = true
+		payload.Message = "invalid json supplied, or json missing entirely"
+		_ = app.writeJSON(w, http.StatusBadRequest, payload)
+	}
+
+	{{.LowerEntity}}ID, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	_, err = app.models.{{.Entity}}.GetOneById({{.LowerEntity}}ID)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	var {{.LowerEntity}} = models.{{.Entity}}{
+Nombre:	{{.LowerEntity}}Req.Nombre,
+Descripcion:	{{.LowerEntity}}Req.Descripcion,
+Precio:	{{.LowerEntity}}Req.Precio,
+Cantidad:	{{.LowerEntity}}Req.Cantidad,
+UpdatedAt:   time.Now(),
+Id:          {{.LowerEntity}}ID,
+}
+
+	_, err = app.models.{{.Entity}}.Update({{.LowerEntity}})
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	payload = jsonResponse{
+		Error:   false,
+		Message: "{{.Entity}} successfully updated",
+		Data:    envelope{"{{.LowerEntity}}": {{.LowerEntity}}.Name}, // sujeto a cambio
+	}
+
+	_ = app.writeJSON(w, http.StatusOK, payload)
+}
+
+
+func (app *application) All{{.Entity}}s(w http.ResponseWriter, r *http.Request) {//plural
+	var {{.LowerEntity}}s models.{{.Entity}} //plural
+	all, err := {{.LowerEntity}}s.GetAll() //plural
+	if err != nil {
+		app.errorLog.Println(err)
+		return
+	}
+
+	payload := jsonResponse{
+		Error:   false,
+		Message: "Data successfully obtained",
+		Data:    envelope{"{{.LowerEntity}}s": all}, //plural
+	}
+
+	_ = app.writeJSON(w, http.StatusOK, payload)
+}
+
+func (app *application) Delete{{.Entity}}(w http.ResponseWriter, r *http.Request) {
+	{{.LowerEntity}}ID, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	err = app.models.{{.Entity}}.DeleteByID({{.LowerEntity}}ID)
+	if err != nil {
+		app.errorJSON(w, err)
+		return
+	}
+
+	payload := jsonResponse{
+		Error:   false,
+		Message: "{{.Entity}} successfully deleted",
+	}
+
+	_ = app.writeJSON(w, http.StatusOK, payload)
 }
