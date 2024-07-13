@@ -17,6 +17,8 @@ var TypesVars = map[string]string{
 	"handlers-varGetEntResponse":     "",
 	"handlers-varUpdateEntityModels": "",
 
+	"database-DDL-statement": "",
+
 	// EntityModels
 	"models-typeEntityStruct":  "",
 	"models-InsertStmt":        "",
@@ -250,11 +252,53 @@ func generateDDLStatement(class string, classMetadata map[string]string) string 
 	fmt.Println("longitud del map es:", longitud)
 	fmt.Println("\n")
 
+	var auxDDL string
+	var ddlStatement []string
+	var sqliteValue string
+	var multilineAuxDDLStatement string
+	var database_DDL_statement string
+
 	for attribute, value := range classMetadata {
 		fmt.Printf("Clave: %s, Valor: %s\n", attribute, value)
 
+		//fmt.Println("Capitalize alternativa nativa: ", strings.ToUpper(string(attribute[0]))+string(attribute[1:])) // toco esto para no usar mas dependencias.
+
+		// if value == "integer" {
+		// 	fmt.Println("EL VALOR ES INTEGER")
+		// }
+
+		switch value {
+		case "integer":
+			fmt.Println("INTEGER")
+			sqliteValue = "INTEGER"
+		case "string":
+			fmt.Println("VARCHAR")
+			sqliteValue = "VARCHAR(100)"
+		case "":
+			fmt.Println("OTRO CASO")
+
+		}
+
+		auxDDL = attribute + " " + sqliteValue + " " + "NOT NULL,"
+		ddlStatement = append(ddlStatement, auxDDL)
 	}
 
+	fmt.Println("Array de ddlStatement: ", ddlStatement)
+	fmt.Println("\n")
+
+	fmt.Println("\n")
+
+	// Se verticalizan , creo que quedarian mejor con un while
+	for i, _ := range ddlStatement {
+		//fmt.Println("Valor de i", i, "Valor de j", j)
+		multilineAuxDDLStatement = multilineAuxDDLStatement + ddlStatement[i] + "\n"
+	}
+
+	fmt.Println("multilineAuxDDLStatement: ", multilineAuxDDLStatement)
+
+	database_DDL_statement = "CREATE TABLE IF NOT EXISTS {{.LowerEntity}}s (\n" + "id INTEGER PRIMARY KEY AUTOINCREMENT,\n" + multilineAuxDDLStatement + "created_at TIMESTAMP DEFAULT DATETIME,\n" + "updated_at TIMESTAMP NOT NULL\n" + ");"
+
+	fmt.Println("database_DDL_statement ES:", database_DDL_statement)
 	return ""
 }
 
