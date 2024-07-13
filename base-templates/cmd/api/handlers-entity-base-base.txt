@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 
-	models "github.com/diego-all/{{.Entity}}-API/internal"  // (pilas con el plural)
+	models "github.com/diego-all/{{.LowerEntity}}-API/internal"  // (pilas con el plural)
 
 	"github.com/go-chi/chi"
 )
@@ -15,13 +15,12 @@ import (
 {{.Handlers_typeEntityResponse}}
 
 
-
 func (app *application) Create{{.Entity}}(w http.ResponseWriter, r *http.Request) {
 
-	var {{.Entity}}Req {{.Entity}}Request
+	var {{.LowerEntity}}Req {{.LowerEntity}}Request
 	var payload jsonResponse
 
-	err := app.readJSON(w, r, &{{.Entity}}Req)
+	err := app.readJSON(w, r, &{{.LowerEntity}}Req)
 	if err != nil {
 		app.errorLog.Println(err)
 		payload.Error = true
@@ -32,7 +31,7 @@ func (app *application) Create{{.Entity}}(w http.ResponseWriter, r *http.Request
 
 	{{.Handlers_varCreateEntityModels}}
 
-	_, err = app.models.{{.Entity}}.Insert({{.Entity}})
+	_, err = app.models.{{.Entity}}.Insert({{.LowerEntity}})
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -41,7 +40,7 @@ func (app *application) Create{{.Entity}}(w http.ResponseWriter, r *http.Request
 	payload = jsonResponse{
 		Error:   false,
 		Message: "{{.Entity}} successfully created",
-		Data:    envelope{"{{.Entity}}": {{.Entity}}.Name},
+		Data:    envelope{"{{.LowerEntity}}": {{.LowerEntity}}.Name},
 	}
 
 	_ = app.writeJSON(w, http.StatusAccepted, payload)

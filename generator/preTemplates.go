@@ -30,6 +30,7 @@ type PreTemplateData struct {
 	Handlers_varGetEntResponse     string
 	Handlers_varUpdateEntityModels string
 	Entity                         string
+	LowerEntity                    string
 }
 
 // quizas sea generar Tipos o algo asi, todas las estructuras que dependen de la metadata de clases (atributos)
@@ -71,7 +72,7 @@ func generateClassTags(class string, classMetadata map[string]string) map[string
 
 		//auxReqRes = attribute + "\t" + value + "\t" + "`json:\"" + attribute + "\"`"
 		auxReqRes = strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + "\t" + value + "\t" + "`json:\"" + attribute + "\"`"
-		auxCreateEntModels = strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + ":\t" + "{{.entity}}Req." + strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + ","
+		auxCreateEntModels = strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + ":\t" + "{{.LowerEntity}}Req." + strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + ","
 		auxGetEntResponse = strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + ":\t" + "{{.entity}}." + strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + ","
 
 		//fmt.Println("auxReqRes", auxReqRes)
@@ -98,12 +99,12 @@ func generateClassTags(class string, classMetadata map[string]string) map[string
 	//fmt.Println("multilineAuxReqResTypes: \n ", multilineAuxReqResTypes+"\n")
 	//fmt.Println("\n")
 
-	handlers_typeEntityRequest = "type {{.Entity}}Request struct {" + "\n" + multilineAuxReqResTypes + "}"
+	handlers_typeEntityRequest = "type {{.LowerEntity}}Request struct {" + "\n" + multilineAuxReqResTypes + "}"
 	//fmt.Println("\n")
 	fmt.Println("handlers_typeEntityRequest: \n ", handlers_typeEntityRequest)
 	fmt.Println("\n")
 
-	handlers_typeEntityResponse = "type {{.Entity}}Response struct {" + "\n" + multilineAuxReqResTypes + "}"
+	handlers_typeEntityResponse = "type {{.LowerEntity}}Response struct {" + "\n" + multilineAuxReqResTypes + "}"
 	fmt.Println("handlers_typeEntityResponse: \n ", handlers_typeEntityResponse)
 	fmt.Println("\n")
 
@@ -113,11 +114,11 @@ func generateClassTags(class string, classMetadata map[string]string) map[string
 		multilineAuxCEntModels = multilineAuxCEntModels + createEntModels[i] + "\n"
 	}
 
-	//fmt.Println("multilineAuxCEntModels: \n ", multilineAuxCEntModels)
-	//fmt.Println("\n")
-
+	fmt.Println("multilineAuxCEntModels: \n ", multilineAuxCEntModels)
+	fmt.Println("\n")
+	// MINUSCULA
 	//para create handlers_varCreateEntityModels
-	handlers_varCreateEntityModels = "var {{.entity}} = models.{{.Entity}}{" + "\n" + multilineAuxCEntModels + "}"
+	handlers_varCreateEntityModels = "var {{.LowerEntity}} = models.{{.Entity}}{" + "\n" + multilineAuxCEntModels + "}"
 	fmt.Println("\n")
 	fmt.Println("handlers_varCreateEntityModels: \n ", handlers_varCreateEntityModels)
 
@@ -172,8 +173,10 @@ func modifyBaseTemplates(preGeneratedTypes map[string]string) {
 		Handlers_varCreateEntityModels: preGeneratedTypes["handlers-varCreateEntityModels"],
 		Handlers_varGetEntResponse:     preGeneratedTypes["handlers-varGetEntResponse"],
 		Handlers_varUpdateEntityModels: preGeneratedTypes["handlers-varUpdateEntityModels"],
-		Entity:                         "{{.Entity}}",
+		// quizas pueda ser {{.UpperEntity}}
+		Entity: "{{.Entity}}",
 		//entity:  "{{.entity}}",   // NO funciona con minusculas seguir indagando
+		LowerEntity: "{{.LowerEntity}}",
 	}
 
 	fmt.Println(preData)

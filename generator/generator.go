@@ -39,6 +39,8 @@ func Generate(projectName, dbType, configFile string) {
 
 	modifyBaseTemplates(tiposGenerados) // Pueden variar
 
+	//SE TUESTA MIRAR SI UN SLEEP O VALIDAR BIEN
+
 	// Generate folder structure
 	//createFolderStructure(projectName, class, classMetadata, generateClassTags(class, classMetadata)) //recordar que no funciono mandando una funcion pero si el valor , tipoGenerado
 	createFolderStructure(projectName, class, classMetadata)
