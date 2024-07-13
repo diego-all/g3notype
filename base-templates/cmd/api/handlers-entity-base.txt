@@ -11,17 +11,17 @@ import (
 )
 
 type {{.LowerEntity}}Request struct {
+Cantidad	integer	`json:"cantidad"`
 Nombre	string	`json:"nombre"`
 Descripcion	string	`json:"descripcion"`
 Precio	integer	`json:"precio"`
-Cantidad	integer	`json:"cantidad"`
 }
 
 type {{.LowerEntity}}Response struct {
+Cantidad	integer	`json:"cantidad"`
 Nombre	string	`json:"nombre"`
 Descripcion	string	`json:"descripcion"`
 Precio	integer	`json:"precio"`
-Cantidad	integer	`json:"cantidad"`
 }
 
 
@@ -40,10 +40,10 @@ func (app *application) Create{{.Entity}}(w http.ResponseWriter, r *http.Request
 
 
 	var {{.LowerEntity}} = models.{{.Entity}}{
+Cantidad:	{{.LowerEntity}}Req.Cantidad,
 Nombre:	{{.LowerEntity}}Req.Nombre,
 Descripcion:	{{.LowerEntity}}Req.Descripcion,
 Precio:	{{.LowerEntity}}Req.Precio,
-Cantidad:	{{.LowerEntity}}Req.Cantidad,
 }
 
 	_, err = app.models.{{.Entity}}.Insert({{.LowerEntity}})
@@ -75,10 +75,10 @@ func (app *application) Get{{.Entity}}(w http.ResponseWriter, r *http.Request) {
 	}
 
 		var {{.LowerEntity}}Response = {{.LowerEntity}}Response{
+Cantidad:	{{.LowerEntity}}.Cantidad,
 Nombre:	{{.LowerEntity}}.Nombre,
 Descripcion:	{{.LowerEntity}}.Descripcion,
 Precio:	{{.LowerEntity}}.Precio,
-Cantidad:	{{.LowerEntity}}.Cantidad,
 }
 
 	payload := jsonResponse{
@@ -117,10 +117,10 @@ func (app *application) Update{{.Entity}}(w http.ResponseWriter, r *http.Request
 	}
 
 	var {{.LowerEntity}} = models.{{.Entity}}{
+Cantidad:	{{.LowerEntity}}Req.Cantidad,
 Nombre:	{{.LowerEntity}}Req.Nombre,
 Descripcion:	{{.LowerEntity}}Req.Descripcion,
 Precio:	{{.LowerEntity}}Req.Precio,
-Cantidad:	{{.LowerEntity}}Req.Cantidad,
 UpdatedAt:   time.Now(),
 Id:          {{.LowerEntity}}ID,
 }

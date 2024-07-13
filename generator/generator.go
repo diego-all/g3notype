@@ -36,6 +36,8 @@ func Generate(projectName, dbType, configFile string) {
 	fmt.Println("\n")
 
 	// SUGERENCIA: OBTENER VALOR POR VALOR Y LLENAR  data := TemplateData{} para sustituir las plantillas, quizas se requieran archivos intermedios.
+	generatedDDL := generateDDLStatement(class, classMetadata)
+	fmt.Println("El DDL es:", generatedDDL)
 
 	modifyBaseTemplates(tiposGenerados) // Pueden variar
 

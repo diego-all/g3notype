@@ -16,6 +16,18 @@ var TypesVars = map[string]string{
 	"handlers-varCreateEntityModels": "",
 	"handlers-varGetEntResponse":     "",
 	"handlers-varUpdateEntityModels": "",
+
+	// EntityModels
+	"models-typeEntityStruct":  "",
+	"models-InsertStmt":        "",
+	"models-InsertErr":         "",
+	"models-GetOneQuery":       "",
+	"models-GetOneErr":         "",
+	"models-UpdateStmt":        "",
+	"models-UpdateErr":         "",
+	"models-GetAllQuery":       "",
+	"models-GetAllErrRowsScan": "",
+	"models-DeleteStmt":        "", // validar si realmente es necesario
 }
 
 var preTemplates = map[string]string{
@@ -225,5 +237,27 @@ func modifyBaseTemplates(preGeneratedTypes map[string]string) {
 	}
 
 	fmt.Println("\n")
+
+}
+
+// Generate Create table
+func generateDDLStatement(class string, classMetadata map[string]string) string {
+
+	fmt.Println("Desde generateDDLStatement", class)
+
+	fmt.Println("Class metadata", classMetadata)
+	longitud := len(classMetadata)
+	fmt.Println("longitud del map es:", longitud)
+	fmt.Println("\n")
+
+	for attribute, value := range classMetadata {
+		fmt.Printf("Clave: %s, Valor: %s\n", attribute, value)
+
+	}
+
+	return ""
+}
+
+func generateEntityModels() {
 
 }
