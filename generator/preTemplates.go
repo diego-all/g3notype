@@ -315,19 +315,28 @@ func generateEntityModels(class string, classMetadata map[string]string) map[str
 	// Pilas con "name,omitempty"`
 	var auxTypeEntityStruct, multilineAuxTypeEntityStructs, models_typeEntityStruct string
 	var auxInsertStmt, models_InsertStmt string
+	var auxInsertErr, multilineAuxInsertErr, models_InsertErr string
+
+	models_InsertErr = "dsdsd"
+	fmt.Println(models_InsertErr)
 
 	var typeEntityStructs []string
+	var InsertErrs []string
 
 	for attribute, value := range classMetadata {
 
 		auxTypeEntityStruct = strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + "\t" + value + "\t" + "`json:\"" + attribute + "\"`"
 		auxInsertStmt = auxInsertStmt + attribute + ", "
+		//auxInsertErr = auxInsertErr + "{{.LowerEntity}}." + strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + "\t"
+		auxInsertErr = "\t" + "{{.LowerEntity}}." + strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + ","
 
 		//fmt.Println("auxTypeEntityStruct: ", auxTypeEntityStruct)
 		typeEntityStructs = append(typeEntityStructs, auxTypeEntityStruct)
+		InsertErrs = append(InsertErrs, auxInsertErr)
 	}
 	//fmt.Println("Array de typeEntityStructs: ", typeEntityStructs)
 	//fmt.Println("\n")
+	fmt.Println("TRINauxInsertErr: ", auxInsertErr)
 
 	// Se verticalizan , creo que quedarian mejor con un while
 	for i, _ := range typeEntityStructs {
@@ -350,15 +359,27 @@ func generateEntityModels(class string, classMetadata map[string]string) map[str
 	fmt.Println("\n")
 
 	// Generate models-InsertErr
+	for i, j := range InsertErrs {
+		fmt.Println("Valor de i", i, "Valor de j", j)
+
+		multilineAuxInsertErr = multilineAuxInsertErr + InsertErrs[i] + "\n"
+	}
+
+	fmt.Println("multilineAuxInsertErr: \n ", multilineAuxInsertErr+"\n")
+	fmt.Println("\n")
+
+	models_InsertErr = "err := db.QueryRowContext(ctx, stmt," + "\n" + multilineAuxInsertErr + "\t" + "time.Now()," + "\n" + "\t" + "time.Now()," + "\n" + ").Scan(&newID)"
 
 	//var auxInsertErr, InsertErr string
 	//fmt.Println(auxInsertErr, InsertErr)
 
+	fmt.Println("models_InsertErr es: ", models_InsertErr)
+
 	TypesVars["models-typeEntityStruct"] = models_typeEntityStruct
 	TypesVars["models-InsertStmt"] = models_InsertStmt
-	// GENERANDO TIPOS
-	TypesVars["models-InsertErr"] = ""
+	TypesVars["models-InsertErr"] = models_InsertErr
 	TypesVars["models-GetOneQuery"] = ""
+	// GENERANDO TIPOS
 	TypesVars["models-GetOneErr"] = ""
 	TypesVars["models-UpdateStmt"] = ""
 	TypesVars["models-UpdateErr"] = ""
@@ -366,8 +387,7 @@ func generateEntityModels(class string, classMetadata map[string]string) map[str
 	TypesVars["models-GetAllErrRowsScan"] = ""
 	TypesVars["models-DeleteStmt"] = "" // validar si realmente es necesario
 
-	var retorno map[string]string
-	return retorno
+	return TypesVars
 
 }
 
