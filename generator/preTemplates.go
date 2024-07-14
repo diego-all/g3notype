@@ -311,23 +311,51 @@ func generateEntityModels(class string, classMetadata map[string]string) map[str
 	fmt.Println("longitud del map es:", longitud)
 	fmt.Println("\n")
 
-	var auxInsertStmt, InsertStmt string
-	var auxInsertErr, InsertErr string
+	// Generate models-typeEntityStruct
+	// Pilas con "name,omitempty"`
+	var auxTypeEntityStruct, multilineAuxTypeEntityStructs, models_typeEntityStruct string
+	var auxInsertStmt, models_InsertStmt string
 
-	fmt.Println(auxInsertErr, InsertErr)
+	var typeEntityStructs []string
 
-	for attribute, _ := range classMetadata {
-		//fmt.Printf("Clave: %s, Valor: %s\n", attribute, value)
+	for attribute, value := range classMetadata {
+
+		auxTypeEntityStruct = strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + "\t" + value + "\t" + "`json:\"" + attribute + "\"`"
 		auxInsertStmt = auxInsertStmt + attribute + ", "
+
+		//fmt.Println("auxTypeEntityStruct: ", auxTypeEntityStruct)
+		typeEntityStructs = append(typeEntityStructs, auxTypeEntityStruct)
 	}
-	//fmt.Println("models-InsertStmt|models-InsertStmt|models-InsertStmt|models-InsertStmt", auxInsertStmt)
+	//fmt.Println("Array de typeEntityStructs: ", typeEntityStructs)
+	//fmt.Println("\n")
 
+	// Se verticalizan , creo que quedarian mejor con un while
+	for i, _ := range typeEntityStructs {
+		//fmt.Println("Valor de i", i, "Valor de j", j)
+		multilineAuxTypeEntityStructs = multilineAuxTypeEntityStructs + typeEntityStructs[i] + "\n"
+	}
+
+	fmt.Println("multilineAuxTypeEntityStructs: \n ", multilineAuxTypeEntityStructs+"\n")
+	fmt.Println("\n")
+
+	models_typeEntityStruct = "type {{.Entity}} struct {" + "\n" + "Id	int	`json:\"id\"`" + "\n" + multilineAuxTypeEntityStructs + "CreatedAt   time.Time `json:\"created_at\"`" + "\n" + "UpdatedAt   time.Time `json:\"updated_at\"`" + "\n" + "}"
+	//fmt.Println("\n")
+	fmt.Println("models_typeEntityStruct: \n ", models_typeEntityStruct)
+	fmt.Println("\n")
+
+	// Generate models-InsertStmt
 	generateStmtValues(longitud + 2) // created_at, updated_at
-	InsertStmt = "stmt := `insert into {{.LowerEntity}}s (" + InsertStmt + "created_at, updated_at)\n" + "values (" + generateStmtValues(longitud+2) + ")" + " returning  id`"
-	fmt.Println("InsertStmt|InsertStmt|InsertStmt|InsertStmt ES: ", InsertStmt)
+	models_InsertStmt = "stmt := `insert into {{.LowerEntity}}s (" + auxInsertStmt + "created_at, updated_at)\n" + "values (" + generateStmtValues(longitud+2) + ")" + " returning  id`"
+	fmt.Println("models_InsertStmt es: ", models_InsertStmt)
+	fmt.Println("\n")
 
-	TypesVars["models-typeEntityStruct"] = "" // Validar si ya esta o no
-	TypesVars["models-InsertStmt"] = InsertStmt
+	// Generate models-InsertErr
+
+	//var auxInsertErr, InsertErr string
+	//fmt.Println(auxInsertErr, InsertErr)
+
+	TypesVars["models-typeEntityStruct"] = models_typeEntityStruct
+	TypesVars["models-InsertStmt"] = models_InsertStmt
 	// GENERANDO TIPOS
 	TypesVars["models-InsertErr"] = ""
 	TypesVars["models-GetOneQuery"] = ""
