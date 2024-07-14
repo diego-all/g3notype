@@ -39,6 +39,9 @@ func Generate(projectName, dbType, configFile string) {
 	generatedDDL := generateDDLStatement(class, classMetadata)
 	fmt.Println("El DDL es:", generatedDDL)
 
+	generatedModels := generateEntityModels(class, classMetadata)
+	fmt.Println("Generated Models es: ", generatedModels)
+
 	modifyBaseTemplates(tiposGenerados) // Pueden variar
 
 	//SE TUESTA MIRAR SI UN SLEEP O VALIDAR BIEN

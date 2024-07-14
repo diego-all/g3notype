@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"strconv"
 	"strings"
 	"text/template"
 )
@@ -161,8 +162,8 @@ func generateClassTags(class string, classMetadata map[string]string) map[string
 	TypesVars["handlers-varGetEntResponse"] = handlers_varGetEntResponse
 	TypesVars["handlers-varUpdateEntityModels"] = handlers_varUpdateEntityModels
 
-	fmt.Println("TIPO FINAL: ", TypesVars)
-	fmt.Println("\n")
+	//fmt.Println("TIPO FINAL: ", TypesVars)
+	//fmt.Println("\n")
 
 	return TypesVars
 	//return multiline // antes retornaba el primer type EntityRequest
@@ -299,9 +300,58 @@ func generateDDLStatement(class string, classMetadata map[string]string) string 
 	database_DDL_statement = "CREATE TABLE IF NOT EXISTS {{.LowerEntity}}s (\n" + "id INTEGER PRIMARY KEY AUTOINCREMENT,\n" + multilineAuxDDLStatement + "created_at TIMESTAMP DEFAULT DATETIME,\n" + "updated_at TIMESTAMP NOT NULL\n" + ");"
 
 	fmt.Println("database_DDL_statement ES:", database_DDL_statement)
-	return ""
+	return database_DDL_statement
 }
 
-func generateEntityModels() {
+func generateEntityModels(class string, classMetadata map[string]string) map[string]string {
+	fmt.Println("Desde generateEntityModels", class)
 
+	fmt.Println("Class metadata", classMetadata)
+	longitud := len(classMetadata)
+	fmt.Println("longitud del map es:", longitud)
+	fmt.Println("\n")
+
+	var auxInsertStmt, InsertStmt string
+	var auxInsertErr, InsertErr string
+
+	fmt.Println(auxInsertErr, InsertErr)
+
+	for attribute, _ := range classMetadata {
+		//fmt.Printf("Clave: %s, Valor: %s\n", attribute, value)
+		auxInsertStmt = auxInsertStmt + attribute + ", "
+	}
+	//fmt.Println("models-InsertStmt|models-InsertStmt|models-InsertStmt|models-InsertStmt", auxInsertStmt)
+
+	generateStmtValues(longitud + 2) // created_at, updated_at
+	InsertStmt = "stmt := `insert into {{.LowerEntity}}s (" + InsertStmt + "created_at, updated_at)\n" + "values (" + generateStmtValues(longitud+2) + ")" + " returning  id`"
+	fmt.Println("InsertStmt|InsertStmt|InsertStmt|InsertStmt ES: ", InsertStmt)
+
+	TypesVars["models-typeEntityStruct"] = "" // Validar si ya esta o no
+	TypesVars["models-InsertStmt"] = InsertStmt
+	// GENERANDO TIPOS
+	TypesVars["models-InsertErr"] = ""
+	TypesVars["models-GetOneQuery"] = ""
+	TypesVars["models-GetOneErr"] = ""
+	TypesVars["models-UpdateStmt"] = ""
+	TypesVars["models-UpdateErr"] = ""
+	TypesVars["models-GetAllQuery"] = ""
+	TypesVars["models-GetAllErrRowsScan"] = ""
+	TypesVars["models-DeleteStmt"] = "" // validar si realmente es necesario
+
+	var retorno map[string]string
+	return retorno
+
+}
+
+func generateStmtValues(quantity int) string {
+	var aux string
+
+	for i := 1; i <= quantity; i++ {
+		aux = aux + "$" + strconv.Itoa(i)
+		if i != quantity {
+			aux = aux + ", "
+		}
+	}
+
+	return aux
 }

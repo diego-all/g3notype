@@ -13,6 +13,9 @@
         },
         "cantidad": {
           "tipoDato": "integer"
+        },
+        "random": {
+          "tipoDato": "string"
         }
       }
     },

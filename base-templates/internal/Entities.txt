@@ -13,3 +13,28 @@ type {{.Entity}} struct {
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
 }
+
+
+func (p *{{.Entity}}) Insert({{.LowerEntity}} {{.Entity}}) (int, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
+	defer cancel()
+
+	var newID int
+
+	stmt := `insert into products (name, description, price, created_at, updated_at)
+	values ($1, $2, $3, $4, $5) returning id`
+
+	err := db.QueryRowContext(ctx, stmt,
+		product.Name,
+		product.Description,
+		product.Price,
+		time.Now(),
+		time.Now(),
+	).Scan(&newID)
+
+	if err != nil {
+		return 0, err
+	}
+
+	return newID, nil
+}
