@@ -316,6 +316,7 @@ func generateEntityModels(class string, classMetadata map[string]string) map[str
 	var auxTypeEntityStruct, multilineAuxTypeEntityStructs, models_typeEntityStruct string
 	var auxInsertStmt, models_InsertStmt string
 	var auxInsertErr, multilineAuxInsertErr, models_InsertErr string
+	var auxGetOneQuery, models_GetOneQuery string
 
 	models_InsertErr = "dsdsd"
 	fmt.Println(models_InsertErr)
@@ -329,6 +330,7 @@ func generateEntityModels(class string, classMetadata map[string]string) map[str
 		auxInsertStmt = auxInsertStmt + attribute + ", "
 		//auxInsertErr = auxInsertErr + "{{.LowerEntity}}." + strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + "\t"
 		auxInsertErr = "\t" + "{{.LowerEntity}}." + strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + ","
+		auxGetOneQuery = auxGetOneQuery + attribute + ", "
 
 		//fmt.Println("auxTypeEntityStruct: ", auxTypeEntityStruct)
 		typeEntityStructs = append(typeEntityStructs, auxTypeEntityStruct)
@@ -373,12 +375,19 @@ func generateEntityModels(class string, classMetadata map[string]string) map[str
 	//var auxInsertErr, InsertErr string
 	//fmt.Println(auxInsertErr, InsertErr)
 
-	fmt.Println("models_InsertErr es: ", models_InsertErr)
+	fmt.Println("models_InsertErr es: \n ", models_InsertErr)
+
+	// Generate models-GetOneQuery
+
+	models_GetOneQuery = "query := `select id, " + auxGetOneQuery + "created_at, updated_at from {{.LowerEntity}}s where id = $1`"
+	// query := `select id, name, description, price, created_at, updated_at from products where id = $1`
+	fmt.Println("models_GetOneQuery es: \n ", models_GetOneQuery)
+	fmt.Println("!ACAAAAAAAAAAAAAAAAAAAAAAAAAAA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
 	TypesVars["models-typeEntityStruct"] = models_typeEntityStruct
 	TypesVars["models-InsertStmt"] = models_InsertStmt
 	TypesVars["models-InsertErr"] = models_InsertErr
-	TypesVars["models-GetOneQuery"] = ""
+	TypesVars["models-GetOneQuery"] = models_GetOneQuery
 	// GENERANDO TIPOS
 	TypesVars["models-GetOneErr"] = ""
 	TypesVars["models-UpdateStmt"] = ""
