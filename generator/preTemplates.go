@@ -317,12 +317,14 @@ func generateEntityModels(class string, classMetadata map[string]string) map[str
 	var auxInsertStmt, models_InsertStmt string
 	var auxInsertErr, multilineAuxInsertErr, models_InsertErr string
 	var auxGetOneQuery, models_GetOneQuery string
+	var auxGetOneErr, multilineAuxGetOneErr, models_GetOneErr string
 
 	models_InsertErr = "dsdsd"
 	fmt.Println(models_InsertErr)
 
 	var typeEntityStructs []string
 	var InsertErrs []string
+	var GetOneErrs []string
 
 	for attribute, value := range classMetadata {
 
@@ -331,10 +333,12 @@ func generateEntityModels(class string, classMetadata map[string]string) map[str
 		//auxInsertErr = auxInsertErr + "{{.LowerEntity}}." + strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + "\t"
 		auxInsertErr = "\t" + "{{.LowerEntity}}." + strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + ","
 		auxGetOneQuery = auxGetOneQuery + attribute + ", "
+		auxGetOneErr = "\t" + "&{{.LowerEntity}}." + strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + ","
 
 		//fmt.Println("auxTypeEntityStruct: ", auxTypeEntityStruct)
 		typeEntityStructs = append(typeEntityStructs, auxTypeEntityStruct)
 		InsertErrs = append(InsertErrs, auxInsertErr)
+		GetOneErrs = append(GetOneErrs, auxGetOneErr)
 	}
 	//fmt.Println("Array de typeEntityStructs: ", typeEntityStructs)
 	//fmt.Println("\n")
@@ -381,15 +385,31 @@ func generateEntityModels(class string, classMetadata map[string]string) map[str
 
 	models_GetOneQuery = "query := `select id, " + auxGetOneQuery + "created_at, updated_at from {{.LowerEntity}}s where id = $1`"
 	// query := `select id, name, description, price, created_at, updated_at from products where id = $1`
+	// query := `select id, nombre, descripcion, precio, cantidad, random, created_at, updated_at from {{.LowerEntity}} where id = $1`
 	fmt.Println("models_GetOneQuery es: \n ", models_GetOneQuery)
+
+	// Generate models-GetOneErr
+	for i, j := range GetOneErrs {
+		fmt.Println("Valor de i", i, "Valor de j", j)
+
+		multilineAuxGetOneErr = multilineAuxGetOneErr + GetOneErrs[i] + "\n"
+	}
+
+	fmt.Println("multilineAuxGetOneErr: \n ", multilineAuxGetOneErr+"\n")
+	fmt.Println("\n")
+
+	models_GetOneErr = "err := row.Scan(" + "\n" + multilineAuxGetOneErr + "\t" + "&{{.LowerEntity}}.Id," + "\n \t" + "&{{.LowerEntity}}.CreatedAt," + "\n" + "\t" + "&{{.LowerEntity}}.UpdatedAt," + "\n" + ")"
+	fmt.Println("models_GetOneErr es: \n ", models_GetOneErr)
+
 	fmt.Println("!ACAAAAAAAAAAAAAAAAAAAAAAAAAAA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
 	TypesVars["models-typeEntityStruct"] = models_typeEntityStruct
 	TypesVars["models-InsertStmt"] = models_InsertStmt
 	TypesVars["models-InsertErr"] = models_InsertErr
 	TypesVars["models-GetOneQuery"] = models_GetOneQuery
+	TypesVars["models-GetOneErr"] = models_GetOneErr
+
 	// GENERANDO TIPOS
-	TypesVars["models-GetOneErr"] = ""
 	TypesVars["models-UpdateStmt"] = ""
 	TypesVars["models-UpdateErr"] = ""
 	TypesVars["models-GetAllQuery"] = ""
