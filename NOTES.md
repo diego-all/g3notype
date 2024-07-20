@@ -162,3 +162,5 @@ Error al ejecutar la plantilla: template: fileContent:8:3: executing "fileConten
 
 
 
+	go run main.go init --db postgres --config /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/classes.json projectTest | grep -A 8 -B 8 "models_UpdateErr"
+

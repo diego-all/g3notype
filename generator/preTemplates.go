@@ -316,11 +316,12 @@ func generateEntityModels(class string, classMetadata map[string]string) map[str
 	var auxTypeEntityStruct, multilineAuxTypeEntityStructs, models_typeEntityStruct string
 	var auxInsertStmt, models_InsertStmt string
 	var auxInsertErr, multilineAuxInsertErr, models_InsertErr string
-	var auxGetOneQuery, models_GetOneQuery string
+	var auxGetOneQuery, models_GetOneQuery string // similar to auxGetOneErr validar
 	var auxGetOneErr, multilineAuxGetOneErr, models_GetOneErr string
 	var auxUpdateStmt, multilineAuxUpdateStmt, models_UpdateStmt string
-
-	var auxUpdateErr, models_UpdateErr string
+	var auxUpdateErr, multilineAuxUpdateErr, models_UpdateErr string
+	var models_GetAllQuery string // similar to auxGetOneErr validar
+	var models_GetAllErrRowsScan string
 
 	models_InsertErr = "dsdsd"
 	fmt.Println(models_InsertErr)
@@ -329,6 +330,7 @@ func generateEntityModels(class string, classMetadata map[string]string) map[str
 	var InsertErrs []string
 	var GetOneErrs []string
 	var UpdateStmt []string
+	var UpdateErr []string
 
 	i := 1
 	for attribute, value := range classMetadata {
@@ -341,13 +343,14 @@ func generateEntityModels(class string, classMetadata map[string]string) map[str
 		auxGetOneQuery = auxGetOneQuery + attribute + ", "
 		auxGetOneErr = "\t" + "&{{.LowerEntity}}." + strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + ","
 		auxUpdateStmt = "\t" + strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + " = $" + strconv.Itoa(i) + ","
-		UpdateErr = "En construccion"
+		auxUpdateErr = "\t" + "{{.LowerEntity}}." + strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + ","
 
 		//fmt.Println("auxTypeEntityStruct: ", auxTypeEntityStruct)
 		typeEntityStructs = append(typeEntityStructs, auxTypeEntityStruct)
 		InsertErrs = append(InsertErrs, auxInsertErr)
 		GetOneErrs = append(GetOneErrs, auxGetOneErr)
 		UpdateStmt = append(UpdateStmt, auxUpdateStmt)
+		UpdateErr = append(UpdateErr, auxUpdateErr)
 		i++
 	}
 	//fmt.Println("Array de typeEntityStructs: ", typeEntityStructs)
@@ -355,6 +358,7 @@ func generateEntityModels(class string, classMetadata map[string]string) map[str
 	fmt.Println("TRINauxInsertErr: ", auxInsertErr)
 	fmt.Println("TRINNI TRINI")
 	fmt.Println("auxUpdateStmt ", auxUpdateStmt)
+	fmt.Println("auxUpdateErr", auxUpdateErr)
 
 	// Se verticalizan , creo que quedarian mejor con un while
 	for i, _ := range typeEntityStructs {
@@ -413,8 +417,11 @@ func generateEntityModels(class string, classMetadata map[string]string) map[str
 	models_GetOneErr = "err := row.Scan(" + "\n" + multilineAuxGetOneErr + "\t" + "&{{.LowerEntity}}.Id," + "\n \t" + "&{{.LowerEntity}}.CreatedAt," + "\n" + "\t" + "&{{.LowerEntity}}.UpdatedAt," + "\n" + ")"
 	fmt.Println("models_GetOneErr es: \n ", models_GetOneErr)
 
-	// Generate models-UpdateStmt
+	// Generate models-GetAllErrRowsScan
+	models_GetAllErrRowsScan = "err := rows.Scan(" + "\n" + multilineAuxGetOneErr + "\t" + "&{{.LowerEntity}}.Id," + "\n \t" + "&{{.LowerEntity}}.CreatedAt," + "\n" + "\t" + "&{{.LowerEntity}}.UpdatedAt," + "\n" + ")"
+	fmt.Println("models_GetAllErrRowsScan es: \n ", models_GetAllErrRowsScan)
 
+	// Generate models-UpdateStmt
 	for i, j := range UpdateStmt {
 		fmt.Println("Valor de i", i, "Valor de j", j)
 
@@ -427,9 +434,25 @@ func generateEntityModels(class string, classMetadata map[string]string) map[str
 
 	// Generate models-UpdateErr
 
-	models_UpdateErr = "_, err := db.ExecContext(ctx, stmt," + "ACA VA EL MULTILINE" + ")"
+	for i, j := range UpdateErr {
+		fmt.Println("Valor de i", i, "Valor de j", j)
 
-	fmt.Println("!ACAAAAAAAAAAAAAAAA!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+		multilineAuxUpdateErr = multilineAuxUpdateErr + UpdateErr[i] + "\n"
+	}
+
+	models_UpdateErr = "_, err := db.ExecContext(ctx, stmt," + "\n" + multilineAuxUpdateErr + "\t" + "time.Now()," + "\n \t" + "{{.LowerEntity}}.Id," + "\n" + ")"
+
+	fmt.Println("\n")
+	fmt.Println("models_UpdateErr: \n ", models_UpdateErr)
+	fmt.Println("\n")
+
+	// Generate models-GetAllQuery
+	// Finding!!! order  by name depends JSON config file for order by nombre
+
+	models_GetAllQuery = "query := `select id, " + auxGetOneQuery + "created_at, updated_at from {{.LowerEntity}}s order by nombre`"
+	// query := `select id, name, description, price, created_at, updated_at from products where id = $1`
+	// query := `select id, nombre, descripcion, precio, cantidad, random, created_at, updated_at from {{.LowerEntity}} where id = $1`
+	fmt.Println("models_GetAllQuery es: \n ", models_GetAllQuery)
 
 	TypesVars["models-typeEntityStruct"] = models_typeEntityStruct
 	TypesVars["models-InsertStmt"] = models_InsertStmt
@@ -437,11 +460,11 @@ func generateEntityModels(class string, classMetadata map[string]string) map[str
 	TypesVars["models-GetOneQuery"] = models_GetOneQuery
 	TypesVars["models-GetOneErr"] = models_GetOneErr
 	TypesVars["models-UpdateStmt"] = models_UpdateStmt
-	// GENERANDO TIPOS
-
 	TypesVars["models-UpdateErr"] = models_UpdateErr
-	TypesVars["models-GetAllQuery"] = ""
-	TypesVars["models-GetAllErrRowsScan"] = ""
+	TypesVars["models-GetAllQuery"] = models_GetAllQuery
+	TypesVars["models-GetAllErrRowsScan"] = models_GetAllErrRowsScan
+
+	// GENERANDO TIPOS
 	TypesVars["models-DeleteStmt"] = "" // validar si realmente es necesario
 
 	return TypesVars

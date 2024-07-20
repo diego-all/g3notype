@@ -69,3 +69,8 @@ Con este funciona bien y dice generando proyecto
     go run github.com/diego-all/run-from-gh@latest init --db postgres /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/config.json
 
     go run github.com/diego-all/run-from-gh@latest init --db postgres --config /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/config.json my-skakkkk
+
+
+El error tendra que ver con el modulo?
+con el tag?
+
