@@ -177,10 +177,6 @@ func generateClassTags(class string, classMetadata map[string]string) map[string
 
 func modifyBaseTemplates(preGeneratedTypes map[string]string) {
 
-	fmt.Println("Desde modifyBaseTemplates")
-
-	//var generatedType = "buenasnoches"
-
 	// //Error al ejecutar la plantilla: template: fileContent:8:2: executing "fileContent" at <.handlers_typeEntityRequest>: handlers_typeEntityRequest is an unexported field of struct type generator.preTemplateData
 	preData := PreTemplateData{
 		Handlers_typeEntityRequest:     preGeneratedTypes["handlers-typeEntityRequest"],
@@ -194,7 +190,7 @@ func modifyBaseTemplates(preGeneratedTypes map[string]string) {
 		LowerEntity: "{{.LowerEntity}}",
 	}
 
-	fmt.Println(preData)
+	// fmt.Println(preData)
 
 	// 	for attribute, value := range preGeneratedTypes {
 	for projectFile, templatePath := range preTemplates {
@@ -211,7 +207,7 @@ func modifyBaseTemplates(preGeneratedTypes map[string]string) {
 				continue
 			}
 
-			fmt.Println("CONTENT:", string(content))
+			//fmt.Println("CONTENT:", string(content))
 
 			tmpl, err := template.New("fileContent").Parse(string(content))
 			fmt.Println("tmpl es:", tmpl)
@@ -352,10 +348,9 @@ func generateEntityModels(class string, classMetadata map[string]string) map[str
 	}
 	//fmt.Println("Array de typeEntityStructs: ", typeEntityStructs)
 	//fmt.Println("\n")
-	fmt.Println("TRINauxInsertErr: ", auxInsertErr)
-	fmt.Println("TRINNI TRINI")
-	fmt.Println("auxUpdateStmt ", auxUpdateStmt)
-	fmt.Println("auxUpdateErr", auxUpdateErr)
+	// fmt.Println("TRINauxInsertErr: ", auxInsertErr)
+	// fmt.Println("auxUpdateStmt ", auxUpdateStmt)
+	// fmt.Println("auxUpdateErr", auxUpdateErr)
 
 	// Se verticalizan , creo que quedarian mejor con un while
 	for i, _ := range typeEntityStructs {
@@ -363,7 +358,7 @@ func generateEntityModels(class string, classMetadata map[string]string) map[str
 		multilineAuxTypeEntityStructs = multilineAuxTypeEntityStructs + "\t" + typeEntityStructs[i] + "\n"
 	}
 
-	fmt.Println("multilineAuxTypeEntityStructs: \n ", multilineAuxTypeEntityStructs+"\n")
+	//fmt.Println("multilineAuxTypeEntityStructs: \n ", multilineAuxTypeEntityStructs+"\n")
 	fmt.Println("\n")
 
 	models_typeEntityStruct = "type {{.Entity}} struct {" + "\n \t" + "Id	int	`json:\"id\"`" + "\n" + multilineAuxTypeEntityStructs + "\t" + "CreatedAt   time.Time `json:\"created_at\"`" + "\n \t" + "UpdatedAt   time.Time `json:\"updated_at\"`" + "\n" + "}"
@@ -373,18 +368,18 @@ func generateEntityModels(class string, classMetadata map[string]string) map[str
 
 	// Generate models-InsertStmt
 	generateStmtValues(longitud + 2) // created_at, updated_at
-	models_InsertStmt = "stmt := `insert into {{.LowerEntity}}s (" + auxInsertStmt + "created_at, updated_at)\n" + "values (" + generateStmtValues(longitud+2) + ")" + " returning  id`"
-	fmt.Println("models_InsertStmt es: ", models_InsertStmt)
+	models_InsertStmt = "\tstmt := `insert into {{.LowerEntity}}s (" + auxInsertStmt + "created_at, updated_at)\n \t" + "values (" + generateStmtValues(longitud+2) + ")" + " returning  id`"
+	fmt.Println("models_InsertStmt es: \n", models_InsertStmt)
 	fmt.Println("\n")
 
 	// Generate models-InsertErr
-	for i, j := range InsertErrs {
-		fmt.Println("Valor de i", i, "Valor de j", j)
+	for i, _ := range InsertErrs {
+		//fmt.Println("Valor de i", i, "Valor de j", j)
 
 		multilineAuxInsertErr = multilineAuxInsertErr + InsertErrs[i] + "\n"
 	}
 
-	fmt.Println("multilineAuxInsertErr: \n ", multilineAuxInsertErr+"\n")
+	//fmt.Println("multilineAuxInsertErr: \n ", multilineAuxInsertErr+"\n")
 	fmt.Println("\n")
 
 	models_InsertErr = "err := db.QueryRowContext(ctx, stmt," + "\n" + multilineAuxInsertErr + "\t" + "time.Now()," + "\n" + "\t" + "time.Now()," + "\n" + ").Scan(&newID)"
@@ -393,46 +388,51 @@ func generateEntityModels(class string, classMetadata map[string]string) map[str
 	//fmt.Println(auxInsertErr, InsertErr)
 
 	fmt.Println("models_InsertErr es: \n ", models_InsertErr)
+	fmt.Println("\n")
 
 	// Generate models-GetOneQuery
 
-	models_GetOneQuery = "query := `select id, " + auxGetOneQuery + "created_at, updated_at from {{.LowerEntity}}s where id = $1`"
+	models_GetOneQuery = "\tquery := `select id, " + auxGetOneQuery + "created_at, updated_at from {{.LowerEntity}}s where id = $1`"
 	// query := `select id, name, description, price, created_at, updated_at from products where id = $1`
 	// query := `select id, nombre, descripcion, precio, cantidad, random, created_at, updated_at from {{.LowerEntity}} where id = $1`
 	fmt.Println("models_GetOneQuery es: \n ", models_GetOneQuery)
 
 	// Generate models-GetOneErr
-	for i, j := range GetOneErrs {
-		fmt.Println("Valor de i", i, "Valor de j", j)
+	for i, _ := range GetOneErrs {
+		///fmt.Println("Valor de i", i, "Valor de j", j)
 
 		multilineAuxGetOneErr = multilineAuxGetOneErr + GetOneErrs[i] + "\n"
 	}
 
-	fmt.Println("multilineAuxGetOneErr: \n ", multilineAuxGetOneErr+"\n")
+	//fmt.Println("multilineAuxGetOneErr: \n ", multilineAuxGetOneErr+"\n")
 	fmt.Println("\n")
 
 	models_GetOneErr = "err := row.Scan(" + "\n" + multilineAuxGetOneErr + "\t" + "&{{.LowerEntity}}.Id," + "\n \t" + "&{{.LowerEntity}}.CreatedAt," + "\n" + "\t" + "&{{.LowerEntity}}.UpdatedAt," + "\n" + ")"
 	fmt.Println("models_GetOneErr es: \n ", models_GetOneErr)
 
+	fmt.Println("\n")
+
 	// Generate models-GetAllErrRowsScan
 	models_GetAllErrRowsScan = "err := rows.Scan(" + "\n" + multilineAuxGetOneErr + "\t" + "&{{.LowerEntity}}.Id," + "\n \t" + "&{{.LowerEntity}}.CreatedAt," + "\n" + "\t" + "&{{.LowerEntity}}.UpdatedAt," + "\n" + ")"
 	fmt.Println("models_GetAllErrRowsScan es: \n ", models_GetAllErrRowsScan)
 
+	fmt.Println("\n")
+
 	// Generate models-UpdateStmt
-	for i, j := range UpdateStmt {
-		fmt.Println("Valor de i", i, "Valor de j", j)
+	for i, _ := range UpdateStmt {
+		//fmt.Println("Valor de i", i, "Valor de j", j)
 
 		multilineAuxUpdateStmt = multilineAuxUpdateStmt + UpdateStmt[i] + "\n"
 	}
 
-	models_UpdateStmt = "stmt := `update products set" + "\n" + " " + multilineAuxUpdateStmt + "\t" + "updated_at = $" + strconv.Itoa(i+1) + "\n \t" + "where id = $" + strconv.Itoa(i+2) + "`"
+	models_UpdateStmt = "stmt := `update {{.LowerEntity}} set" + "\n" + " " + multilineAuxUpdateStmt + "\t" + "updated_at = $" + strconv.Itoa(i+1) + "\n \t" + "where id = $" + strconv.Itoa(i+2) + "`"
 
 	fmt.Println("models_UpdateStmt: \n ", models_UpdateStmt)
 
 	// Generate models-UpdateErr
 
-	for i, j := range UpdateErr {
-		fmt.Println("Valor de i", i, "Valor de j", j)
+	for i, _ := range UpdateErr {
+		//fmt.Println("Valor de i", i, "Valor de j", j)
 
 		multilineAuxUpdateErr = multilineAuxUpdateErr + UpdateErr[i] + "\n"
 	}
@@ -450,6 +450,7 @@ func generateEntityModels(class string, classMetadata map[string]string) map[str
 	// query := `select id, name, description, price, created_at, updated_at from products where id = $1`
 	// query := `select id, nombre, descripcion, precio, cantidad, random, created_at, updated_at from {{.LowerEntity}} where id = $1`
 	fmt.Println("models_GetAllQuery es: \n ", models_GetAllQuery)
+	fmt.Println("\n")
 
 	TypesVars["models-typeEntityStruct"] = models_typeEntityStruct
 	TypesVars["models-InsertStmt"] = models_InsertStmt

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"reflect"
 
 	"github.com/diego-all/run-from-gh/models"
 )
@@ -40,7 +41,9 @@ func Generate(projectName, dbType, configFile string) {
 	fmt.Println("El DDL es:", generatedDDL)
 
 	generatedModels := generateEntityModels(class, classMetadata)
-	fmt.Println("Generated Models es: ", generatedModels)
+	//fmt.Println("Generated Models es: ", generatedModels)
+	fmt.Println("Tipo del mapa:", reflect.TypeOf(generatedModels))
+	fmt.Println("\n")
 
 	modifyBaseTemplates(tiposGenerados) // Pueden variar
 
