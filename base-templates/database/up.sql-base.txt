@@ -8,8 +8,8 @@
 	updated_at TIMESTAMP NOT NULL
 	);
 
+{{.Database_DDL_statement}}
 
-	{{.database_DDL_statement}}
 
 -- DML statements [Dummy data]
 -- INSERT INTO products (name, description, price, created_at, updated_at)
@@ -26,3 +26,4 @@
 
 -- INSERT INTO products (name, description, price, created_at, updated_at)
 --     VALUES ('Muñeca', 'Muñeca de peluche para niños', 15, DATETIME('now'), DATETIME('now'));
+

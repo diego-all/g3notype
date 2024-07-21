@@ -12,11 +12,11 @@ func (app *application) routes() http.Handler {
 	mux.Get("/health", app.Health)
 
 	// {{.Entity}}
-	mux.Post("/EntityPlural", app.Create{{.Entity}})
-	mux.Get("/EntityPlural/get/{id}", app.Get{{.Entity}})
-	mux.Put("/EntityPlural/update/{id}", app.Update{{.Entity}})
-	mux.Get("/EntityPlural/all", app.All{{.Entity}})
-	mux.Delete("/EntityPlural/delete/{id}", app.Delete{{.Entity}})
+	mux.Post("/{{.LowerEntity}}s", app.Create{{.Entity}})
+	mux.Get("/{{.LowerEntity}}s/get/{id}", app.Get{{.Entity}})
+	mux.Put("/{{.LowerEntity}}s/update/{id}", app.Update{{.Entity}})
+	mux.Get("/{{.LowerEntity}}s/all", app.All{{.Entity}})
+	mux.Delete("/{{.LowerEntity}}s/delete/{id}", app.Delete{{.Entity}})
 
 	return mux
 }

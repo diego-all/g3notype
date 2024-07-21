@@ -1,0 +1,46 @@
+package models
+
+import (
+	"context"
+	"time"
+)
+
+{{.Models_typeEntityStruct}}
+
+func (p *{{.Entity}}) Insert({{.LowerEntity}} {{.Entity}}) (int, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
+	defer cancel()
+
+	var newID int
+
+	{{.Models_InsertStmt}}
+
+    {{.Models_InsertErr}}
+
+
+	if err != nil {
+		return 0, err
+	}
+
+	return newID, nil
+}
+
+
+
+func (p *{{.Entity}}) GetOneById(id int) (*{{.Entity}}), error) {
+	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
+	defer cancel()
+
+    {{.Models_GetOneQuery}}
+
+	var {{.LowerEntity}} {{.Entity}})
+	row := db.QueryRowContext(ctx, query, id)
+
+	{{.Models_GetOneErr}}
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &{{.LowerEntity}}, nil
+}

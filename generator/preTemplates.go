@@ -18,6 +18,7 @@ var TypesVars = map[string]string{
 	"handlers-varGetEntResponse":     "",
 	"handlers-varUpdateEntityModels": "",
 
+	//TypesVars["handlers-varUpdateEntityModels"] = Database_DDL_statement
 	"database-DDL-statement": "",
 
 	// EntityModels
@@ -37,7 +38,10 @@ var TypesVars = map[string]string{
 
 var preTemplates = map[string]string{
 	"cmd/api/handlers-entity-base.go": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/handlers-entity-generic.txt",
-	"cmd/api/entities-base.go":        "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/handlers-entity-generic.txt",
+
+	"database/up.sql": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/database/up.sql-generic.txt",
+
+	"internal/entities-base.go": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/internal/entities-generic.txt",
 
 	//"cmd/api/handlers-entity-base.go": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/handlers-entity-base.txt",
 	//"cmd/api/handlers-{{.Entity}}.go": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/handlers-entity.txt",
@@ -50,7 +54,9 @@ type PreTemplateData struct {
 	Handlers_varGetEntResponse     string
 	Handlers_varUpdateEntityModels string
 
-	//falta el ddl
+	//TypesVars["handlers-varUpdateEntityModels"] = Database_DDL_statement
+	//"database-DDL-statement": "",
+	Database_DDL_statement string
 
 	Models_typeEntityStruct  string
 	Models_InsertStmt        string
@@ -203,6 +209,20 @@ func modifyBaseTemplates(preGeneratedTypes map[string]string) {
 		Handlers_varCreateEntityModels: preGeneratedTypes["handlers-varCreateEntityModels"],
 		Handlers_varGetEntResponse:     preGeneratedTypes["handlers-varGetEntResponse"],
 		Handlers_varUpdateEntityModels: preGeneratedTypes["handlers-varUpdateEntityModels"],
+
+		Database_DDL_statement: preGeneratedTypes["database-DDL-statement"],
+
+		Models_typeEntityStruct:  preGeneratedTypes["models-typeEntityStruct"],
+		Models_InsertStmt:        preGeneratedTypes["models-InsertStmt"],
+		Models_InsertErr:         preGeneratedTypes["models-InsertErr"],
+		Models_GetOneQuery:       preGeneratedTypes["models-GetOneQuery"],
+		Models_GetOneErr:         preGeneratedTypes["models-GetOneErr"],
+		Models_UpdateStmt:        preGeneratedTypes["models-UpdateStmt"],
+		Models_UpdateErr:         preGeneratedTypes["models-UpdateErr"],
+		Models_GetAllQuery:       preGeneratedTypes["models-GetAllQuery"],
+		Models_GetAllErrRowsScan: preGeneratedTypes["models-GetAllErrRowsScan"],
+		Models_DeleteStmt:        preGeneratedTypes["models-DeleteStmt"], // validar si realmente es necesario
+
 		// quizas pueda ser {{.UpperEntity}}
 		Entity: "{{.Entity}}",
 		//entity:  "{{.entity}}",   // NO funciona con minusculas seguir indagando
@@ -272,7 +292,7 @@ func generateDDLStatement(class string, classMetadata map[string]string) string 
 	var ddlStatement []string
 	var sqliteValue string
 	var multilineAuxDDLStatement string
-	var database_DDL_statement string
+	var Database_DDL_statement string
 
 	for attribute, value := range classMetadata {
 		//fmt.Printf("Clave: %s, Valor: %s\n", attribute, value)
@@ -312,10 +332,12 @@ func generateDDLStatement(class string, classMetadata map[string]string) string 
 
 	//fmt.Println("multilineAuxDDLStatement: ", multilineAuxDDLStatement)
 
-	database_DDL_statement = "CREATE TABLE IF NOT EXISTS {{.LowerEntity}}s (\n" + "\t" + "id INTEGER PRIMARY KEY AUTOINCREMENT,\n" + multilineAuxDDLStatement + "\t" + "created_at TIMESTAMP DEFAULT DATETIME,\n \t" + "updated_at TIMESTAMP NOT NULL\n \t" + ");"
+	Database_DDL_statement = "CREATE TABLE IF NOT EXISTS {{.LowerEntity}}s (\n" + "\t" + "id INTEGER PRIMARY KEY AUTOINCREMENT,\n" + multilineAuxDDLStatement + "\t" + "created_at TIMESTAMP DEFAULT DATETIME,\n \t" + "updated_at TIMESTAMP NOT NULL\n \t" + ");"
+
+	TypesVars["database-DDL-statement"] = Database_DDL_statement
 
 	//fmt.Println("database_DDL_statement ES:", database_DDL_statement)
-	return database_DDL_statement
+	return Database_DDL_statement
 }
 
 func generateEntityModels(class string, classMetadata map[string]string) map[string]string {

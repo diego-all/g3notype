@@ -39,3 +39,5 @@ func testDB(db *sql.DB) error {
 	fmt.Println("Database ping successful!")
 	return nil
 }
+
+TRIN

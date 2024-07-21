@@ -1,0 +1,73 @@
+package models
+
+import (
+	"context"
+	"time"
+)
+
+type {{.Entity}} struct {
+ 	Id	int	`json:"id"`
+	Cantidad	integer	`json:"cantidad"`
+	Random	string	`json:"random"`
+	Nombre	string	`json:"nombre"`
+	Descripcion	string	`json:"descripcion"`
+	Precio	integer	`json:"precio"`
+	CreatedAt   time.Time `json:"created_at"`
+ 	UpdatedAt   time.Time `json:"updated_at"`
+}
+
+func (p *{{.Entity}}) Insert({{.LowerEntity}} {{.Entity}}) (int, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
+	defer cancel()
+
+	var newID int
+
+		stmt := `insert into {{.LowerEntity}}s (cantidad, random, nombre, descripcion, precio, created_at, updated_at)
+ 	values ($1, $2, $3, $4, $5, $6, $7) returning  id`
+
+    err := db.QueryRowContext(ctx, stmt,
+	{{.LowerEntity}}.Cantidad,
+	{{.LowerEntity}}.Random,
+	{{.LowerEntity}}.Nombre,
+	{{.LowerEntity}}.Descripcion,
+	{{.LowerEntity}}.Precio,
+	time.Now(),
+	time.Now(),
+).Scan(&newID)
+
+
+	if err != nil {
+		return 0, err
+	}
+
+	return newID, nil
+}
+
+
+
+func (p *{{.Entity}}) GetOneById(id int) (*{{.Entity}}), error) {
+	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
+	defer cancel()
+
+    	query := `select id, cantidad, random, nombre, descripcion, precio, created_at, updated_at from {{.LowerEntity}}s where id = $1`
+
+	var {{.LowerEntity}} {{.Entity}})
+	row := db.QueryRowContext(ctx, query, id)
+
+	err := row.Scan(
+	&{{.LowerEntity}}.Cantidad,
+	&{{.LowerEntity}}.Random,
+	&{{.LowerEntity}}.Nombre,
+	&{{.LowerEntity}}.Descripcion,
+	&{{.LowerEntity}}.Precio,
+	&{{.LowerEntity}}.Id,
+ 	&{{.LowerEntity}}.CreatedAt,
+	&{{.LowerEntity}}.UpdatedAt,
+)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &{{.LowerEntity}}, nil
+}

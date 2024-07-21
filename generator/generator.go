@@ -45,7 +45,8 @@ func Generate(projectName, dbType, configFile string) {
 	fmt.Println("Tipo del mapa:", reflect.TypeOf(generatedModels))
 	fmt.Println("\n")
 
-	modifyBaseTemplates(tiposGenerados) // Pueden variar
+	//modifyBaseTemplates(tiposGenerados)  // Pueden variar
+	modifyBaseTemplates(generatedModels) // Pueden variar
 
 	//SE TUESTA MIRAR SI UN SLEEP O VALIDAR BIEN
 
