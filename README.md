@@ -74,3 +74,6 @@ Con este funciona bien y dice generando proyecto
 El error tendra que ver con el modulo?
 con el tag?
 
+    Ejecutar y buscar tipos
+
+    go run main.go init --db postgres --config /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/classes.json projectTest | grep -A 10  "models_GetAllErrRowsScan"

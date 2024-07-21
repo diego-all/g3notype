@@ -10,19 +10,9 @@ import (
 	"github.com/go-chi/chi"
 )
 
-type {{.LowerEntity}}Request struct {
-Cantidad	integer	`json:"cantidad"`
-Nombre	string	`json:"nombre"`
-Descripcion	string	`json:"descripcion"`
-Precio	integer	`json:"precio"`
-}
+{{.Handlers_typeEntityRequest}}
 
-type {{.LowerEntity}}Response struct {
-Cantidad	integer	`json:"cantidad"`
-Nombre	string	`json:"nombre"`
-Descripcion	string	`json:"descripcion"`
-Precio	integer	`json:"precio"`
-}
+{{.Handlers_typeEntityResponse}}
 
 
 func (app *application) Create{{.Entity}}(w http.ResponseWriter, r *http.Request) {
@@ -39,12 +29,7 @@ func (app *application) Create{{.Entity}}(w http.ResponseWriter, r *http.Request
 	}
 
 
-	var {{.LowerEntity}} = models.{{.Entity}}{
-Cantidad:	{{.LowerEntity}}Req.Cantidad,
-Nombre:	{{.LowerEntity}}Req.Nombre,
-Descripcion:	{{.LowerEntity}}Req.Descripcion,
-Precio:	{{.LowerEntity}}Req.Precio,
-}
+	{{.Handlers_varCreateEntityModels}}
 
 	_, err = app.models.{{.Entity}}.Insert({{.LowerEntity}})
 	if err != nil {
@@ -74,12 +59,7 @@ func (app *application) Get{{.Entity}}(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-		var {{.LowerEntity}}Response = {{.LowerEntity}}Response{
-Cantidad:	{{.LowerEntity}}.Cantidad,
-Nombre:	{{.LowerEntity}}.Nombre,
-Descripcion:	{{.LowerEntity}}.Descripcion,
-Precio:	{{.LowerEntity}}.Precio,
-}
+		{{.Handlers_varGetEntResponse}}
 
 	payload := jsonResponse{
 		Error:   false,
@@ -116,14 +96,7 @@ func (app *application) Update{{.Entity}}(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	var {{.LowerEntity}} = models.{{.Entity}}{
-Cantidad:	{{.LowerEntity}}Req.Cantidad,
-Nombre:	{{.LowerEntity}}Req.Nombre,
-Descripcion:	{{.LowerEntity}}Req.Descripcion,
-Precio:	{{.LowerEntity}}Req.Precio,
-UpdatedAt:   time.Now(),
-Id:          {{.LowerEntity}}ID,
-}
+	{{.Handlers_varUpdateEntityModels}}
 
 	_, err = app.models.{{.Entity}}.Update({{.LowerEntity}})
 	if err != nil {
