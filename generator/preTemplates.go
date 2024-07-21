@@ -33,8 +33,13 @@ var TypesVars = map[string]string{
 	"models-DeleteStmt":        "", // validar si realmente es necesario
 }
 
+// RECORDAR EL CAMBIASO DE BASE A GENERIC SOLO FUR POR ORDEN ALFABETICO PERO AL KEY NO SE CAMBIO, DEBERIA SER entity-generic.go
+
 var preTemplates = map[string]string{
-	"cmd/api/handlers-entity-base.go": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/handlers-entity-base.txt",
+	"cmd/api/handlers-entity-base.go": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/handlers-entity-generic.txt",
+	"cmd/api/entities-base.go":        "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/handlers-entity-generic.txt",
+
+	//"cmd/api/handlers-entity-base.go": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/handlers-entity-base.txt",
 	//"cmd/api/handlers-{{.Entity}}.go": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/handlers-entity.txt",
 }
 
@@ -44,8 +49,22 @@ type PreTemplateData struct {
 	Handlers_varCreateEntityModels string
 	Handlers_varGetEntResponse     string
 	Handlers_varUpdateEntityModels string
-	Entity                         string
-	LowerEntity                    string
+
+	//falta el ddl
+
+	Models_typeEntityStruct  string
+	Models_InsertStmt        string
+	Models_InsertErr         string
+	Models_GetOneQuery       string
+	Models_GetOneErr         string
+	Models_UpdateStmt        string
+	Models_UpdateErr         string
+	Models_GetAllQuery       string
+	Models_GetAllErrRowsScan string
+	Models_DeleteStmt        string
+
+	Entity      string
+	LowerEntity string
 }
 
 // quizas sea generar Tipos o algo asi, todas las estructuras que dependen de la metadata de clases (atributos)
