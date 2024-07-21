@@ -14,7 +14,7 @@ import (
 var estructura = map[string]string{
 	"cmd/api/handlers.go": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/handlers.txt",
 	//"cmd/api/handlers-{{.Entity}}.go": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/handlers-entity.txt",
-	"cmd/api/handlers-{{.Entity}}.go": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/handlers-entity-base.txt",
+	"cmd/api/handlers-{{.Entity}}.go": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/handlers-entity-generic.txt",
 	//"cmd/api/handlers-{{.Entity}}.go": "/home/diegoall/base-templates/cmd/api/handlers-{{.Entity}}.txt",
 	//"cmd/api/handlers-{{.Entity}}.go": "/base-templates/cmd/api/handlers-{{.Entity}}.txt",
 	"cmd/api/main.go":        "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/main.txt",
@@ -27,7 +27,7 @@ var estructura = map[string]string{
 	"go.mod":                        "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/go.mod",
 	"go.sum":                        "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/go.sum",
 	"internal/models.go":            "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/internal/models.txt",
-	"internal/{{.EntityPlural}}.go": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/internal/Entities.txt",
+	"internal/{{.EntityPlural}}.go": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/internal/entities-generic.txt", //la acabo de cambiar
 	//"product_classDiagram.png":      "/base-templates",
 	"README.md": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/README.md",
 }
@@ -37,6 +37,7 @@ var estructura = map[string]string{
 // generateClassTags(class, classMetadata)
 type TemplateData struct {
 	Entity        string
+	LowerEntity   string
 	EntityPlural  string
 	AppName       string
 	ClassMetadata map[string]string
@@ -48,6 +49,10 @@ func createFolderStructure(appName string, class string, classMetadata map[strin
 
 	// Convertir la entidad a plural
 	entityPlural := class + "s"
+	fmt.Println("Imprimiendo el plural de la entidad", entityPlural)
+	lowerEntity := strings.ToLower(class)
+
+	// strings.ToUpper(string(attribute[0])) + string(attribute[1:])
 
 	//fmt.Println("GENERATED TYPE ES desde createFolder:", generatedType)
 
@@ -56,10 +61,11 @@ func createFolderStructure(appName string, class string, classMetadata map[strin
 
 	// Datos para las plantillas
 	data := TemplateData{
-		Entity:        class,
-		EntityPlural:  entityPlural,
-		AppName:       appName,
-		ClassMetadata: classMetadata,
+		Entity:       class,
+		LowerEntity:  lowerEntity,
+		EntityPlural: entityPlural,
+		AppName:      appName,
+		//ClassMetadata: classMetadata, // recien comentada
 		//GeneratedType: generatedType,
 	}
 

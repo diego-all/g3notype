@@ -5,8 +5,16 @@ import (
 	"time"
 )
 
-
-
+type {{.Entity}} struct {
+ 	Id	int	`json:"id"`
+	Random	string	`json:"random"`
+	Nombre	string	`json:"nombre"`
+	Descripcion	string	`json:"descripcion"`
+	Precio	integer	`json:"precio"`
+	Cantidad	integer	`json:"cantidad"`
+	CreatedAt   time.Time `json:"created_at"`
+ 	UpdatedAt   time.Time `json:"updated_at"`
+}
 
 func (p *{{.Entity}}) Insert({{.LowerEntity}} {{.Entity}}) (int, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
@@ -14,13 +22,18 @@ func (p *{{.Entity}}) Insert({{.LowerEntity}} {{.Entity}}) (int, error) {
 
 	var newID int
 
-	   
+		stmt := `insert into {{.LowerEntity}}s (random, nombre, descripcion, precio, cantidad, created_at, updated_at)
+ 	values ($1, $2, $3, $4, $5, $6, $7) returning  id`
 
-
-	         
-
-	stmt := `insert into products (name, description, price, created_at, updated_at)
-	values ($1, $2, $3, $4, $5) returning id`
+    err := db.QueryRowContext(ctx, stmt,
+	{{.LowerEntity}}.Random,
+	{{.LowerEntity}}.Nombre,
+	{{.LowerEntity}}.Descripcion,
+	{{.LowerEntity}}.Precio,
+	{{.LowerEntity}}.Cantidad,
+	time.Now(),
+	time.Now(),
+).Scan(&newID)
 
 
 	if err != nil {
@@ -32,17 +45,25 @@ func (p *{{.Entity}}) Insert({{.LowerEntity}} {{.Entity}}) (int, error) {
 
 
 
-func (p *{{.Entity}}) GetOneById(id int) (*{{.Entity}}), error) {
+func (p *{{.Entity}}) GetOneById(id int) (*{{.Entity}}, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
 	defer cancel()
 
-	
+    	query := `select id, random, nombre, descripcion, precio, cantidad, created_at, updated_at from {{.LowerEntity}}s where id = $1`
 
-
-	var {{.LowerEntity}} {{.Entity}})
+	var {{.LowerEntity}} {{.Entity}}
 	row := db.QueryRowContext(ctx, query, id)
 
-	
+	err := row.Scan(
+	&{{.LowerEntity}}.Random,
+	&{{.LowerEntity}}.Nombre,
+	&{{.LowerEntity}}.Descripcion,
+	&{{.LowerEntity}}.Precio,
+	&{{.LowerEntity}}.Cantidad,
+	&{{.LowerEntity}}.Id,
+ 	&{{.LowerEntity}}.CreatedAt,
+	&{{.LowerEntity}}.UpdatedAt,
+)
 
 	if err != nil {
 		return nil, err

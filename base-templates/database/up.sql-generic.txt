@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS {{.LowerEntity}}s (
  	updated_at TIMESTAMP NOT NULL
  	);
 
+
 -- DML statements [Dummy data]
 -- INSERT INTO products (name, description, price, created_at, updated_at)
 --     VALUES ('Teléfono móvil', 'Smartphone de última generación', 799, DATETIME('now'), DATETIME('now'));

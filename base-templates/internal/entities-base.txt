@@ -27,13 +27,13 @@ func (p *{{.Entity}}) Insert({{.LowerEntity}} {{.Entity}}) (int, error) {
 
 
 
-func (p *{{.Entity}}) GetOneById(id int) (*{{.Entity}}), error) {
+func (p *{{.Entity}}) GetOneById(id int) (*{{.Entity}}, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
 	defer cancel()
 
     {{.Models_GetOneQuery}}
 
-	var {{.LowerEntity}} {{.Entity}})
+	var {{.LowerEntity}} {{.Entity}}
 	row := db.QueryRowContext(ctx, query, id)
 
 	{{.Models_GetOneErr}}

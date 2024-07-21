@@ -229,7 +229,7 @@ func modifyBaseTemplates(preGeneratedTypes map[string]string) {
 		LowerEntity: "{{.LowerEntity}}",
 	}
 
-	// fmt.Println(preData)
+	//fmt.Println(preData)
 
 	// 	for attribute, value := range preGeneratedTypes {
 	for projectFile, templatePath := range preTemplates {
