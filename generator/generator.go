@@ -32,7 +32,7 @@ func Generate(projectName, dbType, configFile string) {
 	fmt.Printf("Configuración leída: %+v\n %+v\n", class, classMetadata)
 
 	tiposGenerados := generateClassTags(class, classMetadata)
-	fmt.Println("Longitud de tiposGenerados: (generator/Generate)", len(tiposGenerados))
+	// fmt.Println("Longitud de tiposGenerados: (generator/Generate)", len(tiposGenerados))
 	//fmt.Println("TIPO GENERADO:", tipoGenerado) // el mismo del retorno de la funcion
 	fmt.Println("\n")
 
@@ -43,10 +43,11 @@ func Generate(projectName, dbType, configFile string) {
 	generatedModels := generateEntityModels(class, classMetadata)
 	//fmt.Println("Generated Models es: ", generatedModels)
 	fmt.Println("Tipo del mapa:", reflect.TypeOf(generatedModels))
+	//fmt.Println("Se han generado ", generatedModels, "EntityModels")
 	fmt.Println("\n")
 
-	//modifyBaseTemplates(tiposGenerados)  // Pueden variar
-	modifyBaseTemplates(generatedModels) // Pueden variar
+	modifyBaseTemplates(tiposGenerados) // Pueden variar
+	//modifyBaseTemplates(generatedModels) // Pueden variar
 
 	//SE TUESTA MIRAR SI UN SLEEP O VALIDAR BIEN
 

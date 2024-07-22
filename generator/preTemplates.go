@@ -202,6 +202,21 @@ func generateClassTags(class string, classMetadata map[string]string) map[string
 
 func modifyBaseTemplates(preGeneratedTypes map[string]string) {
 
+	fmt.Println("\n")
+	fmt.Println("PREGENERATED TYPES en modifyBaseTemplates: \n", preGeneratedTypes)
+	fmt.Println("LONGITUD DE PREREGENERATED TYPES en modifyBaseTemplates", len(preGeneratedTypes))
+
+	count := 0
+	for _, value := range preGeneratedTypes {
+		// Verifica si el valor no es vacío. Ajusta la condición según el tipo de valor esperado.
+		if value != "" { // Esto es solo un ejemplo para valores string. Ajusta según tu tipo de dato.
+			count++
+		}
+	}
+	fmt.Println("Número de keys llenas en preGeneratedTypes:", count)
+
+	fmt.Println("\n")
+
 	// //Error al ejecutar la plantilla: template: fileContent:8:2: executing "fileContent" at <.handlers_typeEntityRequest>: handlers_typeEntityRequest is an unexported field of struct type generator.preTemplateData
 	preData := PreTemplateData{
 		Handlers_typeEntityRequest:     preGeneratedTypes["handlers-typeEntityRequest"],
