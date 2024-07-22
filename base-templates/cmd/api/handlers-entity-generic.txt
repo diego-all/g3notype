@@ -10,21 +10,9 @@ import (
 	"github.com/go-chi/chi"
 )
 
-type {{.LowerEntity}}Request struct {
-Precio	integer	`json:"precio"`
-Cantidad	integer	`json:"cantidad"`
-Random	string	`json:"random"`
-Nombre	string	`json:"nombre"`
-Descripcion	string	`json:"descripcion"`
-}
+{{.Handlers_typeEntityRequest}}
 
-type {{.LowerEntity}}Response struct {
-Precio	integer	`json:"precio"`
-Cantidad	integer	`json:"cantidad"`
-Random	string	`json:"random"`
-Nombre	string	`json:"nombre"`
-Descripcion	string	`json:"descripcion"`
-}
+{{.Handlers_typeEntityResponse}}
 
 
 func (app *application) Create{{.Entity}}(w http.ResponseWriter, r *http.Request) {
@@ -41,13 +29,7 @@ func (app *application) Create{{.Entity}}(w http.ResponseWriter, r *http.Request
 	}
 
 
-	var {{.LowerEntity}} = models.{{.Entity}}{
-Precio:	{{.LowerEntity}}Req.Precio,
-Cantidad:	{{.LowerEntity}}Req.Cantidad,
-Random:	{{.LowerEntity}}Req.Random,
-Nombre:	{{.LowerEntity}}Req.Nombre,
-Descripcion:	{{.LowerEntity}}Req.Descripcion,
-}
+	{{.Handlers_varCreateEntityModels}}
 
 	_, err = app.models.{{.Entity}}.Insert({{.LowerEntity}})
 	if err != nil {
@@ -77,13 +59,7 @@ func (app *application) Get{{.Entity}}(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-		var {{.LowerEntity}}Response = {{.LowerEntity}}Response{
-Precio:	{{.LowerEntity}}.Precio,
-Cantidad:	{{.LowerEntity}}.Cantidad,
-Random:	{{.LowerEntity}}.Random,
-Nombre:	{{.LowerEntity}}.Nombre,
-Descripcion:	{{.LowerEntity}}.Descripcion,
-}
+	{{.Handlers_varGetEntResponse}}
 
 	payload := jsonResponse{
 		Error:   false,
@@ -120,15 +96,7 @@ func (app *application) Update{{.Entity}}(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	var {{.LowerEntity}} = models.{{.Entity}}{
-Precio:	{{.LowerEntity}}Req.Precio,
-Cantidad:	{{.LowerEntity}}Req.Cantidad,
-Random:	{{.LowerEntity}}Req.Random,
-Nombre:	{{.LowerEntity}}Req.Nombre,
-Descripcion:	{{.LowerEntity}}Req.Descripcion,
-UpdatedAt:   time.Now(),
-Id:          {{.LowerEntity}}ID,
-}
+	{{.Handlers_varUpdateEntityModels}}
 
 	_, err = app.models.{{.Entity}}.Update({{.LowerEntity}})
 	if err != nil {

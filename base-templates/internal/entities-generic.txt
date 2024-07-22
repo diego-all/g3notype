@@ -5,16 +5,7 @@ import (
 	"time"
 )
 
-type {{.Entity}} struct {
- 	Id	int	`json:"id"`
-	Random	string	`json:"random"`
-	Nombre	string	`json:"nombre"`
-	Descripcion	string	`json:"descripcion"`
-	Precio	integer	`json:"precio"`
-	Cantidad	integer	`json:"cantidad"`
-	CreatedAt   time.Time `json:"created_at"`
- 	UpdatedAt   time.Time `json:"updated_at"`
-}
+{{.Models_typeEntityStruct}}
 
 func (p *{{.Entity}}) Insert({{.LowerEntity}} {{.Entity}}) (int, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
@@ -22,18 +13,9 @@ func (p *{{.Entity}}) Insert({{.LowerEntity}} {{.Entity}}) (int, error) {
 
 	var newID int
 
-		stmt := `insert into {{.LowerEntity}}s (random, nombre, descripcion, precio, cantidad, created_at, updated_at)
- 	values ($1, $2, $3, $4, $5, $6, $7) returning  id`
+	{{.Models_InsertStmt}}
 
-    err := db.QueryRowContext(ctx, stmt,
-	{{.LowerEntity}}.Random,
-	{{.LowerEntity}}.Nombre,
-	{{.LowerEntity}}.Descripcion,
-	{{.LowerEntity}}.Precio,
-	{{.LowerEntity}}.Cantidad,
-	time.Now(),
-	time.Now(),
-).Scan(&newID)
+    {{.Models_InsertErr}}
 
 
 	if err != nil {
@@ -49,25 +31,77 @@ func (p *{{.Entity}}) GetOneById(id int) (*{{.Entity}}, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
 	defer cancel()
 
-    	query := `select id, random, nombre, descripcion, precio, cantidad, created_at, updated_at from {{.LowerEntity}}s where id = $1`
+    {{.Models_GetOneQuery}}
 
 	var {{.LowerEntity}} {{.Entity}}
 	row := db.QueryRowContext(ctx, query, id)
 
-	err := row.Scan(
-	&{{.LowerEntity}}.Random,
-	&{{.LowerEntity}}.Nombre,
-	&{{.LowerEntity}}.Descripcion,
-	&{{.LowerEntity}}.Precio,
-	&{{.LowerEntity}}.Cantidad,
-	&{{.LowerEntity}}.Id,
- 	&{{.LowerEntity}}.CreatedAt,
-	&{{.LowerEntity}}.UpdatedAt,
-)
+	{{.Models_GetOneErr}}
 
 	if err != nil {
 		return nil, err
 	}
 
 	return &{{.LowerEntity}}, nil
+}
+
+
+func (p *{{.Entity}}) Update({{.LowerEntity}} {{.Entity}}) (int, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
+	defer cancel() // resource leaks
+
+	{{.Models_UpdateStmt}}
+
+	{{.Models_UpdateErr}}
+
+	if err != nil {
+		return 0, err
+	}
+
+	return 0, nil
+}
+
+
+
+func (p *{{.Entity}}) GetAll() ([]*{{.Entity}}, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
+	defer cancel()
+
+	{{.Models_GetAllQuery}}
+
+	rows, err := db.QueryContext(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var {{.LowerEntity}}s []*{{.Entity}}
+
+	for rows.Next() {
+		var {{.LowerEntity}} {{.Entity}}
+		{{.Models_GetAllErrRowsScan}}
+		if err != nil {
+			return nil, err
+		}
+
+		{{.LowerEntity}}s = append({{.LowerEntity}}s, &{{.LowerEntity}})
+	}
+
+	return {{.LowerEntity}}s, nil
+}
+
+
+
+func (p *{{.Entity}}) DeleteByID(id int) error {
+
+	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
+	defer cancel()
+
+	stmt := `delete from {{.LowerEntity}}s where id = $1`
+
+	_, err := db.ExecContext(ctx, stmt, id)
+	if err != nil {
+		return err
+	}
+	return nil
 }

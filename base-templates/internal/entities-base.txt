@@ -44,3 +44,64 @@ func (p *{{.Entity}}) GetOneById(id int) (*{{.Entity}}, error) {
 
 	return &{{.LowerEntity}}, nil
 }
+
+
+func (p *{{.Entity}}) Update({{.LowerEntity}} {{.Entity}}) (int, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
+	defer cancel() // resource leaks
+
+	{{.Models_UpdateStmt}}
+
+	{{.Models_UpdateErr}}
+
+	if err != nil {
+		return 0, err
+	}
+
+	return 0, nil
+}
+
+
+
+func (p *{{.Entity}}) GetAll() ([]*{{.Entity}}, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
+	defer cancel()
+
+	{{.Models_GetAllQuery}}
+
+	rows, err := db.QueryContext(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var {{.LowerEntity}}s []*{{.Entity}}
+
+	for rows.Next() {
+		var {{.LowerEntity}} {{.Entity}}
+		{{.Models_GetAllErrRowsScan}}
+		if err != nil {
+			return nil, err
+		}
+
+		{{.LowerEntity}}s = append({{.LowerEntity}}s, &{{.LowerEntity}})
+	}
+
+	return {{.LowerEntity}}s, nil
+}
+
+
+
+func (p *{{.Entity}}) DeleteByID(id int) error {
+
+	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
+	defer cancel()
+
+	stmt := `delete from {{.LowerEntity}}s where id = $1`
+
+	_, err := db.ExecContext(ctx, stmt, id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
