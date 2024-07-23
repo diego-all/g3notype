@@ -179,3 +179,75 @@ Si se requiere un tag especifico
     
     git tag -d v0.1.1
     git push origin --delete v0.1.1
+
+
+    git remote add origin git@github.diego-all:diego-all/evergreen-con.git  (esta funciono para evergreen)
+    git remote add origin git@github.diego-all:diego-all/run-from-gh.git
+
+
+    root@pho3nix:/home/diegoall/MAESTRIA_ING/CLI/PRUEBACLI# go run github.com/diego-all/run-from-gh@latest init --db postgres my-ska
+    go: downloading github.com/diego-all/run-from-gh v0.0.0-20240615221752-c6170d014454
+    Generando proyecto 'my-ska' con base de datos 'postgres'
+
+
+    Al parecer tiene 2 comandos: my-cli-app e init
+
+comando raiz
+
+
+Usage:
+  my-cli-app init [nombre del proyecto] [flags]
+
+
+    go run github.com/diego-all/run-from-gh@latest init --db postgres my-ska
+
+
+    go run github.com/diego-all/run-from-github@latest init --db postgres --config /ruta/al/archivo/config.json my-ska
+
+
+Con este dice que le sobra un parametro
+
+    go run github.com/diego-all/run-from-gh@latest init --db postgres /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/config.json my-skakkkk (primera)
+    
+    go run github.com/diego-all/run-from-github@latest init --db postgres --config path/to/your/config.json my-ska  (segunfa)
+
+
+    go run github.com/diego-all/run-from-gh@latest init --db postgres --config /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/config.json my-skakkkk (segunda)
+
+
+    go run github.com/diego-all/run-from-gh@latest init --db postgres --config /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/config.json my-skakkkk
+
+
+
+
+
+Con este funciona bien y dice generando proyecto
+
+    go run main.go init --db postgres --config /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/config.json projectTest   (MAS CERCANO)
+    go run github.com/diego-all/run-from-gh@latest init --db postgres --config /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/config.json projectTest   (MAS CERCANO)
+
+    go run github.com/diego-all/run-from-gh@latest init --db postgres /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/config.json
+
+    go run github.com/diego-all/run-from-gh@latest init --db postgres --config /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/config.json my-skakkkk
+
+
+El error tendra que ver con el modulo?
+con el tag?
+
+    Ejecutar y buscar tipos
+
+    go run main.go init --db postgres --config /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/classes.json projectTest | grep -A 10  "models_GetAllErrRowsScan"
+
+
+    ACTUAL
+
+
+    go run main.go init --db postgres --config /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/classes.json projectTest
+
+
+    go run github.com/diego-all/run-from-gh@latest init --db postgres --config /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/config.json projectTest
+
+
+
+    go run github.com/diego-all/run-from-gh@v0.1.1 init --db sqlite --config /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/classes.json projectTest
+    go run main.go init --db sqlite --config /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/classes.json projectTest 
