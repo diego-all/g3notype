@@ -164,3 +164,18 @@ Error al ejecutar la plantilla: template: fileContent:8:3: executing "fileConten
 
 	go run main.go init --db postgres --config /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/classes.json projectTest | grep -A 8 -B 8 "models_UpdateErr"
 
+
+
+
+## Generar Tags
+
+Si se requiere un tag especifico
+
+    git tag -a v0.1.1 -m "Nueva versión con el comando init"
+    git push origin v0.1.1
+    go run github.com/diego-all/bridge-exe@v0.1.1 init --name Diego
+
+    git show-ref --tags
+    
+    git tag -d v0.1.1
+    git push origin --delete v0.1.1
