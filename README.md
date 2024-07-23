@@ -1,13 +1,13 @@
-# run-from-gh
+# G3notype (run-from-gh)
 
-**Para su ejecución se debe especificar:**
+## Para su ejecución se debe especificar:
 
 init       (Iniciar la generación del scaffolding.)
 --config  (Ruta al archivo de configuración JSON con el modelo)
 --db sqlite  (Base de datos a utilizar)
 projectTest  (Nombre del proyecto)
 
-**Input JSON (--config)**
+### Input JSON (--config)
 
     {
       "tipo": "Book",
@@ -31,7 +31,7 @@ projectTest  (Nombre del proyecto)
     },
 
 
-**Local**
+### Local
 
     go run github.com/diego-all/run-from-gh@latest init
 
@@ -40,6 +40,6 @@ projectTest  (Nombre del proyecto)
     go run main.go init --db postgres --config /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/classes.json projectTest
 
 
-**From remote repository**
+### From remote repository
 
     go run github.com/diego-all/run-from-gh@v0.1.1 init --db sqlite --config /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/classes.json projectTest
