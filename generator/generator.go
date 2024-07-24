@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"reflect"
 
 	"github.com/diego-all/run-from-gh/models"
 )
@@ -20,42 +19,42 @@ type Entity struct {
 	Atributos map[string]Attribute `json:"atributos"`
 }
 
-func Generate(projectName, dbType, configFile string) {
-	fmt.Printf("Generando proyecto '%s' con base de datos '%s'\n", projectName, dbType)
+// func Generate(projectName, dbType, configFile string) {
+// 	fmt.Printf("Generando proyecto '%s' con base de datos '%s'\n", projectName, dbType)
 
-	class, classMetadata, _, err := readConfigMetadata(configFile)
-	if err != nil {
-		fmt.Printf("Error leyendo el archivo de configuración: %s\n", err)
-		fmt.Println("la clase es:", class)
-		os.Exit(1)
-	}
-	fmt.Printf("Configuración leída: %+v\n %+v\n", class, classMetadata)
+// 	class, classMetadata, _, err := readConfigMetadata(configFile)
+// 	if err != nil {
+// 		fmt.Printf("Error leyendo el archivo de configuración: %s\n", err)
+// 		fmt.Println("la clase es:", class)
+// 		os.Exit(1)
+// 	}
+// 	fmt.Printf("Configuración leída: %+v\n %+v\n", class, classMetadata)
 
-	tiposGenerados := generateClassTags(class, classMetadata)
-	// fmt.Println("Longitud de tiposGenerados: (generator/Generate)", len(tiposGenerados))
-	//fmt.Println("TIPO GENERADO:", tipoGenerado) // el mismo del retorno de la funcion
-	fmt.Println("\n")
+// 	tiposGenerados := generateClassTags(class, classMetadata)
+// 	// fmt.Println("Longitud de tiposGenerados: (generator/Generate)", len(tiposGenerados))
+// 	//fmt.Println("TIPO GENERADO:", tipoGenerado) // el mismo del retorno de la funcion
+// 	fmt.Println("\n")
 
-	// SUGERENCIA: OBTENER VALOR POR VALOR Y LLENAR  data := TemplateData{} para sustituir las plantillas, quizas se requieran archivos intermedios.
-	generatedDDL := generateDDLStatement(class, classMetadata)
-	fmt.Println("El DDL es:", generatedDDL)
+// 	// SUGERENCIA: OBTENER VALOR POR VALOR Y LLENAR  data := TemplateData{} para sustituir las plantillas, quizas se requieran archivos intermedios.
+// 	generatedDDL := generateDDLStatement(class, classMetadata)
+// 	fmt.Println("El DDL es:", generatedDDL)
 
-	generatedModels := generateEntityModels(class, classMetadata)
-	//fmt.Println("Generated Models es: ", generatedModels)
-	fmt.Println("Tipo del mapa:", reflect.TypeOf(generatedModels))
-	//fmt.Println("Se han generado ", generatedModels, "EntityModels")
-	fmt.Println("\n")
+// 	generatedModels := generateEntityModels(class, classMetadata)
+// 	//fmt.Println("Generated Models es: ", generatedModels)
+// 	fmt.Println("Tipo del mapa:", reflect.TypeOf(generatedModels))
+// 	//fmt.Println("Se han generado ", generatedModels, "EntityModels")
+// 	fmt.Println("\n")
 
-	modifyBaseTemplates(tiposGenerados) // Pueden variar
-	//modifyBaseTemplates(generatedModels) // Pueden variar
+// 	modifyBaseTemplates(tiposGenerados) // Pueden variar
+// 	//modifyBaseTemplates(generatedModels) // Pueden variar
 
-	//SE TUESTA MIRAR SI UN SLEEP O VALIDAR BIEN
+// 	//SE TUESTA MIRAR SI UN SLEEP O VALIDAR BIEN
 
-	// Generate folder structure
-	//createFolderStructure(projectName, class, classMetadata, generateClassTags(class, classMetadata)) //recordar que no funciono mandando una funcion pero si el valor , tipoGenerado
-	createFolderStructure(projectName, class, classMetadata)
+// 	// Generate folder structure
+// 	//createFolderStructure(projectName, class, classMetadata, generateClassTags(class, classMetadata)) //recordar que no funciono mandando una funcion pero si el valor , tipoGenerado
+// 	createFolderStructure(projectName, class, classMetadata)
 
-}
+// }
 
 // func leerConfig(configFile string) ([]models.Tipo, error) {
 // Por ahora solo leera un objeto JSON entonces la funcion retornara un map en la informacion de una clase
@@ -159,4 +158,61 @@ func readConfigMetadata(configFile string) (string, map[string]string, [][]strin
 	fmt.Println("mapAtributos es: ", mapAtributos)
 
 	return Class, mapAtributos, nil, nil
+}
+
+// func readConfigMetadata(configFile string) (string, map[string]string, [][]string, error) {
+func readConfigMetadatax(configFile string) (string, [][]string, error) {
+
+	// Tomar el output extraido que viene del map de python y estructurarlo en un [][]string
+	// El anterior tomaba class, classMetadata
+
+	fmt.Println("IMPRIMIR output from readConfigMetadatax: ", configFile, "\n")
+
+	// 	class, classMetadata, _, err := readConfigMetadatax(configFile)
+
+	matriz := [][]string{}
+
+	fmt.Println("Longitud de la matriz", len(matriz))
+
+	return "hola", matriz, nil
+
+}
+
+func Generatex(projectName, dbType, configFile string) {
+	fmt.Printf("Generando proyecto '%s' con base de datos '%s'\n", projectName, dbType)
+
+	fmt.Println("CONFIGFILE from Generatex (output python): ", configFile)
+
+	class, classMetadata, err := readConfigMetadatax(configFile)
+	if err != nil {
+		fmt.Printf("Error leyendo el archivo de configuración: %s\n", err)
+		fmt.Println("la clase es:", class)
+		os.Exit(1)
+	}
+	fmt.Printf("Configuración leída: %+v\n %+v\n", class, classMetadata)
+
+	// TRINTRIN tiposGenerados := generateClassTags(class, classMetadata)
+	// fmt.Println("Longitud de tiposGenerados: (generator/Generate)", len(tiposGenerados))
+	//fmt.Println("TIPO GENERADO:", tipoGenerado) // el mismo del retorno de la funcion
+	fmt.Println("\n")
+
+	// SUGERENCIA: OBTENER VALOR POR VALOR Y LLENAR  data := TemplateData{} para sustituir las plantillas, quizas se requieran archivos intermedios.
+	//TRIN TRIN generatedDDL := generateDDLStatement(class, classMetadata)
+	//TRIN TRIN fmt.Println("El DDL es:", generatedDDL)
+
+	//TRIN TRIN generatedModels := generateEntityModels(class, classMetadata)
+	//fmt.Println("Generated Models es: ", generatedModels)
+	//TRIN TRINfmt.Println("Tipo del mapa:", reflect.TypeOf(generatedModels))
+	//fmt.Println("Se han generado ", generatedModels, "EntityModels")
+	fmt.Println("\n")
+
+	//TRIN TRIN modifyBaseTemplates(tiposGenerados) // Pueden variar
+	//modifyBaseTemplates(generatedModels) // Pueden variar
+
+	//SE TUESTA MIRAR SI UN SLEEP O VALIDAR BIEN
+
+	// Generate folder structure
+	//createFolderStructure(projectName, class, classMetadata, generateClassTags(class, classMetadata)) //recordar que no funciono mandando una funcion pero si el valor , tipoGenerado
+	//TRIN TRIN createFolderStructure(projectName, class, classMetadata)
+
 }

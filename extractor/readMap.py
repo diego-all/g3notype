@@ -5,7 +5,7 @@ import sys
 def main(json_path):
     with open(json_path, 'r') as archivo:
         datos_lista = json.load(archivo)
-        datos = datos_lista[0]
+        datos = datos_lista[0] #Primer elemento del array JSON
         tipo = datos['tipo']
         print(f'Tipo: {tipo}')
         atributos = datos['atributos']

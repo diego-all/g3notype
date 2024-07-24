@@ -30,7 +30,9 @@ var initCmd = &cobra.Command{
 
 		fmt.Printf("Salida del script de Python: %s\n", output)
 
-		generator.Generate(projectName, db, jsonPath)
+		// ya no se manda jsonPath sino output.
+		generator.Generatex(projectName, db, output)
+		//generator.Generate(projectName, db, jsonPath)
 	},
 }
 
