@@ -1,6 +1,9 @@
 package cmd
 
 import (
+	"fmt"
+
+	"github.com/diego-all/run-from-gh/extractor"
 	"github.com/diego-all/run-from-gh/generator"
 	"github.com/spf13/cobra"
 )
@@ -19,6 +22,14 @@ var initCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		projectName := args[0]
 		// generator.Generate(projectName, db)
+		output, err := extractor.CallPythonExtractor(jsonPath)
+		if err != nil {
+			fmt.Printf("Error al ejecutar el script de Python: %v\n", err)
+			return
+		}
+
+		fmt.Printf("Salida del script de Python: %s\n", output)
+
 		generator.Generate(projectName, db, jsonPath)
 	},
 }

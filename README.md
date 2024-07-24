@@ -43,3 +43,8 @@ projectTest  (Nombre del proyecto)
 ### From remote repository
 
     go run github.com/diego-all/run-from-gh@v0.1.1 init --db sqlite --config /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/classes.json projectTest
+
+
+## Extractor (Python)
+
+  Needs python > 3.7 
