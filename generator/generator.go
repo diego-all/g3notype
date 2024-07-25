@@ -178,7 +178,7 @@ func readConfigMetadatax(configFile string) (string, [][]string, error) {
 
 }
 
-func Generatex(projectName, dbType, configFile string) {
+func Generatex(projectName, dbType, configFile string, Config) {
 	fmt.Printf("Generando proyecto '%s' con base de datos '%s'\n", projectName, dbType)
 
 	fmt.Println("CONFIGFILE from Generatex (output python): ", configFile)

@@ -22,19 +22,39 @@ var initCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		projectName := args[0]
 		// generator.Generate(projectName, db)
-		tipo, matrizAtributos, err := extractor.CallPythonExtractor(jsonPath)
+
+		buffer, err := extractor.CallPythonExtractor(jsonPath)
 		if err != nil {
 			fmt.Printf("Error al ejecutar el script de Python: %v\n", err)
 			return
 		}
 
-		fmt.Printf("Tipo: %s\n", tipo)
-		for _, atributo := range matrizAtributos {
-			fmt.Printf("Atributo: %s, Tipo de dato: %s\n", atributo[0], atributo[1])
+		// Parsear los datos
+		tipo, matrizAtributos, err := extractor.ParseData(buffer)
+		if err != nil {
+			fmt.Printf("Error al parsear los datos: %v\n", err)
+			return
 		}
 
-		// ya no se manda jsonPath sino output.
-		generator.Generatex(projectName, db, tipo)
+		// Imprimir los resultados
+		fmt.Printf("Tipo: %s\n", tipo)
+		fmt.Println()
+		for _, atributo := range matrizAtributos {
+			fmt.Printf("Atributo: %s, Tipo de dato: %s\n", atributo[0], atributo[1])
+
+		}
+
+		type Config struct {
+			tipo            string
+			matrizAtributos [][]string
+		}
+
+		Config := Config{
+			tipo:            tipo,
+			matrizAtributos: matrizAtributos,
+		}
+
+		generator.Generatex(projectName, db, tipo, Config)
 		//generator.Generate(projectName, db, jsonPath)
 	},
 }

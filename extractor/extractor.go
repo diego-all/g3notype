@@ -24,20 +24,30 @@ import (
 // 	return string(output), matriz, err
 // }
 
-func CallPythonExtractor(jsonPath string) (string, [][]string, error) {
+func CallPythonExtractor(jsonPath string) (bytes.Buffer, error) {
 	// Ejecutar el script de Python
 	// validar si se peude utilizar la combinedoutput
 	cmd := exec.Command("python3", "extractor/readMap.py", jsonPath)
+
 	var out bytes.Buffer
+
 	cmd.Stdout = &out
+
 	err := cmd.Run()
 	if err != nil {
-		return "", nil, fmt.Errorf("error ejecutando el script de Python: %v", err)
+		return out, fmt.Errorf("error ejecutando el script de Python: %v", err)
 	}
 
-	// Leer la salida
-	output := out.String()
+	return out, err
+}
+
+func ParseData(buffer bytes.Buffer) (string, [][]string, error) {
+
+	// Leer la salida del script de python
+
+	output := buffer.String()
 	lines := strings.Split(output, "\n")
+	fmt.Println("LINES: \n", lines, "\n")
 
 	// El primer elemento es el string tipo
 	if len(lines) < 1 {
@@ -58,4 +68,5 @@ func CallPythonExtractor(jsonPath string) (string, [][]string, error) {
 	}
 
 	return tipo, matrizAtributos, nil
+
 }
