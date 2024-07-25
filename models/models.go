@@ -10,3 +10,8 @@ type Tipo struct {
 	Tipo      string              `json:"tipo"`
 	Atributos map[string]Atributo `json:"atributos"`
 }
+
+type Config struct {
+	Tipo            string
+	MatrizAtributos [][]string
+}

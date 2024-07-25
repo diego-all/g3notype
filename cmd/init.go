@@ -5,6 +5,7 @@ import (
 
 	"github.com/diego-all/run-from-gh/extractor"
 	"github.com/diego-all/run-from-gh/generator"
+	"github.com/diego-all/run-from-gh/models"
 	"github.com/spf13/cobra"
 )
 
@@ -14,6 +15,8 @@ var (
 )
 
 // init use a posicional argument (projectName)
+
+// Pendiente intentar pasar data structure to data structure (list of list to string' slice )
 
 var initCmd = &cobra.Command{
 	Use:   "init [nombre del proyecto]",
@@ -44,17 +47,14 @@ var initCmd = &cobra.Command{
 
 		}
 
-		type Config struct {
-			tipo            string
-			matrizAtributos [][]string
+		configuration := models.Config{
+			Tipo:            tipo,
+			MatrizAtributos: matrizAtributos,
 		}
 
-		Config := Config{
-			tipo:            tipo,
-			matrizAtributos: matrizAtributos,
-		}
+		//Minimizar enviar todo directamente al struct
 
-		generator.Generatex(projectName, db, tipo, Config)
+		generator.Generatex(projectName, db, configuration)
 		//generator.Generate(projectName, db, jsonPath)
 	},
 }

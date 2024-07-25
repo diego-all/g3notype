@@ -78,7 +78,8 @@ type PreTemplateData struct {
 // INTENTAR GENERANDO LOS TIPOS PRIMERO DE HANDLERS, LUEGO PARA MODELS U OTROS DE SER NECESARIO MANEJARLOS EN UN MAP
 
 // func generateClassTags(class string, classMetadata map[string]string) (string) {
-func generateClassTags(class string, classMetadata map[string]string) map[string]string {
+// func generateClassTags(class string, classMetadata map[string]string) map[string]string {
+func generateClassTags(class string, classMetadata [][]string) map[string]string {
 
 	fmt.Println("Desde generateClassTags")
 
@@ -105,15 +106,42 @@ func generateClassTags(class string, classMetadata map[string]string) map[string
 	var handlers_varGetEntResponse string
 	var handlers_varUpdateEntityModels string
 
-	for attribute, value := range classMetadata {
+	// for attribute, value := range classMetadata {
+
+	// 	//fmt.Printf("Clave: %s, Valor: %s\n", attribute, value)
+	// 	//fmt.Println("Capitalize alternativa nativa: ", strings.ToUpper(string(attribute[0]))+string(attribute[1:])) // toco esto para no usar mas dependencias.
+
+	// 	//auxReqRes = attribute + "\t" + value + "\t" + "`json:\"" + attribute + "\"`"
+	// 	auxReqRes = strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + "\t" + value + "\t" + "`json:\"" + attribute + "\"`"
+	// 	auxCreateEntModels = strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + ":\t" + "{{.LowerEntity}}Req." + strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + ","
+	// 	auxGetEntResponse = strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + ":\t" + "{{.LowerEntity}}." + strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + ","
+
+	// 	//fmt.Println("auxReqRes", auxReqRes)
+	// 	//fmt.Println("auxCreateEntModels", auxCreateEntModels)
+	// 	//fmt.Println("AuxGetEntResponse", auxGetEntResponse)
+
+	// 	//Append de cada una de los atributos leidos
+	// 	reqResTypes = append(reqResTypes, auxReqRes)
+	// 	createEntModels = append(createEntModels, auxCreateEntModels)
+	// 	getEntResponse = append(getEntResponse, auxGetEntResponse)
+	// }
+
+	for _, attribute := range classMetadata {
+
+		attributeName := attribute[0]
+		attributeType := attribute[1]
 
 		//fmt.Printf("Clave: %s, Valor: %s\n", attribute, value)
 		//fmt.Println("Capitalize alternativa nativa: ", strings.ToUpper(string(attribute[0]))+string(attribute[1:])) // toco esto para no usar mas dependencias.
 
 		//auxReqRes = attribute + "\t" + value + "\t" + "`json:\"" + attribute + "\"`"
-		auxReqRes = strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + "\t" + value + "\t" + "`json:\"" + attribute + "\"`"
-		auxCreateEntModels = strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + ":\t" + "{{.LowerEntity}}Req." + strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + ","
-		auxGetEntResponse = strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + ":\t" + "{{.LowerEntity}}." + strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + ","
+		// auxReqRes = strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + "\t" + value + "\t" + "`json:\"" + attribute + "\"`"
+		// auxCreateEntModels = strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + ":\t" + "{{.LowerEntity}}Req." + strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + ","
+		// auxGetEntResponse = strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + ":\t" + "{{.LowerEntity}}." + strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + ","
+
+		auxReqRes = strings.ToUpper(string(attributeName[0])) + string(attributeName[1:]) + "\t" + attributeType + "\t" + "`json:\"" + attributeName + "\"`"
+		auxCreateEntModels = strings.ToUpper(string(attributeName[0])) + string(attributeName[1:]) + ":\t" + "{{.LowerEntity}}Req." + strings.ToUpper(string(attributeName[0])) + string(attributeName[1:]) + ","
+		auxGetEntResponse = strings.ToUpper(string(attributeName[0])) + string(attributeName[1:]) + ":\t" + "{{.LowerEntity}}." + strings.ToUpper(string(attributeName[0])) + string(attributeName[1:]) + ","
 
 		//fmt.Println("auxReqRes", auxReqRes)
 		//fmt.Println("auxCreateEntModels", auxCreateEntModels)

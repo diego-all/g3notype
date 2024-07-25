@@ -160,39 +160,20 @@ func readConfigMetadata(configFile string) (string, map[string]string, [][]strin
 	return Class, mapAtributos, nil, nil
 }
 
-// func readConfigMetadata(configFile string) (string, map[string]string, [][]string, error) {
-func readConfigMetadatax(configFile string) (string, [][]string, error) {
-
-	// Tomar el output extraido que viene del map de python y estructurarlo en un [][]string
-	// El anterior tomaba class, classMetadata
-
-	fmt.Println("IMPRIMIR output from readConfigMetadatax: ", configFile, "\n")
-
-	// 	class, classMetadata, _, err := readConfigMetadatax(configFile)
-
-	matriz := [][]string{}
-
-	fmt.Println("Longitud de la matriz", len(matriz))
-
-	return "hola", matriz, nil
-
-}
-
-func Generatex(projectName, dbType, configFile string, Config) {
+func Generatex(projectName string, dbType string, config models.Config) {
 	fmt.Printf("Generando proyecto '%s' con base de datos '%s'\n", projectName, dbType)
 
-	fmt.Println("CONFIGFILE from Generatex (output python): ", configFile)
+	fmt.Println("CONFIG from Generatex (output python): ", config)
 
-	class, classMetadata, err := readConfigMetadatax(configFile)
-	if err != nil {
-		fmt.Printf("Error leyendo el archivo de configuración: %s\n", err)
-		fmt.Println("la clase es:", class)
-		os.Exit(1)
+	for _, trin := range config.MatrizAtributos {
+
+		fmt.Println(trin)
 	}
-	fmt.Printf("Configuración leída: %+v\n %+v\n", class, classMetadata)
 
-	// TRINTRIN tiposGenerados := generateClassTags(class, classMetadata)
-	// fmt.Println("Longitud de tiposGenerados: (generator/Generate)", len(tiposGenerados))
+	fmt.Println(config.Tipo)
+
+	tiposGenerados := generateClassTags(config.Tipo, config.MatrizAtributos)
+	fmt.Println("Longitud de tiposGenerados: (generator/Generate)", len(tiposGenerados))
 	//fmt.Println("TIPO GENERADO:", tipoGenerado) // el mismo del retorno de la funcion
 	fmt.Println("\n")
 
