@@ -251,3 +251,15 @@ con el tag?
 
     go run github.com/diego-all/run-from-gh@v0.1.1 init --db sqlite --config /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/classes.json projectTest
     go run main.go init --db sqlite --config /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/classes.json projectTest 
+
+
+
+
+
+
+matriz_atributos = []   Lista de listas
+
+var matriz [][]string  se conoce como una matriz bidimensional o slice de slices de cadenas (slice de strings)
+
+
+

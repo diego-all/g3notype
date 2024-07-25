@@ -47,4 +47,8 @@ projectTest  (Nombre del proyecto)
 
 ## Extractor (Python)
 
-  Needs python > 3.7 
+  Needs python > 3.7
+
+  Uso: python3 extractor/readMap.py <ruta_del_json>
+
+  Uso: python3 extractor/readMap.py /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/classes.json
