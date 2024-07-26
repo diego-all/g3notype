@@ -52,3 +52,8 @@ projectTest  (Nombre del proyecto)
   Uso: python3 extractor/readMap.py <ruta_del_json>
 
   Uso: python3 extractor/readMap.py /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/classes.json
+
+
+## Test generated API
+
+    cp projectTest/ /home/diegoall/PROBAR-GENERADA/

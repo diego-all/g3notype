@@ -178,19 +178,19 @@ func Generatex(projectName string, dbType string, config models.Config) {
 	generatedDDL := generateDDLStatement(config.Tipo, config.MatrizAtributos)
 	fmt.Println("El DDL es: \n", generatedDDL)
 
-	//TRIN TRIN generatedModels := generateEntityModels(class, classMetadata)
-	//fmt.Println("Generated Models es: ", generatedModels)
+	generatedModels := generateEntityModels(config.Tipo, config.MatrizAtributos)
+	fmt.Println("Generated Models es: ", generatedModels)
 	//TRIN TRINfmt.Println("Tipo del mapa:", reflect.TypeOf(generatedModels))
 	//fmt.Println("Se han generado ", generatedModels, "EntityModels")
 	fmt.Println("\n")
 
-	//TRIN TRIN modifyBaseTemplates(tiposGenerados) // Pueden variar
+	modifyBaseTemplates(tiposGenerados) // Pueden variar
 	//modifyBaseTemplates(generatedModels) // Pueden variar
 
 	//SE TUESTA MIRAR SI UN SLEEP O VALIDAR BIEN
 
 	// Generate folder structure
 	//createFolderStructure(projectName, class, classMetadata, generateClassTags(class, classMetadata)) //recordar que no funciono mandando una funcion pero si el valor , tipoGenerado
-	//TRIN TRIN createFolderStructure(projectName, class, classMetadata)
+	createFolderStructure(projectName, config.Tipo, config.MatrizAtributos)
 
 }

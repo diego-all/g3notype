@@ -1,14 +1,5 @@
 -- DDL statements
-CREATE TABLE IF NOT EXISTS {{.LowerEntity}}s (
-	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	random VARCHAR(100) NOT NULL,
-	nombre VARCHAR(100) NOT NULL,
-	descripcion VARCHAR(100) NOT NULL,
-	precio INTEGER NOT NULL,
-	cantidad INTEGER NOT NULL,
-	created_at TIMESTAMP DEFAULT DATETIME,
- 	updated_at TIMESTAMP NOT NULL
- 	);
+{{.Database_DDL_statement}}
 
 
 -- DML statements [Dummy data]

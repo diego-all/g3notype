@@ -345,13 +345,13 @@ func generateDDLStatement(class string, classMetadata [][]string) string {
 
 	// }
 
-	for iterator, data := range classMetadata {
-		fmt.Printf("Clave: %s, Valor: %s\n", iterator, data)
+	for _, data := range classMetadata {
+		//fmt.Printf("Clave: %s, Valor: %s\n", iterator, data)
 
 		attributeName := data[0]
 		attributeType := data[1]
 
-		fmt.Println(attributeName, attributeType)
+		//fmt.Println(attributeName, attributeType)
 
 		//fmt.Println("Capitalize alternativa nativa: ", strings.ToUpper(string(attribute[0]))+string(attribute[1:])) // toco esto para no usar mas dependencias.
 
@@ -454,7 +454,7 @@ func generateDDLStatement(class string, classMetadata [][]string) string {
 // 	return Database_DDL_statement
 // }
 
-func generateEntityModels(class string, classMetadata map[string]string) map[string]string {
+func generateEntityModels(class string, classMetadata [][]string) map[string]string {
 	fmt.Println("Desde generateEntityModels", class)
 
 	fmt.Println("Class metadata", classMetadata)
@@ -481,17 +481,20 @@ func generateEntityModels(class string, classMetadata map[string]string) map[str
 	var UpdateErr []string
 
 	i := 1
-	for attribute, value := range classMetadata {
+	for _, data := range classMetadata {
+
+		attributeName := data[0]
+		attributeType := data[1]
 
 		//fmt.Printf("Iterador i: %d\n", i)
-		auxTypeEntityStruct = strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + "\t" + value + "\t" + "`json:\"" + attribute + "\"`"
-		auxInsertStmt = auxInsertStmt + attribute + ", "
+		auxTypeEntityStruct = strings.ToUpper(string(attributeName[0])) + string(attributeName[1:]) + "\t" + attributeType + "\t" + "`json:\"" + attributeName + "\"`"
+		auxInsertStmt = auxInsertStmt + attributeName + ", "
 		//auxInsertErr = auxInsertErr + "{{.LowerEntity}}." + strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + "\t"
-		auxInsertErr = "\t" + "{{.LowerEntity}}." + strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + ","
-		auxGetOneQuery = auxGetOneQuery + attribute + ", "
-		auxGetOneErr = "\t" + "&{{.LowerEntity}}." + strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + ","
-		auxUpdateStmt = "\t" + strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + " = $" + strconv.Itoa(i) + ","
-		auxUpdateErr = "\t" + "{{.LowerEntity}}." + strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + ","
+		auxInsertErr = "\t" + "{{.LowerEntity}}." + strings.ToUpper(string(attributeName[0])) + string(attributeName[1:]) + ","
+		auxGetOneQuery = auxGetOneQuery + attributeName + ", "
+		auxGetOneErr = "\t" + "&{{.LowerEntity}}." + strings.ToUpper(string(attributeName[0])) + string(attributeName[1:]) + ","
+		auxUpdateStmt = "\t" + strings.ToUpper(string(attributeName[0])) + string(attributeName[1:]) + " = $" + strconv.Itoa(i) + ","
+		auxUpdateErr = "\t" + "{{.LowerEntity}}." + strings.ToUpper(string(attributeName[0])) + string(attributeName[1:]) + ","
 
 		//fmt.Println("auxTypeEntityStruct: ", auxTypeEntityStruct)
 		typeEntityStructs = append(typeEntityStructs, auxTypeEntityStruct)

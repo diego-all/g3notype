@@ -5,16 +5,7 @@ import (
 	"time"
 )
 
-type {{.Entity}} struct {
- 	Id	int	`json:"id"`
-	Cantidad	integer	`json:"cantidad"`
-	Random	string	`json:"random"`
-	Nombre	string	`json:"nombre"`
-	Descripcion	string	`json:"descripcion"`
-	Precio	integer	`json:"precio"`
-	CreatedAt   time.Time `json:"created_at"`
- 	UpdatedAt   time.Time `json:"updated_at"`
-}
+{{.Models_typeEntityStruct}}
 
 func (p *{{.Entity}}) Insert({{.LowerEntity}} {{.Entity}}) (int, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
@@ -22,18 +13,9 @@ func (p *{{.Entity}}) Insert({{.LowerEntity}} {{.Entity}}) (int, error) {
 
 	var newID int
 
-		stmt := `insert into {{.LowerEntity}}s (cantidad, random, nombre, descripcion, precio, created_at, updated_at)
- 	values ($1, $2, $3, $4, $5, $6, $7) returning  id`
+	{{.Models_InsertStmt}}
 
-    err := db.QueryRowContext(ctx, stmt,
-	{{.LowerEntity}}.Cantidad,
-	{{.LowerEntity}}.Random,
-	{{.LowerEntity}}.Nombre,
-	{{.LowerEntity}}.Descripcion,
-	{{.LowerEntity}}.Precio,
-	time.Now(),
-	time.Now(),
-).Scan(&newID)
+    {{.Models_InsertErr}}
 
 
 	if err != nil {
@@ -49,21 +31,12 @@ func (p *{{.Entity}}) GetOneById(id int) (*{{.Entity}}, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
 	defer cancel()
 
-    	query := `select id, cantidad, random, nombre, descripcion, precio, created_at, updated_at from {{.LowerEntity}}s where id = $1`
+    {{.Models_GetOneQuery}}
 
 	var {{.LowerEntity}} {{.Entity}}
 	row := db.QueryRowContext(ctx, query, id)
 
-	err := row.Scan(
-	&{{.LowerEntity}}.Cantidad,
-	&{{.LowerEntity}}.Random,
-	&{{.LowerEntity}}.Nombre,
-	&{{.LowerEntity}}.Descripcion,
-	&{{.LowerEntity}}.Precio,
-	&{{.LowerEntity}}.Id,
- 	&{{.LowerEntity}}.CreatedAt,
-	&{{.LowerEntity}}.UpdatedAt,
-)
+	{{.Models_GetOneErr}}
 
 	if err != nil {
 		return nil, err
@@ -77,24 +50,9 @@ func (p *{{.Entity}}) Update({{.LowerEntity}} {{.Entity}}) (int, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
 	defer cancel() // resource leaks
 
-	stmt := `update {{.LowerEntity}} set
- 	Cantidad = $1,
-	Random = $2,
-	Nombre = $3,
-	Descripcion = $4,
-	Precio = $5,
-	updated_at = $7
- 	where id = $8`
+	{{.Models_UpdateStmt}}
 
-	_, err := db.ExecContext(ctx, stmt,
-	{{.LowerEntity}}.Cantidad,
-	{{.LowerEntity}}.Random,
-	{{.LowerEntity}}.Nombre,
-	{{.LowerEntity}}.Descripcion,
-	{{.LowerEntity}}.Precio,
-	time.Now(),
- 	{{.LowerEntity}}.Id,
-)
+	{{.Models_UpdateErr}}
 
 	if err != nil {
 		return 0, err
@@ -109,7 +67,7 @@ func (p *{{.Entity}}) GetAll() ([]*{{.Entity}}, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
 	defer cancel()
 
-	query := `select id, cantidad, random, nombre, descripcion, precio, created_at, updated_at from {{.LowerEntity}}s order by nombre`
+	{{.Models_GetAllQuery}}
 
 	rows, err := db.QueryContext(ctx, query)
 	if err != nil {
@@ -121,16 +79,7 @@ func (p *{{.Entity}}) GetAll() ([]*{{.Entity}}, error) {
 
 	for rows.Next() {
 		var {{.LowerEntity}} {{.Entity}}
-		err := rows.Scan(
-	&{{.LowerEntity}}.Cantidad,
-	&{{.LowerEntity}}.Random,
-	&{{.LowerEntity}}.Nombre,
-	&{{.LowerEntity}}.Descripcion,
-	&{{.LowerEntity}}.Precio,
-	&{{.LowerEntity}}.Id,
- 	&{{.LowerEntity}}.CreatedAt,
-	&{{.LowerEntity}}.UpdatedAt,
-)
+		{{.Models_GetAllErrRowsScan}}
 		if err != nil {
 			return nil, err
 		}

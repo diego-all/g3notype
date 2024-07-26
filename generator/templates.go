@@ -46,7 +46,7 @@ type TemplateData struct {
 	GeneratedType string
 }
 
-func createFolderStructure(appName string, class string, classMetadata map[string]string) {
+func createFolderStructure(appName string, class string, classMetadata [][]string) {
 	//func createFolderStructure(appName string, class string, classMetadata map[string]string, generatedType string) {
 
 	// Convertir la entidad a plural
