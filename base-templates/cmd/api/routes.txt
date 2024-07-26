@@ -15,7 +15,7 @@ func (app *application) routes() http.Handler {
 	mux.Post("/{{.LowerEntity}}s", app.Create{{.Entity}})
 	mux.Get("/{{.LowerEntity}}s/get/{id}", app.Get{{.Entity}})
 	mux.Put("/{{.LowerEntity}}s/update/{id}", app.Update{{.Entity}})
-	mux.Get("/{{.LowerEntity}}s/all", app.All{{.Entity}})
+	mux.Get("/{{.LowerEntity}}s/all", app.All{{.Entity}}s)
 	mux.Delete("/{{.LowerEntity}}s/delete/{id}", app.Delete{{.Entity}})
 
 	return mux

@@ -9,10 +9,10 @@
           "tipoDato": "string"
         },
         "precio": {
-          "tipoDato": "integer"
+          "tipoDato": "int"
         },
         "cantidad": {
-          "tipoDato": "integer"
+          "tipoDato": "int"
         },
         "random": {
           "tipoDato": "string"

@@ -70,3 +70,7 @@ projectTest  (Nombre del proyecto)
     Quiza deba cambirse el nombre para poder probar y no busque modulo.
 
 
+## Ajuste descriptivo (book.Name vs book.nombre)
+
+
+## Se pierden las identaciones o tabulaciones en algunos casos (Ya ajustados)
