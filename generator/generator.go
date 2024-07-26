@@ -1,10 +1,7 @@
 package generator
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"os"
 
 	"github.com/diego-all/run-from-gh/models"
 )
@@ -111,54 +108,54 @@ type Entity struct {
 
 // }
 
-func readConfigMetadata(configFile string) (string, map[string]string, [][]string, error) {
-	jsonData, err := os.Open(configFile)
-	if err != nil {
-		return "", nil, nil, err
-	}
-	defer jsonData.Close()
+// func readConfigMetadata(configFile string) (string, map[string]string, [][]string, error) {
+// 	jsonData, err := os.Open(configFile)
+// 	if err != nil {
+// 		return "", nil, nil, err
+// 	}
+// 	defer jsonData.Close()
 
-	// fmt.Println("JSONDATA ES:", jsonData)
+// 	// fmt.Println("JSONDATA ES:", jsonData)
 
-	bytes, err := ioutil.ReadAll(jsonData)
-	if err != nil {
-		return "", nil, nil, err
-	}
+// 	bytes, err := ioutil.ReadAll(jsonData)
+// 	if err != nil {
+// 		return "", nil, nil, err
+// 	}
 
-	var tipos []models.Tipo
-	if err := json.Unmarshal(bytes, &tipos); err != nil {
-		return "", nil, nil, err
-	}
+// 	var tipos []models.Tipo
+// 	if err := json.Unmarshal(bytes, &tipos); err != nil {
+// 		return "", nil, nil, err
+// 	}
 
-	// PROVISIONAL [Solo 1 Tipo del JSON]
-	mapAtributos := make(map[string]string)
-	var Class string // Declaración de la variable Class
+// 	// PROVISIONAL [Solo 1 Tipo del JSON]
+// 	mapAtributos := make(map[string]string)
+// 	var Class string // Declaración de la variable Class
 
-	// Iterar sobre cada tipo y sus atributos
-	for _, tipo := range tipos {
-		Class = tipo.Tipo
-		fmt.Println("Clase:", tipo.Tipo)
-		fmt.Println("Atributos:")
-		for nombreAtributo, atributo := range tipo.Atributos {
+// 	// Iterar sobre cada tipo y sus atributos
+// 	for _, tipo := range tipos {
+// 		Class = tipo.Tipo
+// 		fmt.Println("Clase:", tipo.Tipo)
+// 		fmt.Println("Atributos:")
+// 		for nombreAtributo, atributo := range tipo.Atributos {
 
-			fmt.Printf(" - %s: %s\n", nombreAtributo, atributo.TipoDato)
+// 			fmt.Printf(" - %s: %s\n", nombreAtributo, atributo.TipoDato)
 
-			// PROVISIONAL [Solo 1 Tipo del JSON]
-			mapAtributos[nombreAtributo] = atributo.TipoDato
-		}
+// 			// PROVISIONAL [Solo 1 Tipo del JSON]
+// 			mapAtributos[nombreAtributo] = atributo.TipoDato
+// 		}
 
-		// PROVISIONAL [Solo 1 Tipo del JSON]
-		oneType := true
-		if oneType == true {
-			break
-		}
-	}
+// 		// PROVISIONAL [Solo 1 Tipo del JSON]
+// 		oneType := true
+// 		if oneType == true {
+// 			break
+// 		}
+// 	}
 
-	// PROVISIONAL [Solo 1 Tipo del JSON]
-	fmt.Println("mapAtributos es: ", mapAtributos)
+// 	// PROVISIONAL [Solo 1 Tipo del JSON]
+// 	fmt.Println("mapAtributos es: ", mapAtributos)
 
-	return Class, mapAtributos, nil, nil
-}
+// 	return Class, mapAtributos, nil, nil
+// }
 
 func Generatex(projectName string, dbType string, config models.Config) {
 	fmt.Printf("Generando proyecto '%s' con base de datos '%s'\n", projectName, dbType)
@@ -178,8 +175,8 @@ func Generatex(projectName string, dbType string, config models.Config) {
 	fmt.Println("\n")
 
 	// SUGERENCIA: OBTENER VALOR POR VALOR Y LLENAR  data := TemplateData{} para sustituir las plantillas, quizas se requieran archivos intermedios.
-	//TRIN TRIN generatedDDL := generateDDLStatement(class, classMetadata)
-	//TRIN TRIN fmt.Println("El DDL es:", generatedDDL)
+	generatedDDL := generateDDLStatement(config.Tipo, config.MatrizAtributos)
+	fmt.Println("El DDL es: \n", generatedDDL)
 
 	//TRIN TRIN generatedModels := generateEntityModels(class, classMetadata)
 	//fmt.Println("Generated Models es: ", generatedModels)

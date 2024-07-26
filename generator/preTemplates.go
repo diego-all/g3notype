@@ -106,6 +106,7 @@ func generateClassTags(class string, classMetadata [][]string) map[string]string
 	var handlers_varGetEntResponse string
 	var handlers_varUpdateEntityModels string
 
+	// REPETIDO
 	// for attribute, value := range classMetadata {
 
 	// 	//fmt.Printf("Clave: %s, Valor: %s\n", attribute, value)
@@ -139,9 +140,9 @@ func generateClassTags(class string, classMetadata [][]string) map[string]string
 		// auxCreateEntModels = strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + ":\t" + "{{.LowerEntity}}Req." + strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + ","
 		// auxGetEntResponse = strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + ":\t" + "{{.LowerEntity}}." + strings.ToUpper(string(attribute[0])) + string(attribute[1:]) + ","
 
-		auxReqRes = strings.ToUpper(string(attributeName[0])) + string(attributeName[1:]) + "\t" + attributeType + "\t" + "`json:\"" + attributeName + "\"`"
-		auxCreateEntModels = strings.ToUpper(string(attributeName[0])) + string(attributeName[1:]) + ":\t" + "{{.LowerEntity}}Req." + strings.ToUpper(string(attributeName[0])) + string(attributeName[1:]) + ","
-		auxGetEntResponse = strings.ToUpper(string(attributeName[0])) + string(attributeName[1:]) + ":\t" + "{{.LowerEntity}}." + strings.ToUpper(string(attributeName[0])) + string(attributeName[1:]) + ","
+		auxReqRes = "\t" + strings.ToUpper(string(attributeName[0])) + string(attributeName[1:]) + "\t" + attributeType + "\t" + "`json:\"" + attributeName + "\"`"
+		auxCreateEntModels = "\t" + strings.ToUpper(string(attributeName[0])) + string(attributeName[1:]) + ":\t" + "{{.LowerEntity}}Req." + strings.ToUpper(string(attributeName[0])) + string(attributeName[1:]) + ","
+		auxGetEntResponse = "\t" + strings.ToUpper(string(attributeName[0])) + string(attributeName[1:]) + ":\t" + "{{.LowerEntity}}." + strings.ToUpper(string(attributeName[0])) + string(attributeName[1:]) + ","
 
 		//fmt.Println("auxReqRes", auxReqRes)
 		//fmt.Println("auxCreateEntModels", auxCreateEntModels)
@@ -191,7 +192,7 @@ func generateClassTags(class string, classMetadata [][]string) map[string]string
 	fmt.Println("handlers_varCreateEntityModels: \n ", handlers_varCreateEntityModels)
 
 	// Para update handlers_varUpdateEntResponse
-	handlers_varUpdateEntityModels = "var {{.LowerEntity}} = models.{{.Entity}}{" + "\n" + multilineAuxCEntModels + "UpdatedAt:   time.Now()," + "\n" + "Id:          {{.LowerEntity}}ID," + "\n" + "}"
+	handlers_varUpdateEntityModels = "var {{.LowerEntity}} = models.{{.Entity}}{" + "\n" + multilineAuxCEntModels + "\t" + "UpdatedAt:   time.Now()," + "\n \t" + "Id:          {{.LowerEntity}}ID," + "\n" + "}"
 	fmt.Println("\n")
 	fmt.Println("handlers_varUpdateEntityModels: \n ", handlers_varUpdateEntityModels)
 
@@ -322,7 +323,7 @@ func modifyBaseTemplates(preGeneratedTypes map[string]string) {
 }
 
 // Generate Create table
-func generateDDLStatement(class string, classMetadata map[string]string) string {
+func generateDDLStatement(class string, classMetadata [][]string) string {
 
 	fmt.Println("Desde generateDDLStatement", class)
 
@@ -337,18 +338,26 @@ func generateDDLStatement(class string, classMetadata map[string]string) string 
 	var multilineAuxDDLStatement string
 	var Database_DDL_statement string
 
-	for attribute, value := range classMetadata {
-		//fmt.Printf("Clave: %s, Valor: %s\n", attribute, value)
+	// for _, attribute := range classMetadata {
+
+	// 	attributeName := attribute[0]
+	// 	attributeType := attribute[1]
+
+	// }
+
+	for iterator, data := range classMetadata {
+		fmt.Printf("Clave: %s, Valor: %s\n", iterator, data)
+
+		attributeName := data[0]
+		attributeType := data[1]
+
+		fmt.Println(attributeName, attributeType)
 
 		//fmt.Println("Capitalize alternativa nativa: ", strings.ToUpper(string(attribute[0]))+string(attribute[1:])) // toco esto para no usar mas dependencias.
 
-		// if value == "integer" {
-		// 	fmt.Println("EL VALOR ES INTEGER")
-		// }
-
-		switch value {
+		switch attributeType {
 		case "integer":
-			//fmt.Println("INTEGER")
+			fmt.Println("INTEGER")
 			sqliteValue = "INTEGER"
 		case "string":
 			//fmt.Println("VARCHAR")
@@ -358,7 +367,7 @@ func generateDDLStatement(class string, classMetadata map[string]string) string 
 
 		}
 
-		auxDDL = attribute + " " + sqliteValue + " " + "NOT NULL,"
+		auxDDL = "\t" + attributeName + " " + sqliteValue + " " + "NOT NULL,"
 		ddlStatement = append(ddlStatement, auxDDL)
 	}
 
@@ -370,18 +379,80 @@ func generateDDLStatement(class string, classMetadata map[string]string) string 
 	// Se verticalizan , creo que quedarian mejor con un while
 	for i, _ := range ddlStatement {
 		//fmt.Println("Valor de i", i, "Valor de j", j)
-		multilineAuxDDLStatement = multilineAuxDDLStatement + "\t" + ddlStatement[i] + "\n"
+		multilineAuxDDLStatement = multilineAuxDDLStatement + ddlStatement[i] + "\n"
 	}
 
 	//fmt.Println("multilineAuxDDLStatement: ", multilineAuxDDLStatement)
 
-	Database_DDL_statement = "CREATE TABLE IF NOT EXISTS {{.LowerEntity}}s (\n" + "\t" + "id INTEGER PRIMARY KEY AUTOINCREMENT,\n" + multilineAuxDDLStatement + "\t" + "created_at TIMESTAMP DEFAULT DATETIME,\n \t" + "updated_at TIMESTAMP NOT NULL\n \t" + ");"
+	Database_DDL_statement = "CREATE TABLE IF NOT EXISTS {{.LowerEntity}}s (\n \t" + "id INTEGER PRIMARY KEY AUTOINCREMENT,\n" + multilineAuxDDLStatement + "\t" + "created_at TIMESTAMP DEFAULT DATETIME,\n \t" + "updated_at TIMESTAMP NOT NULL\n \t" + ");"
 
 	TypesVars["database-DDL-statement"] = Database_DDL_statement
 
 	//fmt.Println("database_DDL_statement ES:", database_DDL_statement)
 	return Database_DDL_statement
 }
+
+// Generate Create table
+// func generateDDLStatement(class string, classMetadata [][]string) string {
+
+// 	fmt.Println("Desde generateDDLStatement", class)
+
+// 	fmt.Println("Class metadata", classMetadata)
+// 	longitud := len(classMetadata)
+// 	fmt.Println("longitud del map es:", longitud)
+// 	fmt.Println("\n")
+
+// 	var auxDDL string
+// 	var ddlStatement []string
+// 	var sqliteValue string
+// 	var multilineAuxDDLStatement string
+// 	var Database_DDL_statement string
+
+// 	for attribute, value := range classMetadata {
+// 		//fmt.Printf("Clave: %s, Valor: %s\n", attribute, value)
+
+// 		//fmt.Println("Capitalize alternativa nativa: ", strings.ToUpper(string(attribute[0]))+string(attribute[1:])) // toco esto para no usar mas dependencias.
+
+// 		// if value == "integer" {
+// 		// 	fmt.Println("EL VALOR ES INTEGER")
+// 		// }
+
+// 		switch value {
+// 		case "integer":
+// 			//fmt.Println("INTEGER")
+// 			sqliteValue = "INTEGER"
+// 		case "string":
+// 			//fmt.Println("VARCHAR")
+// 			sqliteValue = "VARCHAR(100)"
+// 		case "":
+// 			fmt.Println("OTRO CASO")
+
+// 		}
+
+// 		auxDDL = attribute + " " + sqliteValue + " " + "NOT NULL,"
+// 		ddlStatement = append(ddlStatement, auxDDL)
+// 	}
+
+// 	//fmt.Println("Array de ddlStatement: ", ddlStatement)
+// 	fmt.Println("\n")
+
+// 	fmt.Println("\n")
+
+// 	// Se verticalizan , creo que quedarian mejor con un while
+// 	for i, _ := range ddlStatement {
+// 		//fmt.Println("Valor de i", i, "Valor de j", j)
+// 		multilineAuxDDLStatement = multilineAuxDDLStatement + "\t" + ddlStatement[i] + "\n"
+// 	}
+
+// 	//fmt.Println("multilineAuxDDLStatement: ", multilineAuxDDLStatement)
+
+// 	Database_DDL_statement = "CREATE TABLE IF NOT EXISTS {{.LowerEntity}}s (\n" + "\t" + "id INTEGER PRIMARY KEY AUTOINCREMENT,\n" + multilineAuxDDLStatement + "\t" + "created_at TIMESTAMP DEFAULT DATETIME,\n \t" + "updated_at TIMESTAMP NOT NULL\n \t" + ");"
+
+// 	TypesVars["database-DDL-statement"] = Database_DDL_statement
+
+// 	//fmt.Println("database_DDL_statement ES:", database_DDL_statement)
+// 	return Database_DDL_statement
+// }
 
 func generateEntityModels(class string, classMetadata map[string]string) map[string]string {
 	fmt.Println("Desde generateEntityModels", class)

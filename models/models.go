@@ -12,6 +12,8 @@ type Tipo struct {
 }
 
 type Config struct {
+	//ProjectName projectName,
+	//Database db
 	Tipo            string
 	MatrizAtributos [][]string
 }

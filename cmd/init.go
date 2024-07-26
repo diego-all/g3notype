@@ -48,6 +48,8 @@ var initCmd = &cobra.Command{
 		}
 
 		configuration := models.Config{
+			//ProjectName: projectName,
+			//Database: db
 			Tipo:            tipo,
 			MatrizAtributos: matrizAtributos,
 		}
