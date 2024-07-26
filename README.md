@@ -56,4 +56,17 @@ projectTest  (Nombre del proyecto)
 
 ## Test generated API
 
-    cp projectTest/ /home/diegoall/PROBAR-GENERADA/
+    cp -R projectTest /home/diegoall/PROBAR-GENERADA
+
+
+## Analizar el tema del repositorio
+
+    go run ./cmd/api
+    go build ./cmd/api
+    go build -o productsAPI ./cmd/api
+
+    cmd/api/handlers-Book.go:8:2: no required module provides package github.com/diego-all/books-API/internal; to add it:
+
+    Quiza deba cambirse el nombre para poder probar y no busque modulo.
+
+
