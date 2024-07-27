@@ -3,9 +3,10 @@ package main
 import (
 	"fmt"
 
-	models "github.com/diego-all/products-API/internal"
+	models "github.com/diego-all/{{.LowerEntity}}s-API/internal"
 
-	"github.com/diego-all/products-API/database"
+	"github.com/diego-all/{{.LowerEntity}}s-API/database"
+	
 
 	"log"
 	"net/http"
