@@ -70,7 +70,11 @@ projectTest  (Nombre del proyecto)
     Quiza deba cambirse el nombre para poder probar y no busque modulo.
 
 
-## Ajuste descriptivo (book.Name vs book.nombre)
+## Ajuste descriptivo (book.Name vs book.nombre) crear tipos (Nombre)
 
 
 ## Se pierden las identaciones o tabulaciones en algunos casos (Ya ajustados)
+Funciona bien, al parecer vscode organiza el script.
+
+
+## Llenar los inserts
