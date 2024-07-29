@@ -43,6 +43,8 @@ func (app *application) Create{{.Entity}}(w http.ResponseWriter, r *http.Request
 		Data:    envelope{"{{.LowerEntity}}": {{.LowerEntity}}.Name},
 	}
 
+	{{.Handlers_payloadCreateResponse}}
+
 	_ = app.writeJSON(w, http.StatusAccepted, payload)
 }
 

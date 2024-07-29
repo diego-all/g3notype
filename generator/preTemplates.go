@@ -17,8 +17,10 @@ var TypesVars = map[string]string{
 	"handlers-varCreateEntityModels": "",
 	"handlers-varGetEntResponse":     "",
 	"handlers-varUpdateEntityModels": "",
+	"handlers-payloadCreateResponse": "",
+	"handlers-payloadUpdateResponse": "",
 
-	//TypesVars["handlers-varUpdateEntityModels"] = Database_DDL_statement
+	//Database_DDL_statement
 	"database-DDL-statement": "",
 
 	// EntityModels
@@ -53,6 +55,8 @@ type PreTemplateData struct {
 	Handlers_varCreateEntityModels string
 	Handlers_varGetEntResponse     string
 	Handlers_varUpdateEntityModels string
+	Handlers_payloadCreateResponse string
+	Handlers_payloadUpdateResponse string
 
 	//TypesVars["handlers-varUpdateEntityModels"] = Database_DDL_statement
 	//"database-DDL-statement": "",
@@ -105,6 +109,8 @@ func generateClassTags(class string, classMetadata [][]string) map[string]string
 	var handlers_varCreateEntityModels string
 	var handlers_varGetEntResponse string
 	var handlers_varUpdateEntityModels string
+	var handlers_payloadCreateResponse string
+	var handlers_payloadUpdateResponse string
 
 	// REPETIDO
 	// for attribute, value := range classMetadata {
@@ -209,12 +215,17 @@ func generateClassTags(class string, classMetadata [][]string) map[string]string
 	fmt.Println("handlers_varGetEntResponse: \n ", handlers_varGetEntResponse)
 
 	fmt.Println("\n")
+
+	handlers_payloadCreateResponse = "payload = jsonResponse{\n" + "\t Error:   false,\n" + "\t Message: \"Book successfully updated\",\n" + "\t Data:    envelope{\"book\": book.Name},"
+
 	// Generated Types and Vars
 	TypesVars["handlers-typeEntityRequest"] = handlers_typeEntityRequest
 	TypesVars["handlers-typeEntityResponse"] = handlers_typeEntityResponse
 	TypesVars["handlers-varCreateEntityModels"] = handlers_varCreateEntityModels
 	TypesVars["handlers-varGetEntResponse"] = handlers_varGetEntResponse
 	TypesVars["handlers-varUpdateEntityModels"] = handlers_varUpdateEntityModels
+	TypesVars["handlers-payloadCreateResponse"] = handlers_payloadCreateResponse
+	TypesVars["handlers-payloadUpdateResponse"] = handlers_payloadUpdateResponse
 
 	//fmt.Println("TIPO FINAL: ", TypesVars)
 	//fmt.Println("\n")
@@ -253,6 +264,8 @@ func modifyBaseTemplates(preGeneratedTypes map[string]string) {
 		Handlers_varCreateEntityModels: preGeneratedTypes["handlers-varCreateEntityModels"],
 		Handlers_varGetEntResponse:     preGeneratedTypes["handlers-varGetEntResponse"],
 		Handlers_varUpdateEntityModels: preGeneratedTypes["handlers-varUpdateEntityModels"],
+		Handlers_payloadCreateResponse: preGeneratedTypes["handlers-payloadCreateResponse"],
+		Handlers_payloadUpdateResponse: preGeneratedTypes["handlers-payloadUpdateResponse"],
 
 		Database_DDL_statement: preGeneratedTypes["database-DDL-statement"],
 
