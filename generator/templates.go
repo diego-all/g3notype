@@ -3,7 +3,6 @@ package generator
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -120,17 +119,4 @@ func createFolderStructure(appName string, class string, classMetadata [][]strin
 		}
 	}
 	fmt.Println("Estructura de archivos y carpetas generada con éxito en la carpeta", appName)
-}
-
-func readTemplate(ruta string) {
-	// leer el arreglo de bytes del archivo
-	datosComoBytes, err := ioutil.ReadFile(ruta)
-	fmt.Println("Leyendo template ...")
-	if err != nil {
-		log.Fatal(err)
-	}
-	// convertir el arreglo a string
-	datosComoString := string(datosComoBytes)
-	// imprimir el string
-	fmt.Println(datosComoString)
 }

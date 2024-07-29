@@ -112,6 +112,8 @@ func generateClassTags(class string, classMetadata [][]string) map[string]string
 	var handlers_payloadCreateResponse string
 	var handlers_payloadUpdateResponse string
 
+	var naturalId string
+
 	// REPETIDO
 	// for attribute, value := range classMetadata {
 
@@ -133,7 +135,7 @@ func generateClassTags(class string, classMetadata [][]string) map[string]string
 	// 	getEntResponse = append(getEntResponse, auxGetEntResponse)
 	// }
 
-	for _, attribute := range classMetadata {
+	for k, attribute := range classMetadata {
 
 		attributeName := attribute[0]
 		attributeType := attribute[1]
@@ -158,7 +160,13 @@ func generateClassTags(class string, classMetadata [][]string) map[string]string
 		reqResTypes = append(reqResTypes, auxReqRes)
 		createEntModels = append(createEntModels, auxCreateEntModels)
 		getEntResponse = append(getEntResponse, auxGetEntResponse)
+
+		if k == 0 {
+			naturalId = string(strings.ToUpper(string(attributeName[0])) + string(attributeName[1:]))
+		}
 	}
+
+	fmt.Println(naturalId)
 
 	// fmt.Println("Array de reqResTypes: ", reqResTypes)
 	// fmt.Println("Array de createEntModels: ", createEntModels)
@@ -216,7 +224,17 @@ func generateClassTags(class string, classMetadata [][]string) map[string]string
 
 	fmt.Println("\n")
 
-	handlers_payloadCreateResponse = "payload = jsonResponse{\n" + "\t Error:   false,\n" + "\t Message: \"Book successfully updated\",\n" + "\t Data:    envelope{\"book\": book.Name},"
+	handlers_payloadCreateResponse = "payload = jsonResponse{\n" + "\t    Error:   false,\n" + "\t    Message: \"{{.Entity}} successfully created\",\n" + "\t    Data:    envelope{\"book\": {{.LowerEntity}}." + naturalId + "},\n" + "}"
+
+	fmt.Println("handlers_payloadCreateResponse: \n ", handlers_payloadCreateResponse)
+
+	fmt.Println("\n")
+
+	handlers_payloadUpdateResponse = "payload = jsonResponse{\n" + "\t    Error:   false,\n" + "\t    Message: \"{{.Entity}} successfully updated\",\n" + "\t    Data:    envelope{\"book\": {{.LowerEntity}}." + naturalId + "},\n" + "}"
+
+	fmt.Println("handlers_payloadUpdateResponse: \n ", handlers_payloadUpdateResponse)
+
+	fmt.Println("\n")
 
 	// Generated Types and Vars
 	TypesVars["handlers-typeEntityRequest"] = handlers_typeEntityRequest

@@ -37,11 +37,6 @@ func (app *application) Create{{.Entity}}(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	payload = jsonResponse{
-		Error:   false,
-		Message: "{{.Entity}} successfully created",
-		Data:    envelope{"{{.LowerEntity}}": {{.LowerEntity}}.Name},
-	}
 
 	{{.Handlers_payloadCreateResponse}}
 
@@ -106,11 +101,8 @@ func (app *application) Update{{.Entity}}(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	payload = jsonResponse{
-		Error:   false,
-		Message: "{{.Entity}} successfully updated",
-		Data:    envelope{"{{.LowerEntity}}": {{.LowerEntity}}.Name}, // sujeto a cambio
-	}
+
+	{{.Handlers_payloadUpdateResponse}}
 
 	_ = app.writeJSON(w, http.StatusOK, payload)
 }
