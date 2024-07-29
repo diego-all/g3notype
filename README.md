@@ -92,3 +92,17 @@ Funciona bien, al parecer vscode organiza el script.
 lsof -i:9090
 
 
+## Roolback (Copy generic to base)
+
+
+## Crear la base de datos
+
+
+	CreateDatabase()
+
+  sqlite3 mi_base_de_datos.db < create_database.sql
+
+  sqlite3 mi_base_de_datos.db
+
+  .tables
+  SELECT * FROM books;
