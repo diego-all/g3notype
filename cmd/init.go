@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/diego-all/run-from-gh/extractor"
 	"github.com/diego-all/run-from-gh/generator"
@@ -23,6 +24,9 @@ var initCmd = &cobra.Command{
 	Short: "Inicializa un nuevo proyecto",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
+
+		start := time.Now()
+
 		projectName := args[0]
 		// generator.Generate(projectName, db)
 
@@ -58,6 +62,10 @@ var initCmd = &cobra.Command{
 
 		generator.Generatex(projectName, db, configuration)
 		//generator.Generate(projectName, db, jsonPath)
+
+		elapsed := time.Since(start)
+
+		fmt.Printf("El tiempo de ejecución es: %s\n", elapsed)
 	},
 }
 

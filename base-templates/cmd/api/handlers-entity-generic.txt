@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 
-	models "github.com/diego-all/{{.LowerEntity}}s-API/internal"  // (pilas con el plural)
+	models "github.com/diego-all/{{.LowerEntity}}s-API/internal"
 
 	"github.com/go-chi/chi"
 )
@@ -108,9 +108,9 @@ func (app *application) Update{{.Entity}}(w http.ResponseWriter, r *http.Request
 }
 
 
-func (app *application) All{{.Entity}}s(w http.ResponseWriter, r *http.Request) {//plural
-	var {{.LowerEntity}}s models.{{.Entity}} //plural
-	all, err := {{.LowerEntity}}s.GetAll() //plural
+func (app *application) All{{.Entity}}s(w http.ResponseWriter, r *http.Request) {
+	var {{.LowerEntity}}s models.{{.Entity}}
+	all, err := {{.LowerEntity}}s.GetAll() 
 	if err != nil {
 		app.errorLog.Println(err)
 		return
@@ -119,7 +119,7 @@ func (app *application) All{{.Entity}}s(w http.ResponseWriter, r *http.Request) 
 	payload := jsonResponse{
 		Error:   false,
 		Message: "Data successfully obtained",
-		Data:    envelope{"{{.LowerEntity}}s": all}, //plural
+		Data:    envelope{"{{.LowerEntity}}s": all},
 	}
 
 	_ = app.writeJSON(w, http.StatusOK, payload)

@@ -109,3 +109,15 @@ lsof -i:9090
 
   .tables
   SELECT * FROM books;
+
+
+
+## Tiempo de ejecucion
+
+  El tiempo de ejecución es: 13.435069ms
+  El tiempo de ejecución es: 12.930049ms
+  El tiempo de ejecución es: 12.957422ms
+  El tiempo de ejecución es: 14.075117ms
+  El tiempo de ejecución es: 12.814421ms
+
+
