@@ -98,7 +98,10 @@ lsof -i:9090
 ## Crear la base de datos
 
 
-	CreateDatabase()
+	CreateDatabase()  dummyData()
+
+  nano create_database.sql
+
 
   sqlite3 mi_base_de_datos.db < create_database.sql
 
