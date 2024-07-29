@@ -12,6 +12,10 @@
     go build ./cmd/api
     go build -o {{.LowerEntity}}API ./cmd/api/
 
+    go run ./cmd/api
+
+
+
 **Execute the API**
 
     ./api

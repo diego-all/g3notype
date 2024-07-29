@@ -69,6 +69,8 @@ projectTest  (Nombre del proyecto)
 
     Quiza deba cambirse el nombre para poder probar y no busque modulo.
 
+    Funciona sin repositorio. Analizar como hacer que funcione con repositorio y crearlo con git. (analizar como crea el repo git init y demas)
+
 
 ## Ajuste descriptivo (book.Name vs book.nombre) crear tipos (Nombre)
 
@@ -78,3 +80,15 @@ Funciona bien, al parecer vscode organiza el script.
 
 
 ## Llenar los inserts
+
+  Se hizo con Gemini (enpalmar con el generador o solicitar al usuario si desea crearlos)
+
+
+## 
+
+
+## 
+
+lsof -i:9090
+
+
