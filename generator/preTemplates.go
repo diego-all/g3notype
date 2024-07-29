@@ -224,13 +224,13 @@ func generateClassTags(class string, classMetadata [][]string) map[string]string
 
 	fmt.Println("\n")
 
-	handlers_payloadCreateResponse = "payload = jsonResponse{\n" + "\t    Error:   false,\n" + "\t    Message: \"{{.Entity}} successfully created\",\n" + "\t    Data:    envelope{\"book\": {{.LowerEntity}}." + naturalId + "},\n" + "}"
+	handlers_payloadCreateResponse = "payload = jsonResponse{\n" + "\t    Error:   false,\n" + "\t    Message: \"{{.Entity}} successfully created\",\n" + "\t    Data:    envelope{\"book\": {{.LowerEntity}}." + naturalId + "},\n" + "\t}"
 
 	fmt.Println("handlers_payloadCreateResponse: \n ", handlers_payloadCreateResponse)
 
 	fmt.Println("\n")
 
-	handlers_payloadUpdateResponse = "payload = jsonResponse{\n" + "\t    Error:   false,\n" + "\t    Message: \"{{.Entity}} successfully updated\",\n" + "\t    Data:    envelope{\"book\": {{.LowerEntity}}." + naturalId + "},\n" + "}"
+	handlers_payloadUpdateResponse = "payload = jsonResponse{\n" + "\t    Error:   false,\n" + "\t    Message: \"{{.Entity}} successfully updated\",\n" + "\t    Data:    envelope{\"book\": {{.LowerEntity}}." + naturalId + "},\n" + "\t}"
 
 	fmt.Println("handlers_payloadUpdateResponse: \n ", handlers_payloadUpdateResponse)
 
@@ -251,12 +251,6 @@ func generateClassTags(class string, classMetadata [][]string) map[string]string
 	return TypesVars
 	//return multiline // antes retornaba el primer type EntityRequest
 }
-
-// var generatedType = `var productResponse = {{.Entitrin}} productResponse{
-// 	Name:        product.Name,
-// 	Description: product.Description,
-// 	Price:       product.Price,
-// }`
 
 func modifyBaseTemplates(preGeneratedTypes map[string]string) {
 
