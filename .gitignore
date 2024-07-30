@@ -1,0 +1,9 @@
+# Excluir archivos binarios y compilados
+*.exe
+*.o
+*.a
+*.out
+
+# Excluir archivos de configuración específicos del entorno
+*.env
+.env

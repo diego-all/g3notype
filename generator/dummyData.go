@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/diego-all/run-from-gh/models"
 	"github.com/google/generative-ai-go/genai"
 	"github.com/joho/godotenv"
 	"google.golang.org/api/option"
@@ -37,7 +38,7 @@ type DDLData struct {
 	} `json:"UsageMetadata"`
 }
 
-func CreateDatabase() {
+func GenerateDummyData(config models.Config) {
 	// Cargar variables de entorno desde el archivo .env
 	err := godotenv.Load()
 	if err != nil {

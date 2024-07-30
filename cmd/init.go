@@ -13,6 +13,7 @@ import (
 var (
 	db       string
 	jsonPath string
+	dummy    bool
 )
 
 // init use a posicional argument (projectName)
@@ -63,6 +64,14 @@ var initCmd = &cobra.Command{
 		generator.Generatex(projectName, db, configuration)
 		//generator.Generate(projectName, db, jsonPath)
 
+		// Ejecutar la función GenerateDummyData solo si el flag dummy está presente
+
+		if dummy {
+
+			generator.GenerateDummyData(configuration)
+
+		}
+
 		elapsed := time.Since(start)
 
 		fmt.Printf("El tiempo de ejecución es: %s\n", elapsed)
@@ -84,4 +93,5 @@ func init() {
 	// Validar "" o "/inputs/classes.json"
 	//initCmd.Flags().StringVarP(&jsonPath, "config", "c", "inputs/classes.json", "Ruta del archivo JSON de configuración")
 	initCmd.Flags().StringVarP(&jsonPath, "config", "c", "", "Ruta del archivo JSON de configuración")
+	initCmd.Flags().BoolVarP(&dummy, "dummy", "u", false, "Generar Dummy data usando Gemini (Requiere API Key)")
 }

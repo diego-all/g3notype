@@ -121,3 +121,35 @@ lsof -i:9090
   El tiempo de ejecución es: 12.814421ms
 
 
+  dummyData.go (independiente)
+
+  El tiempo de ejecución es: 4.799758713s
+  El tiempo de ejecución es: 5.610740169s
+  El tiempo de ejecución es: 3.801896691s
+  El tiempo de ejecución es: 5.126581685s
+  El tiempo de ejecución es: 5.268949742s
+  El tiempo de ejecución es: 6.398674133s
+  El tiempo de ejecución es: 5.195210352s
+  El tiempo de ejecución es: 4.689731216s
+
+
+
+  Tiempo completo de ejecucion de generator y dummyData
+
+  El tiempo de ejecución es: 5.370131241s
+
+
+## Agregar feature Generate dummy Data
+
+  go run main.go init --db sqlite --config /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/classes.json projectTest
+
+  go run main.go init --db sqlite --dummy --config /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/classes.json projectTest
+
+  go run main.go init --db sqlite --dummy --config inputs/classes.json projectTest
+
+  go run main.go rollback   (Reestablecer las Pre-Templates a su estado original)
+
+
+
+
+
