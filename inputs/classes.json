@@ -1,20 +1,20 @@
 [
     {
-      "tipo": "Product",
+      "tipo": "Book",
       "atributos": {
-        "nombresito": {
+        "nombre": {
           "tipoDato": "string"
         },
-        "descripcionsita": {
+        "descripcion": {
           "tipoDato": "string"
         },
-        "precioaquel": {
+        "precio": {
           "tipoDato": "int"
         },
-        "cantidadparce": {
+        "cantidad": {
           "tipoDato": "int"
         },
-        "randomoelo": {
+        "random": {
           "tipoDato": "string"
         }
       }

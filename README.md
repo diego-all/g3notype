@@ -72,6 +72,8 @@ projectTest  (Nombre del proyecto)
     Funciona sin repositorio. Analizar como hacer que funcione con repositorio y crearlo con git. (analizar como crea el repo git init y demas)
 
 
+    COMO QUE SI FUNCIONA
+
 ## Ajuste descriptivo (book.Name vs book.nombre) crear tipos (Nombre)
 
 
@@ -92,7 +94,7 @@ Funciona bien, al parecer vscode organiza el script.
 lsof -i:9090
 
 
-## Roolback (Copy generic to base)
+## Rollback (Copy generic to base)
 
 
 ## Crear la base de datos
@@ -151,5 +153,39 @@ lsof -i:9090
 
 
 
+## Hay Bugs
+
+ - Tengo las request en POstman 
+ - SOlo funciona decente el insert
+ - Hay inconsistencia en los tipos de datos
 
 
+ type Book struct {
+ 	Id	int	`json:"id"`
+	Nombre	string	`json:"nombre"`
+	Descripcion	string	`json:"descripcion"`
+	Precio	int	`json:"precio"`
+	Cantidad	int	`json:"cantidad"`
+	Random	string	`json:"random"`
+	CreatedAt   time.Time `json:"created_at"`
+ 	UpdatedAt   time.Time `json:"updated_at"`
+}
+
+CREATE TABLE IF NOT EXISTS books (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre TEXT NOT NULL,
+    descripcion TEXT NOT NULL,
+    precio INTEGER NOT NULL,
+    cantidad INTEGER NOT NULL,
+    random INTEGER NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+Por que los toma diferente?
+
+Analizar si tome harcodeado de alguna parte el DDL de la tabla.
+
+
+SI funciono crear la base de datos, a veces hay que abrir y cerrar el editor
