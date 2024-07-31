@@ -4,11 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
-	"regexp"
-	"strings"
 
 	"github.com/diego-all/run-from-gh/models"
 	"github.com/google/generative-ai-go/genai"
@@ -41,7 +38,7 @@ type DDLData struct {
 	} `json:"UsageMetadata"`
 }
 
-func GenerateDummyData(config models.Config) string {
+func GenerateDummyData(config models.Config) {
 	// Cargar variables de entorno desde el archivo .env
 	err := godotenv.Load()
 	if err != nil {
@@ -111,48 +108,10 @@ func GenerateDummyData(config models.Config) string {
 		log.Fatalf("Error al deserializar la respuesta: %v", err)
 	}
 
-	// Recopilar el contenido de Parts
-	var parts []string
+	// Imprimir el contenido de Parts
 	for _, candidate := range data.Candidates {
-		parts = append(parts, candidate.Content.Parts...)
-	}
-
-	// Unir las partes en una sola cadena de texto
-	return fmt.Sprintf("%s", strings.Join(parts, "\n"))
-}
-
-func ExtractInsertStatements(data string) string {
-	// Utilizar expresión regular para extraer las sentencias INSERT
-	re := regexp.MustCompile(`(?i)INSERT INTO [^\;]+;`)
-	inserts := re.FindAllString(data, -1)
-
-	// Unir todas las sentencias INSERT en un solo string
-	return strings.Join(inserts, "\n")
-}
-
-func AddDummyData() {
-	// Llamar a GenerateDummyData para obtener los datos dummy
-	config := models.Config{}
-	dummyData := GenerateDummyData(config)
-
-	// Extraer solo las sentencias INSERT
-	inserts := ExtractInsertStatements(dummyData)
-
-	// Especificar la ruta del archivo
-	filePath := "base-templates/database/up.sql-generic.txt"
-
-	// Leer el contenido existente del archivo
-	fileContent, err := ioutil.ReadFile(filePath)
-	if err != nil {
-		log.Fatalf("Error reading file: %v", err)
-	}
-
-	// Agregar las sentencias INSERT al final del archivo
-	updatedContent := fmt.Sprintf("%s\n%s", string(fileContent), inserts)
-
-	// Escribir el contenido actualizado de nuevo en el archivo
-	err = ioutil.WriteFile(filePath, []byte(updatedContent), 0644)
-	if err != nil {
-		log.Fatalf("Error writing to file: %v", err)
+		for _, part := range candidate.Content.Parts {
+			fmt.Println(part)
+		}
 	}
 }

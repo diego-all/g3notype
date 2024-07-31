@@ -68,7 +68,8 @@ var initCmd = &cobra.Command{
 
 		if dummy {
 
-			generator.GenerateDummyData(configuration)
+			//generator.GenerateDummyData(configuration)
+			generator.AddDummyData()
 
 		}
 

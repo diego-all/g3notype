@@ -13,16 +13,16 @@ CREATE TABLE IF NOT EXISTS books (
 
 -- DML statements [Dummy data]
 INSERT INTO Books (nombre, descripcion, precio, cantidad, random, created_at, updated_at)
-     VALUES ('El Hobbit', 'Una aventura épica de Tolkien', 15, 10, 10, DATETIME('now'), DATETIME('now'));
+     VALUES ('El Hobbit', 'Aventura épica de Tolkien', 15, 10, 1234, DATETIME('now'), DATETIME('now'));
 
 INSERT INTO Books (nombre, descripcion, precio, cantidad, random, created_at, updated_at)
-     VALUES ('Cien años de soledad', 'Una novela mágica de García Márquez', 20, 15, 20, DATETIME('now'), DATETIME('now'));
+     VALUES ('Cien años de soledad', 'Novela clásica de García Márquez', 12, 20, 5678, DATETIME('now'), DATETIME('now'));
 
 INSERT INTO Books (nombre, descripcion, precio, cantidad, random, created_at, updated_at)
-     VALUES ('cualquier cosa', 'Una distopía clásica de Orwell', 12, 8, 15, DATETIME('now'), DATETIME('now'));
+     VALUES ('1984', 'Distopía de Orwell', 10, 15, 9012, DATETIME('now'), DATETIME('now'));
 
 INSERT INTO Books (nombre, descripcion, precio, cantidad, random, created_at, updated_at)
-     VALUES ('El principito', 'Una historia conmovedora de Saint-Exupéry', 10, 12, 5, DATETIME('now'), DATETIME('now'));
+     VALUES ('El señor de los anillos', 'Trilogía épica de Tolkien', 25, 5, 3456, DATETIME('now'), DATETIME('now'));
 
 INSERT INTO Books (nombre, descripcion, precio, cantidad, random, created_at, updated_at)
-     VALUES ('Matar a un ruiseñor', 'Un clásico de la literatura americana', 18, 10, 25, DATETIME('now'), DATETIME('now'));
+     VALUES ('El principito', 'Cuento clásico de Saint-Exupéry', 8, 30, 7890, DATETIME('now'), DATETIME('now'));
