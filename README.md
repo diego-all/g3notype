@@ -189,3 +189,8 @@ Analizar si tome harcodeado de alguna parte el DDL de la tabla.
 
 
 SI funciono crear la base de datos, a veces hay que abrir y cerrar el editor
+
+Podria ser: (Ya lo habia revisaod antes)
+
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at DATETIME NOT NULL

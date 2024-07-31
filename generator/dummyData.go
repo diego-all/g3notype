@@ -72,20 +72,20 @@ func GenerateDummyData(config models.Config) {
 		Requiero construir basado en los datos anteriores las sentencias insert con data dummy, en total 5 sentencias para una base de datos sqlite, como las siguientes:
 		
 		-- DML statements [Dummy data]
-		-- INSERT INTO products (name, description, price, created_at, updated_at)
-		--     VALUES ('Teléfono móvil', 'Smartphone de última generación', 799, DATETIME('now'), DATETIME('now'));
+		INSERT INTO products (name, description, price, created_at, updated_at)
+		     VALUES ('Teléfono móvil', 'Smartphone de última generación', 799, DATETIME('now'), DATETIME('now'));
 		
-		-- INSERT INTO products (name, description, price, created_at, updated_at)
-		--     VALUES ('Camiseta', 'Camiseta de algodón', 20, DATETIME('now'), DATETIME('now'));
+		INSERT INTO products (name, description, price, created_at, updated_at)
+		     VALUES ('Camiseta', 'Camiseta de algodón', 20, DATETIME('now'), DATETIME('now'));
 		
-		-- INSERT INTO products (name, description, price, created_at, updated_at)
-		--     VALUES ('Sartén antiadherente', 'Sartén para cocinar', 35, DATETIME('now'), DATETIME('now'));
+		INSERT INTO products (name, description, price, created_at, updated_at)
+		     VALUES ('Sartén antiadherente', 'Sartén para cocinar', 35, DATETIME('now'), DATETIME('now'));
 		
-		-- INSERT INTO products (name, description, price, created_at, updated_at)
-		--     VALUES ('Balón de fútbol', 'Balón oficial de la FIFA', 50, DATETIME('now'), DATETIME('now'));
+		INSERT INTO products (name, description, price, created_at, updated_at)
+		     VALUES ('Balón de fútbol', 'Balón oficial de la FIFA', 50, DATETIME('now'), DATETIME('now'));
 		
-		-- INSERT INTO products (name, description, price, created_at, updated_at)
-		--     VALUES ('Muñeca', 'Muñeca de peluche para niños', 15, DATETIME('now'), DATETIME('now'));`
+		INSERT INTO products (name, description, price, created_at, updated_at)
+		     VALUES ('Muñeca', 'Muñeca de peluche para niños', 15, DATETIME('now'), DATETIME('now'));`
 
 	resp, err := model.GenerateContent(
 		ctx,

@@ -381,12 +381,14 @@ func generateDDLStatement(class string, classMetadata [][]string) string {
 		//fmt.Println("Capitalize alternativa nativa: ", strings.ToUpper(string(attribute[0]))+string(attribute[1:])) // toco esto para no usar mas dependencias.
 
 		switch attributeType {
-		case "integer":
-			fmt.Println("INTEGER")
+		case "int":
+			//fmt.Println("INT")
 			sqliteValue = "INTEGER"
 		case "string":
 			//fmt.Println("VARCHAR")
 			sqliteValue = "VARCHAR(100)"
+		case "bool":
+			sqliteValue = "INTEGER"
 		case "":
 			fmt.Println("OTRO CASO")
 
@@ -409,7 +411,7 @@ func generateDDLStatement(class string, classMetadata [][]string) string {
 
 	//fmt.Println("multilineAuxDDLStatement: ", multilineAuxDDLStatement)
 
-	Database_DDL_statement = "CREATE TABLE IF NOT EXISTS {{.LowerEntity}}s (\n \t" + "id INTEGER PRIMARY KEY AUTOINCREMENT,\n" + multilineAuxDDLStatement + "\t" + "created_at TIMESTAMP DEFAULT DATETIME,\n \t" + "updated_at TIMESTAMP NOT NULL\n \t" + ");"
+	Database_DDL_statement = "CREATE TABLE IF NOT EXISTS {{.LowerEntity}}s (\n \t" + "id INTEGER PRIMARY KEY AUTOINCREMENT,\n" + multilineAuxDDLStatement + "\t" + "created_at TIMESTAMP DEFAULT DATETIME NOT NULL,\n \t" + "updated_at TIMESTAMP NOT NULL\n \t" + ");"
 
 	TypesVars["database-DDL-statement"] = Database_DDL_statement
 
@@ -590,13 +592,13 @@ func generateEntityModels(class string, classMetadata [][]string) map[string]str
 	//fmt.Println("multilineAuxGetOneErr: \n ", multilineAuxGetOneErr+"\n")
 	fmt.Println("\n")
 
-	models_GetOneErr = "err := row.Scan(" + "\n" + multilineAuxGetOneErr + "\t" + "&{{.LowerEntity}}.Id," + "\n \t" + "&{{.LowerEntity}}.CreatedAt," + "\n" + "\t" + "&{{.LowerEntity}}.UpdatedAt," + "\n" + ")"
+	models_GetOneErr = "err := row.Scan(" + "\n" + "\t" + "&{{.LowerEntity}}.Id," + multilineAuxGetOneErr + "\n \t" + "&{{.LowerEntity}}.CreatedAt," + "\n" + "\t" + "&{{.LowerEntity}}.UpdatedAt," + "\n" + ")"
 	fmt.Println("models_GetOneErr es: \n ", models_GetOneErr)
 
 	fmt.Println("\n")
 
 	// Generate models-GetAllErrRowsScan
-	models_GetAllErrRowsScan = "err := rows.Scan(" + "\n" + multilineAuxGetOneErr + "\t" + "&{{.LowerEntity}}.Id," + "\n \t" + "&{{.LowerEntity}}.CreatedAt," + "\n" + "\t" + "&{{.LowerEntity}}.UpdatedAt," + "\n" + ")"
+	models_GetAllErrRowsScan = "err := rows.Scan(" + "\n" + "\t" + "&{{.LowerEntity}}.Id," + multilineAuxGetOneErr + "\n \t" + "&{{.LowerEntity}}.CreatedAt," + "\n" + "\t" + "&{{.LowerEntity}}.UpdatedAt," + "\n" + ")"
 	fmt.Println("models_GetAllErrRowsScan es: \n ", models_GetAllErrRowsScan)
 
 	fmt.Println("\n")
@@ -608,7 +610,7 @@ func generateEntityModels(class string, classMetadata [][]string) map[string]str
 		multilineAuxUpdateStmt = multilineAuxUpdateStmt + UpdateStmt[i] + "\n"
 	}
 
-	models_UpdateStmt = "stmt := `update {{.LowerEntity}} set" + "\n" + " " + multilineAuxUpdateStmt + "\t" + "updated_at = $" + strconv.Itoa(i+1) + "\n \t" + "where id = $" + strconv.Itoa(i+2) + "`"
+	models_UpdateStmt = "stmt := `update {{.LowerEntity}}s set" + "\n" + " " + multilineAuxUpdateStmt + "\t" + "updated_at = $" + strconv.Itoa(i+1) + "\n \t" + "where id = $" + strconv.Itoa(i+2) + "`"
 
 	fmt.Println("models_UpdateStmt: \n ", models_UpdateStmt)
 

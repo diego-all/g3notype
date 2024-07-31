@@ -1,30 +1,28 @@
-
-
 CREATE TABLE IF NOT EXISTS books (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    nombre TEXT NOT NULL,
-    descripcion TEXT NOT NULL,
-    precio INTEGER NOT NULL,
-    cantidad INTEGER NOT NULL,
-    random INTEGER NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- DML statements [Dummy data]
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+   nombre VARCHAR(100) NOT NULL,
+   descripcion VARCHAR(100) NOT NULL,
+   precio INTEGER NOT NULL,
+   cantidad INTEGER NOT NULL,
+   random VARCHAR(100) NOT NULL,
+   created_at TIMESTAMP DEFAULT DATETIME NOT NULL,
+	updated_at TIMESTAMP NOT NULL
+	);
 
 -- GENERADO CON SCRIPT 
+
+-- DML statements [Dummy data]
 INSERT INTO Books (nombre, descripcion, precio, cantidad, random, created_at, updated_at)
-     VALUES ('El Hobbit', 'Aventura épica de Tolkien', 15, 10, 12345, DATETIME('now'), DATETIME('now'));
+     VALUES ('El Hobbit', 'Una aventura épica de Tolkien', 15, 10, 10, DATETIME('now'), DATETIME('now'));
 
 INSERT INTO Books (nombre, descripcion, precio, cantidad, random, created_at, updated_at)
-    VALUES ('Cien años de soledad', 'Novela maestra de García Márquez', 12, 15, 67890, DATETIME('now'), DATETIME('now'));
+     VALUES ('Cien años de soledad', 'Una novela mágica de García Márquez', 20, 15, 20, DATETIME('now'), DATETIME('now'));
 
 INSERT INTO Books (nombre, descripcion, precio, cantidad, random, created_at, updated_at)
-    VALUES ('El principito', 'Cuento clásico para todas las edades', 8, 20, 24680, DATETIME('now'), DATETIME('now'));
+     VALUES ('cualquier cosa', 'Una distopía clásica de Orwell', 12, 8, 15, DATETIME('now'), DATETIME('now'));
 
 INSERT INTO Books (nombre, descripcion, precio, cantidad, random, created_at, updated_at)
-    VALUES ('1984', 'Distopía de Orwell', 10, 18, 13579, DATETIME('now'), DATETIME('now'));
+     VALUES ('El principito', 'Una historia conmovedora de Saint-Exupéry', 10, 12, 5, DATETIME('now'), DATETIME('now'));
 
 INSERT INTO Books (nombre, descripcion, precio, cantidad, random, created_at, updated_at)
-    VALUES ('El Señor de los Anillos', 'Trilogía de fantasía épica', 25, 12, 56789, DATETIME('now'), DATETIME('now'));
+     VALUES ('Matar a un ruiseñor', 'Un clásico de la literatura americana', 18, 10, 25, DATETIME('now'), DATETIME('now'));

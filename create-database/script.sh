@@ -1,2 +1,2 @@
 
-sqlite3 books.db < create-database/create_database.sql
+sqlite3 books.db < create_database.sql
