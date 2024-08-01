@@ -14,12 +14,12 @@ CREATE TABLE IF NOT EXISTS books (
 -- DML statements [Dummy data] by Gemini
 
 INSERT INTO Books (nombre, descripcion, precio, cantidad, random, created_at, updated_at)
-     VALUES ('El Hobbit', 'Una aventura épica en la Tierra Media', 15, 10, 1, DATETIME('now'), DATETIME('now'));
+     VALUES ('The Hitchhikers Guide to the Galaxy', 'A humorous science fiction novel by Douglas Adams', 10, 100, 12345, DATETIME('now'), DATETIME('now'));
 INSERT INTO Books (nombre, descripcion, precio, cantidad, random, created_at, updated_at)
-     VALUES ('Cien años de soledad', 'Una novela mágica sobre el amor, la familia y la historia', 12, 15, 2, DATETIME('now'), DATETIME('now'));
+     VALUES ('Pride and Prejudice', 'A romantic novel by Jane Austen', 8, 50, 67890, DATETIME('now'), DATETIME('now'));
 INSERT INTO Books (nombre, descripcion, precio, cantidad, random, created_at, updated_at)
-     VALUES ('El Señor de los Anillos', 'La trilogía épica de Tolkien', 25, 20, 3, DATETIME('now'), DATETIME('now'));
+     VALUES ('1984', 'A dystopian novel by George Orwell', 12, 75, 24680, DATETIME('now'), DATETIME('now'));
 INSERT INTO Books (nombre, descripcion, precio, cantidad, random, created_at, updated_at)
-     VALUES ('1984', 'Una novela distópica sobre un futuro totalitario', 10, 5, 4, DATETIME('now'), DATETIME('now'));
+     VALUES ('To Kill a Mockingbird', 'A novel by Harper Lee', 9, 120, 13579, DATETIME('now'), DATETIME('now'));
 INSERT INTO Books (nombre, descripcion, precio, cantidad, random, created_at, updated_at)
-     VALUES ('El principito', 'Una historia clásica sobre la amistad y el amor', 8, 12, 5, DATETIME('now'), DATETIME('now'));
+     VALUES ('The Lord of the Rings', 'An epic high fantasy novel by J. R. R. Tolkien', 15, 150, 56789, DATETIME('now'), DATETIME('now'));

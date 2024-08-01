@@ -3,5 +3,6 @@
 
 
 -- DML statements [Dummy data] by Gemini
+-- Tener cuidado con caracteres especiales que no acepta SQL lite como apostrofe por ejemplo para posesivo sajon
 
 {{.Database_DummyData}}
