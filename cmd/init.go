@@ -53,7 +53,7 @@ var initCmd = &cobra.Command{
 		}
 
 		configuration := models.Config{
-			//ProjectName: projectName,
+			ProjectName: projectName,
 			//Database: db
 			Tipo:            tipo,
 			MatrizAtributos: matrizAtributos,
@@ -61,17 +61,17 @@ var initCmd = &cobra.Command{
 
 		//Minimizar enviar todo directamente al struct
 
-		generator.Generatex(projectName, db, configuration)
+		generator.Generate(projectName, db, configuration, dummy)
 		//generator.Generate(projectName, db, jsonPath)
 
 		// Ejecutar la función GenerateDummyData solo si el flag dummy está presente
 
-		if dummy {
+		// if dummy {
 
-			//generator.GenerateDummyData(configuration)
-			generator.AddDummyData()
+		// 	//generator.GenerateDummyData(configuration)
+		// 	generator.AddDummyData()
 
-		}
+		// }
 
 		elapsed := time.Since(start)
 

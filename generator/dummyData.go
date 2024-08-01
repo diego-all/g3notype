@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"regexp"
@@ -130,29 +129,11 @@ func ExtractInsertStatements(data string) string {
 	return strings.Join(inserts, "\n")
 }
 
-func AddDummyData() {
+func AddDummyData() string {
 	// Llamar a GenerateDummyData para obtener los datos dummy
 	config := models.Config{}
 	dummyData := GenerateDummyData(config)
 
 	// Extraer solo las sentencias INSERT
-	inserts := ExtractInsertStatements(dummyData)
-
-	// Especificar la ruta del archivo
-	filePath := "base-templates/database/up.sql-generic.txt"
-
-	// Leer el contenido existente del archivo
-	fileContent, err := ioutil.ReadFile(filePath)
-	if err != nil {
-		log.Fatalf("Error reading file: %v", err)
-	}
-
-	// Agregar las sentencias INSERT al final del archivo
-	updatedContent := fmt.Sprintf("%s\n%s", string(fileContent), inserts)
-
-	// Escribir el contenido actualizado de nuevo en el archivo
-	err = ioutil.WriteFile(filePath, []byte(updatedContent), 0644)
-	if err != nil {
-		log.Fatalf("Error writing to file: %v", err)
-	}
+	return ExtractInsertStatements(dummyData)
 }

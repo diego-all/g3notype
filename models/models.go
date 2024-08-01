@@ -12,7 +12,7 @@ type Tipo struct {
 }
 
 type Config struct {
-	//ProjectName projectName,
+	ProjectName string
 	//Database db
 	Tipo            string
 	MatrizAtributos [][]string

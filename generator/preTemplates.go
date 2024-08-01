@@ -22,6 +22,8 @@ var TypesVars = map[string]string{
 
 	//Database_DDL_statement
 	"database-DDL-statement": "",
+	"database-DummyData":     "",
+	// 	TypeVars["dummyData"] = DummyData
 
 	// EntityModels
 	"models-typeEntityStruct":  "",
@@ -61,6 +63,7 @@ type PreTemplateData struct {
 	//TypesVars["handlers-varUpdateEntityModels"] = Database_DDL_statement
 	//"database-DDL-statement": "",
 	Database_DDL_statement string
+	Database_DummyData     string
 
 	Models_typeEntityStruct  string
 	Models_InsertStmt        string
@@ -280,6 +283,7 @@ func modifyBaseTemplates(preGeneratedTypes map[string]string) {
 		Handlers_payloadUpdateResponse: preGeneratedTypes["handlers-payloadUpdateResponse"],
 
 		Database_DDL_statement: preGeneratedTypes["database-DDL-statement"],
+		Database_DummyData:     preGeneratedTypes["database-DummyData"],
 
 		Models_typeEntityStruct:  preGeneratedTypes["models-typeEntityStruct"],
 		Models_InsertStmt:        preGeneratedTypes["models-InsertStmt"],
@@ -348,7 +352,7 @@ func modifyBaseTemplates(preGeneratedTypes map[string]string) {
 }
 
 // Generate Create table
-func generateDDLStatement(class string, classMetadata [][]string) string {
+func generateDatabaseDDL(class string, classMetadata [][]string, dummy bool) map[string]string {
 
 	fmt.Println("Desde generateDDLStatement", class)
 
@@ -361,7 +365,7 @@ func generateDDLStatement(class string, classMetadata [][]string) string {
 	var ddlStatement []string
 	var sqliteValue string
 	var multilineAuxDDLStatement string
-	var Database_DDL_statement string
+	var Database_DDL_statement, Database_DummyData string
 
 	// for _, attribute := range classMetadata {
 
@@ -413,10 +417,27 @@ func generateDDLStatement(class string, classMetadata [][]string) string {
 
 	Database_DDL_statement = "CREATE TABLE IF NOT EXISTS {{.LowerEntity}}s (\n \t" + "id INTEGER PRIMARY KEY AUTOINCREMENT,\n" + multilineAuxDDLStatement + "\t" + "created_at TIMESTAMP DEFAULT DATETIME NOT NULL,\n \t" + "updated_at TIMESTAMP NOT NULL\n \t" + ");"
 
+	Database_DummyData = ""
+
+	fmt.Println("DUMMY ES: \n", dummy)
+
+	// GEMINI
+	if dummy {
+		//generator.GenerateDummyData(configuration)
+		//AddDummyData()
+		Database_DummyData = AddDummyData()
+
+		fmt.Println("EL VALOR DE DE DATABASE_DUMMYDATA ES:\n", Database_DummyData)
+
+	}
+
 	TypesVars["database-DDL-statement"] = Database_DDL_statement
+	TypesVars["database-DummyData"] = Database_DummyData
 
 	//fmt.Println("database_DDL_statement ES:", database_DDL_statement)
-	return Database_DDL_statement
+
+	//return Database_DDL_statement
+	return TypesVars
 }
 
 // Generate Create table
