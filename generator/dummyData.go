@@ -61,6 +61,9 @@ func GenerateDummyData(config models.Config) string {
 
 	model := client.GenerativeModel("gemini-1.5-flash")
 
+	// AL PARECER NO ES GLOBAL, VALIDAR!!!!
+	fmt.Println("CONSULTANDO A GEMINI: \n", config.MatrizAtributos, "\n", config.Tipo, "\n")
+
 	// Definir la consulta
 	query := `Tengo un modelo de datos: Books con los siguientes atributos y su tipo de dato correspondiente
 		nombre | string
@@ -128,6 +131,8 @@ func ExtractInsertStatements(data string) string {
 	// Unir todas las sentencias INSERT en un solo string
 	return strings.Join(inserts, "\n")
 }
+
+// PENDIENTE RECIBIR ESTE: class string, classMetadata [][]string, AL PARECER CONFIG NO ES GLOBAL.
 
 func AddDummyData() string {
 	// Llamar a GenerateDummyData para obtener los datos dummy

@@ -1,4 +1,13 @@
 # Validar y eliminar el archivo create_database.sql si existe
+
+
+
+
+########################################################################
+#
+#  AJUSTAR ESTO, LA DB SE AGREGA A LA ANTIGUA DEBE BORRARSE Y GENERARSE UNA NUEVA, Y A LA CARPETA DEL PROYECTO
+#
+##########################################################################
 if [ -f create_database.sql ]; then
     rm create_database.sql
 fi
@@ -20,3 +29,5 @@ if [ -f ~/PROBAR-GENERADA/projectTest/data.sqlite ]; then
 fi
 
 cp data.sqlite ~/PROBAR-GENERADA/projectTest
+
+

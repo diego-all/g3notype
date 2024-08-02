@@ -425,6 +425,7 @@ func generateDatabaseDDL(class string, classMetadata [][]string, dummy bool) map
 	if dummy {
 		//generator.GenerateDummyData(configuration)
 		//AddDummyData()
+		//Database_DummyData = AddDummyData(class, classMetadata)
 		Database_DummyData = AddDummyData()
 
 		fmt.Println("EL VALOR DE DE DATABASE_DUMMYDATA ES:\n", Database_DummyData)

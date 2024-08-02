@@ -1,4 +1,3 @@
--- DDL statements
 CREATE TABLE IF NOT EXISTS books (
  	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	nombre VARCHAR(100) NOT NULL,
@@ -12,14 +11,15 @@ CREATE TABLE IF NOT EXISTS books (
 
 
 -- DML statements [Dummy data] by Gemini
+-- Tener cuidado con caracteres especiales que no acepta SQL lite como apostrofe por ejemplo para posesivo sajon
 
 INSERT INTO Books (nombre, descripcion, precio, cantidad, random, created_at, updated_at)
-     VALUES ('The Hitchhikers Guide to the Galaxy', 'A humorous science fiction novel by Douglas Adams', 10, 100, 12345, DATETIME('now'), DATETIME('now'));
+     VALUES ('El Hobbit', 'Una aventura épica de fantasía', 15, 5, 10, DATETIME('now'), DATETIME('now'));
 INSERT INTO Books (nombre, descripcion, precio, cantidad, random, created_at, updated_at)
-     VALUES ('Pride and Prejudice', 'A romantic novel by Jane Austen', 8, 50, 67890, DATETIME('now'), DATETIME('now'));
+     VALUES ('Cien años de soledad', 'Una obra maestra de la literatura latinoamericana', 12, 8, 15, DATETIME('now'), DATETIME('now'));
 INSERT INTO Books (nombre, descripcion, precio, cantidad, random, created_at, updated_at)
-     VALUES ('1984', 'A dystopian novel by George Orwell', 12, 75, 24680, DATETIME('now'), DATETIME('now'));
+     VALUES ('1984', 'Una distopía clásica sobre el control totalitario', 18, 3, 20, DATETIME('now'), DATETIME('now'));
 INSERT INTO Books (nombre, descripcion, precio, cantidad, random, created_at, updated_at)
-     VALUES ('To Kill a Mockingbird', 'A novel by Harper Lee', 9, 120, 13579, DATETIME('now'), DATETIME('now'));
+     VALUES ('El Principito', 'Una historia conmovedora sobre la amistad y la imaginación', 10, 12, 25, DATETIME('now'), DATETIME('now'));
 INSERT INTO Books (nombre, descripcion, precio, cantidad, random, created_at, updated_at)
-     VALUES ('The Lord of the Rings', 'An epic high fantasy novel by J. R. R. Tolkien', 15, 150, 56789, DATETIME('now'), DATETIME('now'));
+     VALUES ('El Señor de los Anillos', 'Una trilogía épica de fantasía', 25, 7, 30, DATETIME('now'), DATETIME('now'));
