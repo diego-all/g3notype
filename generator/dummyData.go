@@ -9,7 +9,6 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/diego-all/run-from-gh/models"
 	"github.com/google/generative-ai-go/genai"
 	"github.com/joho/godotenv"
 	"google.golang.org/api/option"
@@ -40,7 +39,7 @@ type DDLData struct {
 	} `json:"UsageMetadata"`
 }
 
-func GenerateDummyData(config models.Config) string {
+func GenerateDummyData(class string, classMetadata [][]string) string {
 	// Cargar variables de entorno desde el archivo .env
 	err := godotenv.Load()
 	if err != nil {
@@ -62,35 +61,75 @@ func GenerateDummyData(config models.Config) string {
 	model := client.GenerativeModel("gemini-1.5-flash")
 
 	// AL PARECER NO ES GLOBAL, VALIDAR!!!!
-	fmt.Println("CONSULTANDO A GEMINI: \n", config.MatrizAtributos, "\n", config.Tipo, "\n")
+	fmt.Println("CONSULTANDO A GEMINI: (clase) \n", class)
+
+	var formattedMetadata []string
+
+	for _, pair := range classMetadata {
+		if len(pair) == 2 {
+			formattedMetadata = append(formattedMetadata, fmt.Sprintf("%s|%s", pair[0], pair[1]))
+		}
+		//fmt.Println("valor de i:", i, "valor de j", j)
+	}
+	formattedMetadata = append(formattedMetadata, "created_at|DATETIME('now')")
+	formattedMetadata = append(formattedMetadata, "updated_at|DATETIME('now')")
+
+	// Unir todas las líneas en un solo string separado por saltos de línea
+	formattedMetadataString := strings.Join(formattedMetadata, "\n")
+
+	fmt.Println("FORMATTEDMETADATA: \n", formattedMetadata)
 
 	// Definir la consulta
-	query := `Tengo un modelo de datos: Books con los siguientes atributos y su tipo de dato correspondiente
-		nombre | string
-		descripcion| string
-		precio | int
-		cantidad | int
-		random| int
-		created_at|DATETIME('now')
-		updated_at|DATETIME('now')
-		
+	// query := `Tengo un modelo de datos: ` + class + ` con los siguientes atributos y su tipo de dato correspondiente` + formattedMetadata +
+	// 	// nombre | string
+	// 	// descripcion| string
+	// 	// precio | int
+	// 	// cantidad | int
+	// 	// random| int
+	// 	// created_at|DATETIME('now')
+	// 	// updated_at|DATETIME('now')
+
+	// 	`Requiero construir basado en los datos anteriores las sentencias insert con data dummy, en total 5 sentencias para una base de datos sqlite, como las siguientes:
+
+	// 	-- DML statements [Dummy data]
+	// 	INSERT INTO products (name, description, price, created_at, updated_at)
+	// 	     VALUES ('Teléfono móvil', 'Smartphone de última generación', 799, DATETIME('now'), DATETIME('now'));
+
+	// 	INSERT INTO products (name, description, price, created_at, updated_at)
+	// 	     VALUES ('Camiseta', 'Camiseta de algodón', 20, DATETIME('now'), DATETIME('now'));
+
+	// 	INSERT INTO products (name, description, price, created_at, updated_at)
+	// 	     VALUES ('Sartén antiadherente', 'Sartén para cocinar', 35, DATETIME('now'), DATETIME('now'));
+
+	// 	INSERT INTO products (name, description, price, created_at, updated_at)
+	// 	     VALUES ('Balón de fútbol', 'Balón oficial de la FIFA', 50, DATETIME('now'), DATETIME('now'));
+
+	// 	INSERT INTO products (name, description, price, created_at, updated_at)
+	// 	     VALUES ('Muñeca', 'Muñeca de peluche para niños', 15, DATETIME('now'), DATETIME('now'));`
+
+	// Definir la consulta
+	query := `Tengo un modelo de datos: ` + class + ` con los siguientes atributos y su tipo de dato correspondiente:
+		` + formattedMetadataString + `
+				
 		Requiero construir basado en los datos anteriores las sentencias insert con data dummy, en total 5 sentencias para una base de datos sqlite, como las siguientes:
-		
+				
 		-- DML statements [Dummy data]
 		INSERT INTO products (name, description, price, created_at, updated_at)
-		     VALUES ('Teléfono móvil', 'Smartphone de última generación', 799, DATETIME('now'), DATETIME('now'));
+			 VALUES ('Teléfono móvil', 'Smartphone de última generación', 799, DATETIME('now'), DATETIME('now'));
 		
 		INSERT INTO products (name, description, price, created_at, updated_at)
-		     VALUES ('Camiseta', 'Camiseta de algodón', 20, DATETIME('now'), DATETIME('now'));
+			 VALUES ('Camiseta', 'Camiseta de algodón', 20, DATETIME('now'), DATETIME('now'));
 		
 		INSERT INTO products (name, description, price, created_at, updated_at)
-		     VALUES ('Sartén antiadherente', 'Sartén para cocinar', 35, DATETIME('now'), DATETIME('now'));
+			 VALUES ('Sartén antiadherente', 'Sartén para cocinar', 35, DATETIME('now'), DATETIME('now'));
 		
 		INSERT INTO products (name, description, price, created_at, updated_at)
-		     VALUES ('Balón de fútbol', 'Balón oficial de la FIFA', 50, DATETIME('now'), DATETIME('now'));
+			 VALUES ('Balón de fútbol', 'Balón oficial de la FIFA', 50, DATETIME('now'), DATETIME('now'));
 		
 		INSERT INTO products (name, description, price, created_at, updated_at)
-		     VALUES ('Muñeca', 'Muñeca de peluche para niños', 15, DATETIME('now'), DATETIME('now'));`
+			 VALUES ('Muñeca', 'Muñeca de peluche para niños', 15, DATETIME('now'), DATETIME('now'));`
+
+	fmt.Println("QUERY:\n", query)
 
 	resp, err := model.GenerateContent(
 		ctx,
@@ -113,6 +152,8 @@ func GenerateDummyData(config models.Config) string {
 		log.Fatalf("Error al deserializar la respuesta: %v", err)
 	}
 
+	fmt.Println("DATA:\n", data) // No se ve
+
 	// Recopilar el contenido de Parts
 	var parts []string
 	for _, candidate := range data.Candidates {
@@ -134,10 +175,17 @@ func ExtractInsertStatements(data string) string {
 
 // PENDIENTE RECIBIR ESTE: class string, classMetadata [][]string, AL PARECER CONFIG NO ES GLOBAL.
 
-func AddDummyData() string {
+func AddDummyData(class string, classMetadata [][]string) string {
 	// Llamar a GenerateDummyData para obtener los datos dummy
-	config := models.Config{}
-	dummyData := GenerateDummyData(config)
+
+	//config := models.Config{}
+	dummyData := GenerateDummyData(class, classMetadata)
+
+	fmt.Println("DESDE ADDDUMMYDATA: (clase) \n", class)
+
+	fmt.Println("\n")
+
+	fmt.Println("DESDE ADDDUMMYDATA: (clase) \n", classMetadata)
 
 	// Extraer solo las sentencias INSERT
 	return ExtractInsertStatements(dummyData)

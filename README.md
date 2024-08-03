@@ -153,6 +153,10 @@ lsof -i:9090
 
 
 
+Generar Gemini API Key
+
+https://aistudio.google.com/app/apikey
+
 ## Hay Bugs
 
  - Tengo las request en POstman 
