@@ -127,7 +127,10 @@ func GenerateDummyData(class string, classMetadata [][]string) string {
 			 VALUES ('Balón de fútbol', 'Balón oficial de la FIFA', 50, DATETIME('now'), DATETIME('now'));
 		
 		INSERT INTO products (name, description, price, created_at, updated_at)
-			 VALUES ('Muñeca', 'Muñeca de peluche para niños', 15, DATETIME('now'), DATETIME('now'));`
+			 VALUES ('Muñeca', 'Muñeca de peluche para niños', 15, DATETIME('now'), DATETIME('now'));
+			  
+		Es necesario no utilizar caracteres especiales ni comas en los posesivos en la datadummy en caso de ser informacion en ingles.
+		Ademas considerar que la entidad para nombrar la tabla debe ser en plural en las sentencias insert`
 
 	fmt.Println("QUERY:\n", query)
 
