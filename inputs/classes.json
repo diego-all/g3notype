@@ -1,47 +1,47 @@
 [
-    {
-      "tipo": "Book",
-      "atributos": {
-        "nombre": {
-          "tipoDato": "string"
-        },
-        "descripcion": {
-          "tipoDato": "string"
-        },
-        "precio": {
-          "tipoDato": "int"
-        },
-        "cantidad": {
-          "tipoDato": "int"
-        },
-        "random": {
-          "tipoDato": "string"
-        }
+  {
+    "tipo": "Product",
+    "atributos": {
+      "nombresito": {
+        "tipoDato": "string"
+      },
+      "descripcionsita": {
+        "tipoDato": "string"
+      },
+      "precioaquel": {
+        "tipoDato": "int"
+      },
+      "cantidadparce": {
+        "tipoDato": "int"
+      },
+      "randomoelo": {
+        "tipoDato": "string"
       }
-    },
-    {
-      "tipo": "Category",
+    }
+  },
+  {
+    "tipo": "Category",
+    "atributos": {
+      "propiedad1": {
+        "tipoDato": "string"
+      },
+      "propiedad2": {
+        "tipoDato": "string"
+      }
+    }
+  },
+  {
+      "tipo": "Order",
       "atributos": {
         "propiedad1": {
           "tipoDato": "string"
         },
         "propiedad2": {
           "tipoDato": "string"
+        },
+        "propiedad3": {
+          "tipoDato": "string"
         }
       }
-    },
-    {
-        "tipo": "Order",
-        "atributos": {
-          "propiedad1": {
-            "tipoDato": "string"
-          },
-          "propiedad2": {
-            "tipoDato": "string"
-          },
-          "propiedad3": {
-            "tipoDato": "string"
-          }
-        }
-      }
-  ]
+    }
+]

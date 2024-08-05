@@ -198,3 +198,6 @@ Podria ser: (Ya lo habia revisaod antes)
 
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at DATETIME NOT NULL
+
+
+  sqlite3 data.sqlite < up.sql

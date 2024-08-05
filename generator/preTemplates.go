@@ -51,6 +51,16 @@ var preTemplates = map[string]string{
 	//"cmd/api/handlers-{{.Entity}}.go": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/handlers-entity.txt",
 }
 
+var (
+	NaturalID string
+)
+
+func SetNaturalID(id string) {
+	NaturalID = id
+}
+
+//var naturalId string
+
 type PreTemplateData struct {
 	Handlers_typeEntityRequest     string
 	Handlers_typeEntityResponse    string
@@ -115,7 +125,7 @@ func generateClassTags(class string, classMetadata [][]string) map[string]string
 	var handlers_payloadCreateResponse string
 	var handlers_payloadUpdateResponse string
 
-	var naturalId string
+	var naturalID string
 
 	// REPETIDO
 	// for attribute, value := range classMetadata {
@@ -165,11 +175,13 @@ func generateClassTags(class string, classMetadata [][]string) map[string]string
 		getEntResponse = append(getEntResponse, auxGetEntResponse)
 
 		if k == 0 {
-			naturalId = string(strings.ToUpper(string(attributeName[0])) + string(attributeName[1:]))
+			//naturalID = string(strings.ToUpper(string(attributeName[0])) + string(attributeName[1:]))
+			//SetNaturalID(naturalID)
+			SetNaturalID(string(strings.ToUpper(string(attributeName[0])) + string(attributeName[1:])))
 		}
 	}
 
-	fmt.Println(naturalId)
+	fmt.Println("SETNATURALID GLOBAL: \n ", naturalID)
 
 	// fmt.Println("Array de reqResTypes: ", reqResTypes)
 	// fmt.Println("Array de createEntModels: ", createEntModels)
@@ -227,13 +239,13 @@ func generateClassTags(class string, classMetadata [][]string) map[string]string
 
 	fmt.Println("\n")
 
-	handlers_payloadCreateResponse = "payload = jsonResponse{\n" + "\t    Error:   false,\n" + "\t    Message: \"{{.Entity}} successfully created\",\n" + "\t    Data:    envelope{\"book\": {{.LowerEntity}}." + naturalId + "},\n" + "\t}"
+	handlers_payloadCreateResponse = "payload = jsonResponse{\n" + "\t    Error:   false,\n" + "\t    Message: \"{{.Entity}} successfully created\",\n" + "\t    Data:    envelope{\"book\": {{.LowerEntity}}." + NaturalID + "},\n" + "\t}"
 
 	fmt.Println("handlers_payloadCreateResponse: \n ", handlers_payloadCreateResponse)
 
 	fmt.Println("\n")
 
-	handlers_payloadUpdateResponse = "payload = jsonResponse{\n" + "\t    Error:   false,\n" + "\t    Message: \"{{.Entity}} successfully updated\",\n" + "\t    Data:    envelope{\"book\": {{.LowerEntity}}." + naturalId + "},\n" + "\t}"
+	handlers_payloadUpdateResponse = "payload = jsonResponse{\n" + "\t    Error:   false,\n" + "\t    Message: \"{{.Entity}} successfully updated\",\n" + "\t    Data:    envelope{\"book\": {{.LowerEntity}}." + NaturalID + "},\n" + "\t}"
 
 	fmt.Println("handlers_payloadUpdateResponse: \n ", handlers_payloadUpdateResponse)
 
@@ -655,7 +667,7 @@ func generateEntityModels(class string, classMetadata [][]string) map[string]str
 	// Generate models-GetAllQuery
 	// Finding!!! order  by name depends JSON config file for order by nombre
 
-	models_GetAllQuery = "query := `select id, " + auxGetOneQuery + "created_at, updated_at from {{.LowerEntity}}s order by nombre`"
+	models_GetAllQuery = "query := `select id, " + auxGetOneQuery + "created_at, updated_at from {{.LowerEntity}}s order by " + strings.ToLower(NaturalID) + "`"
 	// query := `select id, name, description, price, created_at, updated_at from products where id = $1`
 	// query := `select id, nombre, descripcion, precio, cantidad, random, created_at, updated_at from {{.LowerEntity}} where id = $1`
 	fmt.Println("models_GetAllQuery es: \n ", models_GetAllQuery)
