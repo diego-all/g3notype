@@ -36,6 +36,10 @@ var TypesVars = map[string]string{
 	"models-GetAllQuery":       "",
 	"models-GetAllErrRowsScan": "",
 	"models-DeleteStmt":        "", // validar si realmente es necesario
+
+	// Requests (Collections)
+	"requests-Create": "",
+	"requests-Update": "",
 }
 
 // RECORDAR EL CAMBIASO DE BASE A GENERIC SOLO FUR POR ORDEN ALFABETICO PERO AL KEY NO SE CAMBIO, DEBERIA SER entity-generic.go
@@ -46,6 +50,8 @@ var preTemplates = map[string]string{
 	"database/up.sql": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/database/up.sql-generic.txt",
 
 	"internal/entities-base.go": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/internal/entities-generic.txt",
+
+	"requests-base.txt": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/requests-generic.txt",
 
 	//"cmd/api/handlers-entity-base.go": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/handlers-entity-base.txt",
 	//"cmd/api/handlers-{{.Entity}}.go": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/handlers-entity.txt",
@@ -85,6 +91,10 @@ type PreTemplateData struct {
 	Models_GetAllQuery       string
 	Models_GetAllErrRowsScan string
 	Models_DeleteStmt        string
+
+	// Requests
+	Collection_Create string
+	Collection_Update string
 
 	Entity      string
 	LowerEntity string
@@ -308,6 +318,9 @@ func modifyBaseTemplates(preGeneratedTypes map[string]string) {
 		Models_GetAllErrRowsScan: preGeneratedTypes["models-GetAllErrRowsScan"],
 		Models_DeleteStmt:        preGeneratedTypes["models-DeleteStmt"], // validar si realmente es necesario
 
+		Collection_Create: preGeneratedTypes["requests-Create"],
+		Collection_Update: preGeneratedTypes["requests-Update"],
+
 		// quizas pueda ser {{.UpperEntity}}
 		Entity: "{{.Entity}}",
 		//entity:  "{{.entity}}",   // NO funciona con minusculas seguir indagando
@@ -373,11 +386,14 @@ func generateDatabaseDDL(class string, classMetadata [][]string, dummy bool) map
 	fmt.Println("longitud del map es:", longitud)
 	fmt.Println("\n")
 
-	var auxDDL string
-	var ddlStatement []string
+	var auxDDL, auxCollection string
+	var ddlStatement, collectionRequest []string
+
 	var sqliteValue string
 	var multilineAuxDDLStatement string
-	var Database_DDL_statement, Database_DummyData string
+	//var multilineAuxDDLStatement, multilineCollectionReq string
+	var Database_DDL_statement, Database_DummyData, Collection_Create string
+	//var Database_DDL_statement, Database_DummyData, Collection_Create, Collection_Update string
 
 	// for _, attribute := range classMetadata {
 
@@ -412,6 +428,10 @@ func generateDatabaseDDL(class string, classMetadata [][]string, dummy bool) map
 
 		auxDDL = "\t" + attributeName + " " + sqliteValue + " " + "NOT NULL,"
 		ddlStatement = append(ddlStatement, auxDDL)
+
+		auxCollection = "\"" + attributeName + "\": " + "\"value\","
+		collectionRequest = append(collectionRequest, auxCollection)
+
 	}
 
 	//fmt.Println("Array de ddlStatement: ", ddlStatement)
@@ -431,6 +451,16 @@ func generateDatabaseDDL(class string, classMetadata [][]string, dummy bool) map
 
 	Database_DummyData = ""
 
+	for i, _ := range collectionRequest {
+		//fmt.Println("Valor de i", i, "Valor de j", j)
+		//multilineCollectionReq = multilineCollectionReq + collectionRequest[i] + "\n"
+		Collection_Create = Collection_Create + collectionRequest[i] + "\n"
+	}
+
+	//Collection_Create = ""
+
+	//Collection_Update = ""
+
 	fmt.Println("DUMMY ES: \n", dummy)
 
 	// GEMINI
@@ -448,6 +478,9 @@ func generateDatabaseDDL(class string, classMetadata [][]string, dummy bool) map
 
 	TypesVars["database-DDL-statement"] = Database_DDL_statement
 	TypesVars["database-DummyData"] = Database_DummyData
+
+	TypesVars["requests-Create"] = Collection_Create
+	TypesVars["requests-Update"] = Collection_Create
 
 	//fmt.Println("database_DDL_statement ES:", database_DDL_statement)
 

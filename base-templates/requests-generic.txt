@@ -1,0 +1,49 @@
+**REQUESTS**
+
+
+**CREATE**
+
+curl --location 'http://localhost:9090/{{.LowerEntity}}s' \
+--header 'Content-Type: application/json' \
+--data '{
+"nombresito": "value",
+"descripcionsita": "value",
+"precioaquel": "value",
+"cantidadparce": "value",
+"randomoelo": "value",
+
+}'
+
+
+
+**READ**
+
+curl --location 'http://localhost:9090/{{.LowerEntity}}s/get/6'
+
+
+
+**UPDATE**  
+
+curl --location --request PUT 'http://localhost:9090/{{.LowerEntity}}s/update/6' \
+--header 'Content-Type: application/json' \
+--data '{
+"nombresito": "value",
+"descripcionsita": "value",
+"precioaquel": "value",
+"cantidadparce": "value",
+"randomoelo": "value",
+
+}'
+
+
+
+**LIST**
+
+curl --location 'http://localhost:9090/{{.LowerEntity}}s/all'
+
+
+
+
+**DELETE**
+
+curl --location --request DELETE 'http://localhost:9090/{{.LowerEntity}}s/delete/6'

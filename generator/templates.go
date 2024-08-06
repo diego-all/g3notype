@@ -25,8 +25,10 @@ var estructura = map[string]string{
 	"database/script.sh": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/database/script.sh",
 	//"data.sqlite":            "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/database/data.sqlite",
 	//"golang-CRUD-{{.Entity}}-API.postman_collection.json": "/base-templates",
-	"go.mod":                        "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/go.mod.txt",
-	"go.sum":                        "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/go.sum.txt",
+	"go.mod":       "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/go.mod.txt",
+	"go.sum":       "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/go.sum.txt",
+	"requests.txt": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/requests-generic.txt",
+
 	"internal/models.go":            "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/internal/models.txt",
 	"internal/{{.EntityPlural}}.go": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/internal/entities-generic.txt", //la acabo de cambiar
 	//"product_classDiagram.png":      "/base-templates",
