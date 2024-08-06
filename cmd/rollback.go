@@ -17,6 +17,7 @@ var rollbackCmd = &cobra.Command{
 			{"base-templates/cmd/api/handlers-entity-base.txt", "base-templates/cmd/api/handlers-entity-generic.txt"},
 			{"base-templates/database/up.sql-base.txt", "base-templates/database/up.sql-generic.txt"},
 			{"base-templates/internal/entities-base.txt", "base-templates/internal/entities-generic.txt"},
+			{"base-templates/requests-base.txt", "base-templates/requests-generic.txt"},
 		}
 
 		for _, file := range rollbackFiles {

@@ -6,8 +6,7 @@
 curl --location 'http://localhost:9090/{{.LowerEntity}}s' \
 --header 'Content-Type: application/json' \
 --data '{
-{{.Collection_Create}}
-}'
+{{.Collection_Create}}}'
 
 
 
@@ -22,8 +21,7 @@ curl --location 'http://localhost:9090/{{.LowerEntity}}s/get/6'
 curl --location --request PUT 'http://localhost:9090/{{.LowerEntity}}s/update/6' \
 --header 'Content-Type: application/json' \
 --data '{
-{{.Collection_Update}}
-}'
+{{.Collection_Update}}}'
 
 
 

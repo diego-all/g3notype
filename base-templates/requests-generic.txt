@@ -6,13 +6,7 @@
 curl --location 'http://localhost:9090/{{.LowerEntity}}s' \
 --header 'Content-Type: application/json' \
 --data '{
-"nombresito": "value",
-"descripcionsita": "value",
-"precioaquel": "value",
-"cantidadparce": "value",
-"randomoelo": "value",
-
-}'
+{{.Collection_Create}}}'
 
 
 
@@ -27,13 +21,7 @@ curl --location 'http://localhost:9090/{{.LowerEntity}}s/get/6'
 curl --location --request PUT 'http://localhost:9090/{{.LowerEntity}}s/update/6' \
 --header 'Content-Type: application/json' \
 --data '{
-"nombresito": "value",
-"descripcionsita": "value",
-"precioaquel": "value",
-"cantidadparce": "value",
-"randomoelo": "value",
-
-}'
+{{.Collection_Update}}}'
 
 
 
