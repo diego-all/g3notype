@@ -1,0 +1,47 @@
+**COLLECTION**
+
+
+**CREATE**
+
+curl --location 'http://localhost:9090/products' \
+--header 'Content-Type: application/json' \
+--data '{
+"nombresito": "no me interesa",
+"descripcionsita": "no me interesa",
+"precioaquel": 100000,
+"cantidadparce":2,
+"randomoelo": "no me interesa" 
+}'
+
+
+
+**READ**
+
+curl --location 'http://localhost:9090/products/get/8'
+
+
+
+**UPDATE**  
+
+curl --location --request PUT 'http://localhost:9090/products/update/8' \
+--header 'Content-Type: application/json' \
+--data '{
+"nombresito": "oelooelo",
+"descripcionsita": "no me interesa",
+"precioaquel": 100000,
+"cantidadparce":2,
+"randomoelo": "no me interesa" 
+}'
+
+
+
+**LIST**
+
+curl --location 'http://localhost:9090/products/all'
+
+
+
+
+**DELETE**
+
+curl --location --request DELETE 'http://localhost:9090/books/delete/4'

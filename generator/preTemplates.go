@@ -239,13 +239,13 @@ func generateClassTags(class string, classMetadata [][]string) map[string]string
 
 	fmt.Println("\n")
 
-	handlers_payloadCreateResponse = "payload = jsonResponse{\n" + "\t    Error:   false,\n" + "\t    Message: \"{{.Entity}} successfully created\",\n" + "\t    Data:    envelope{\"book\": {{.LowerEntity}}." + NaturalID + "},\n" + "\t}"
+	handlers_payloadCreateResponse = "payload = jsonResponse{\n" + "\t    Error:   false,\n" + "\t    Message: \"{{.Entity}} successfully created\",\n" + "\t    Data:    envelope{\"{{.LowerEntity}}\": {{.LowerEntity}}." + NaturalID + "},\n" + "\t}"
 
 	fmt.Println("handlers_payloadCreateResponse: \n ", handlers_payloadCreateResponse)
 
 	fmt.Println("\n")
 
-	handlers_payloadUpdateResponse = "payload = jsonResponse{\n" + "\t    Error:   false,\n" + "\t    Message: \"{{.Entity}} successfully updated\",\n" + "\t    Data:    envelope{\"book\": {{.LowerEntity}}." + NaturalID + "},\n" + "\t}"
+	handlers_payloadUpdateResponse = "payload = jsonResponse{\n" + "\t    Error:   false,\n" + "\t    Message: \"{{.Entity}} successfully updated\",\n" + "\t    Data:    envelope{\"{{.LowerEntity}}\": {{.LowerEntity}}." + NaturalID + "},\n" + "\t}"
 
 	fmt.Println("handlers_payloadUpdateResponse: \n ", handlers_payloadUpdateResponse)
 

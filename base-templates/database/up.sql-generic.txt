@@ -1,8 +1,26 @@
 -- DDL statements
-{{.Database_DDL_statement}}
+CREATE TABLE IF NOT EXISTS {{.LowerEntity}}s (
+ 	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	nombresito VARCHAR(100) NOT NULL,
+	descripcionsita VARCHAR(100) NOT NULL,
+	precioaquel INTEGER NOT NULL,
+	cantidadparce INTEGER NOT NULL,
+	randomoelo VARCHAR(100) NOT NULL,
+	created_at TIMESTAMP DEFAULT DATETIME NOT NULL,
+ 	updated_at TIMESTAMP NOT NULL
+ 	);
 
 
 -- DML statements [Dummy data] by Gemini
 -- Tener cuidado con caracteres especiales que no acepta SQL lite como apostrofe por ejemplo para posesivo sajon
 
-{{.Database_DummyData}}
+INSERT INTO products (nombresito, descripcionsita, precioaquel, cantidadparce, randomoelo, created_at, updated_at)
+VALUES ('Laptop', 'Portatil con procesador de ultima generación', 1200, 12, 'ModeloA', DATETIME('now'), DATETIME('now'));
+INSERT INTO products (nombresito, descripcionsita, precioaquel, cantidadparce, randomoelo, created_at, updated_at)
+VALUES ('Tablet', 'Dispositivo movil con pantalla tactil', 300, 6, 'ModeloB', DATETIME('now'), DATETIME('now'));
+INSERT INTO products (nombresito, descripcionsita, precioaquel, cantidadparce, randomoelo, created_at, updated_at)
+VALUES ('Audifonos', 'Audifonos inalámbricos con cancelación de ruido', 150, 2, 'ModeloC', DATETIME('now'), DATETIME('now'));
+INSERT INTO products (nombresito, descripcionsita, precioaquel, cantidadparce, randomoelo, created_at, updated_at)
+VALUES ('Reloj inteligente', 'Reloj con funciones inteligentes para fitness', 250, 4, 'ModeloD', DATETIME('now'), DATETIME('now'));
+INSERT INTO products (nombresito, descripcionsita, precioaquel, cantidadparce, randomoelo, created_at, updated_at)
+VALUES ('Smart TV', 'Televisor inteligente con acceso a internet', 500, 8, 'ModeloE', DATETIME('now'), DATETIME('now'));

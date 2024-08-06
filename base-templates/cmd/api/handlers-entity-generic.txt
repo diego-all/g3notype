@@ -10,9 +10,21 @@ import (
 	"github.com/go-chi/chi"
 )
 
-{{.Handlers_typeEntityRequest}}
+type {{.LowerEntity}}Request struct {
+	Nombresito	string	`json:"nombresito"`
+	Descripcionsita	string	`json:"descripcionsita"`
+	Precioaquel	int	`json:"precioaquel"`
+	Cantidadparce	int	`json:"cantidadparce"`
+	Randomoelo	string	`json:"randomoelo"`
+}
 
-{{.Handlers_typeEntityResponse}}
+type {{.LowerEntity}}Response struct {
+	Nombresito	string	`json:"nombresito"`
+	Descripcionsita	string	`json:"descripcionsita"`
+	Precioaquel	int	`json:"precioaquel"`
+	Cantidadparce	int	`json:"cantidadparce"`
+	Randomoelo	string	`json:"randomoelo"`
+}
 
 
 func (app *application) Create{{.Entity}}(w http.ResponseWriter, r *http.Request) {
@@ -29,7 +41,13 @@ func (app *application) Create{{.Entity}}(w http.ResponseWriter, r *http.Request
 	}
 
 
-	{{.Handlers_varCreateEntityModels}}
+	var {{.LowerEntity}} = models.{{.Entity}}{
+	Nombresito:	{{.LowerEntity}}Req.Nombresito,
+	Descripcionsita:	{{.LowerEntity}}Req.Descripcionsita,
+	Precioaquel:	{{.LowerEntity}}Req.Precioaquel,
+	Cantidadparce:	{{.LowerEntity}}Req.Cantidadparce,
+	Randomoelo:	{{.LowerEntity}}Req.Randomoelo,
+}
 
 	_, err = app.models.{{.Entity}}.Insert({{.LowerEntity}})
 	if err != nil {
@@ -38,7 +56,11 @@ func (app *application) Create{{.Entity}}(w http.ResponseWriter, r *http.Request
 	}
 
 
-	{{.Handlers_payloadCreateResponse}}
+	payload = jsonResponse{
+	    Error:   false,
+	    Message: "{{.Entity}} successfully created",
+	    Data:    envelope{"{{.LowerEntity}}": {{.LowerEntity}}.Nombresito},
+	}
 
 	_ = app.writeJSON(w, http.StatusAccepted, payload)
 }
@@ -56,7 +78,13 @@ func (app *application) Get{{.Entity}}(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	{{.Handlers_varGetEntResponse}}
+	var {{.LowerEntity}}Response = {{.LowerEntity}}Response{
+	Nombresito:	{{.LowerEntity}}.Nombresito,
+	Descripcionsita:	{{.LowerEntity}}.Descripcionsita,
+	Precioaquel:	{{.LowerEntity}}.Precioaquel,
+	Cantidadparce:	{{.LowerEntity}}.Cantidadparce,
+	Randomoelo:	{{.LowerEntity}}.Randomoelo,
+}
 
 	payload := jsonResponse{
 		Error:   false,
@@ -93,7 +121,15 @@ func (app *application) Update{{.Entity}}(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	{{.Handlers_varUpdateEntityModels}}
+	var {{.LowerEntity}} = models.{{.Entity}}{
+	Nombresito:	{{.LowerEntity}}Req.Nombresito,
+	Descripcionsita:	{{.LowerEntity}}Req.Descripcionsita,
+	Precioaquel:	{{.LowerEntity}}Req.Precioaquel,
+	Cantidadparce:	{{.LowerEntity}}Req.Cantidadparce,
+	Randomoelo:	{{.LowerEntity}}Req.Randomoelo,
+	UpdatedAt:   time.Now(),
+ 	Id:          {{.LowerEntity}}ID,
+}
 
 	_, err = app.models.{{.Entity}}.Update({{.LowerEntity}})
 	if err != nil {
@@ -102,7 +138,11 @@ func (app *application) Update{{.Entity}}(w http.ResponseWriter, r *http.Request
 	}
 
 
-	{{.Handlers_payloadUpdateResponse}}
+	payload = jsonResponse{
+	    Error:   false,
+	    Message: "{{.Entity}} successfully updated",
+	    Data:    envelope{"{{.LowerEntity}}": {{.LowerEntity}}.Nombresito},
+	}
 
 	_ = app.writeJSON(w, http.StatusOK, payload)
 }
