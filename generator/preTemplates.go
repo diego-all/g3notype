@@ -402,7 +402,7 @@ func generateDatabaseDDL(class string, classMetadata [][]string, dummy bool) map
 
 	// }
 
-	for _, data := range classMetadata {
+	for i, data := range classMetadata {
 		//fmt.Printf("Clave: %s, Valor: %s\n", iterator, data)
 
 		attributeName := data[0]
@@ -429,7 +429,21 @@ func generateDatabaseDDL(class string, classMetadata [][]string, dummy bool) map
 		auxDDL = "\t" + attributeName + " " + sqliteValue + " " + "NOT NULL,"
 		ddlStatement = append(ddlStatement, auxDDL)
 
-		auxCollection = "\"" + attributeName + "\": " + "\"value\","
+		// Verificar si es la última iteración para no agregar la coma
+		if i == len(classMetadata)-1 {
+			if sqliteValue == "VARCHAR(100)" {
+				auxCollection = "\"" + attributeName + "\": " + "\"value\""
+			} else {
+				auxCollection = "\"" + attributeName + "\": " + "10"
+			}
+		} else {
+			if sqliteValue == "VARCHAR(100)" {
+				auxCollection = "\"" + attributeName + "\": " + "\"value\","
+			} else {
+				auxCollection = "\"" + attributeName + "\": " + "10,"
+			}
+		}
+
 		collectionRequest = append(collectionRequest, auxCollection)
 
 	}
