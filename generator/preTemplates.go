@@ -392,8 +392,8 @@ func generateDatabaseDDL(class string, classMetadata [][]string, dummy bool) map
 	var sqliteValue string
 	var multilineAuxDDLStatement string
 	//var multilineAuxDDLStatement, multilineCollectionReq string
-	var Database_DDL_statement, Database_DummyData, Collection_Create string
-	//var Database_DDL_statement, Database_DummyData, Collection_Create, Collection_Update string
+	//var Database_DDL_statement, Database_DummyData, Collection_Create string
+	var Database_DDL_statement, Database_DummyData, Collection_Create, Collection_Update string
 
 	// for _, attribute := range classMetadata {
 
@@ -482,23 +482,46 @@ func generateDatabaseDDL(class string, classMetadata [][]string, dummy bool) map
 		//generator.GenerateDummyData(configuration)
 		//AddDummyData()
 
-		// Ahora es dinamico
-		Database_DummyData = AddDummyData(class, classMetadata)
 		//Database_DummyData = AddDummyData()
+		// Ahora es dinamico
+		//Database_DummyData = AddDummyData(class, classMetadata)
 
-		fmt.Println("EL VALOR DE DE DATABASE_DUMMYDATA ES:\n", Database_DummyData)
+		// var dummyDataResult DummyDataResult
+
+		// // Database_DummyData, Collection_Create, Collection_Update = AddDummyData(class, classMetadata)
+		// dummyData = AddDummyData(class, classMetadata)
+
+		// fmt.Println("EL VALOR DE DE DATABASE_DUMMYDATA ES:\n", Database_DummyData)
+
+		var dummyDataResult DummyDataResult
+
+		dummyDataResult = AddDummyData(class, classMetadata)
+
+		fmt.Println("El valor de Database_DummyData es:\n", dummyDataResult.Inserts)
+		fmt.Println("El valor del JSON para CREATE es:\n", dummyDataResult.CreateJSON)
+		fmt.Println("El valor del JSON para UPDATE es:\n", dummyDataResult.UpdateJSON)
+
+		Database_DummyData = dummyDataResult.Inserts
+		Collection_Create = dummyDataResult.CreateJSON
+		Collection_Update = dummyDataResult.UpdateJSON
 
 	}
 
 	TypesVars["database-DDL-statement"] = Database_DDL_statement
 	TypesVars["database-DummyData"] = Database_DummyData
 
-	TypesVars["requests-Create"] = Collection_Create
-	TypesVars["requests-Update"] = Collection_Create
+	// TypesVars["requests-Create"] = Collection_Create
+	// //TypesVars["requests-Update"] = Collection_Create
+	// TypesVars["requests-Update"] = Collection_Update
 
 	//fmt.Println("database_DDL_statement ES:", database_DDL_statement)
 
-	//return Database_DDL_statement
+	//ULTIMO TRAMOS
+
+	TypesVars["requests-Create"] = Collection_Create
+	//TypesVars["requests-Update"] = Collection_Create
+	TypesVars["requests-Update"] = Collection_Update
+
 	return TypesVars
 }
 
