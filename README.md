@@ -145,6 +145,8 @@ lsof -i:9090
 
   go run main.go init --db sqlite --config /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/classes.json projectTest
 
+  go run main.go init --db sqlite --config inputs/classes.json projectTest
+
   go run main.go init --db sqlite --dummy --config /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/classes.json projectTest
 
   go run main.go init --db sqlite --dummy --config inputs/classes.json projectTest
