@@ -1,58 +1,4 @@
-tengo una funcion en golang que recibe como parametros un string y una matriz y retorna un string:
-
-
-func AddDummyData(class string, classMetadata [][]string) string {
-
-	dummyData := GenerateDummyData(class, classMetadata)
-
-	return ExtractInsertStatements(dummyData)
-}
-
-
-En GenerateDummyData() hay una logica que hace una consulta a traves de la API de gemini,
-
-func GenerateDummyData(class string, classMetadata [][]string) string {
-//Logica para hacer consulta a gemini
-	return fmt.Sprintf("%s", strings.Join(parts, "\n"))
-}
-
-En dicha consulta (query) se contatenan dos variables:
-class que es un string y classMetadata que es una matriz de strings.
-
-
-Actualmente el script lo que hace es construir 5 insert para una base de datos sqlite.
-Luego de esto hay una logica que a partir de una funcion con una expresion regular extrae los 5 insert y los retorna en forma de string.
-
-Ahora requiero modificar esta consulta para que gemini genere dummy data en forma o structura de JSON (Realmente no necesito un JSON), considerando los tipos de dato incluidos en los metadatos que recibe la funcion.
-
-Podrias ayudarme a modificar esta logica para que ahora con esta segunda parte que genera dummydata para construir el body de un JSON (considerando que siguen siendo strings) puedan ser extraidas. Una puede ser a partir del primer insert emularia una peticion request de CREATE y a partir del segundo insert crear un UPDATE.
-
-AHora luego de extraer los 3 valores solicitados:
-
-1. 5 inserts en un string
-2. 1 string que emule la porcion de un JSON create a partir del primer insert.
-3. 1 string que emule la porcion de un JSON update a partir del segundo insert
-
-Quiza AHora las funciones deban ser modificadas y su valor de retorno no seria solo un string como esta actualmente, sino otra estructura como un array o un map.
-
-Considerando nuevamente no retornar 3 strings sino un struct con los 3 strings.
-
-
-package generator
-
-import (
-	"context"
-	"encoding/json"
-	"fmt"
-	"log"
-	"os"
-	"regexp"
-	"strings"
-
-	"github.com/google/generative-ai-go/genai"
-	"github.com/joho/godotenv"
-	"google.golang.org/api/option"
-)
+Tengo esta funcion en golang: GenerateDummyData()
 
 type DDLData struct {
 	Candidates []struct {
@@ -146,11 +92,12 @@ func GenerateDummyData(class string, classMetadata [][]string) string {
 		
 		También requiero que generes a partir de los 2 primeros inserts la estructura de una request JSON. Es decir 2 veces el siguiente
 		ejemplo considerando el tipo de dato si son strings utilizar comillas, en caso de ser valores numericos omitirlas.
+		Debes omitir agregar los campos created_at y updated_at en estos 2 nuevos strings a generar, tambien omitir las llaves {}, no será
+		un JSON, solo es una porcion del mismo.
 
 		"name": "value",
 		"description": "value",
 		"price": 100000
-
 		`
 
 	fmt.Println("QUERY:\n", query)
@@ -185,36 +132,86 @@ func GenerateDummyData(class string, classMetadata [][]string) string {
 	}
 
 	// Unir las partes en una sola cadena de texto
+	fmt.Println("GENERATEDUMMYDATA SENTENCIAS INSERT: \n")
+	fmt.Println(fmt.Sprintf("%s", strings.Join(parts, "\n")))
 	return fmt.Sprintf("%s", strings.Join(parts, "\n"))
 }
 
-func ExtractInsertStatements(data string) string {
-	// Utilizar expresión regular para extraer las sentencias INSERT
-	re := regexp.MustCompile(`(?i)INSERT INTO [^\;]+;`)
-	inserts := re.FindAllString(data, -1)
+Lo que imprime es lo siguiente:
 
-	// Unir todas las sentencias INSERT en un solo string
-	return strings.Join(inserts, "\n")
-}
+GENERATEDUMMYDATA SENTENCIAS INSERT: 
 
-// PENDIENTE RECIBIR ESTE: class string, classMetadata [][]string, AL PARECER CONFIG NO ES GLOBAL.
+## Sentencias INSERT con data dummy
 
-func AddDummyData(class string, classMetadata [][]string) string {
-	// Llamar a GenerateDummyData para obtener los datos dummy
+```sql
+-- DML statements [Dummy data]
+INSERT INTO products (nombresito, descripcionsita, precioaquel, cantidadparce, randomoelo, created_at, updated_at)
+VALUES ('Telefono movil', 'Smartphone de ultima generacion', 799, 24, 'modelo1', DATETIME('now'), DATETIME('now'));
 
-	//config := models.Config{}
+INSERT INTO products (nombresito, descripcionsita, precioaquel, cantidadparce, randomoelo, created_at, updated_at)
+VALUES ('Camiseta', 'Camiseta de algodon', 20, 12, 'modelo2', DATETIME('now'), DATETIME('now'));
+
+INSERT INTO products (nombresito, descripcionsita, precioaquel, cantidadparce, randomoelo, created_at, updated_at)
+VALUES ('Sarten antiadherente', 'Sarten para cocinar', 35, 8, 'modelo3', DATETIME('now'), DATETIME('now'));
+
+INSERT INTO products (nombresito, descripcionsita, precioaquel, cantidadparce, randomoelo, created_at, updated_at)
+VALUES ('Balon de futbol', 'Balon oficial de la FIFA', 50, 10, 'modelo4', DATETIME('now'), DATETIME('now'));
+
+INSERT INTO products (nombresito, descripcionsita, precioaquel, cantidadparce, randomoelo, created_at, updated_at)
+VALUES ('Muneca', 'Muneca de peluche para ninos', 15, 6, 'modelo5', DATETIME('now'), DATETIME('now'));
+```
+
+## Estructura JSON de los dos primeros inserts
+
+```json
+"nombresito": "Telefono movil",
+"descripcionsita": "Smartphone de ultima generacion",
+"precioaquel": 799,
+"cantidadparce": 24,
+"randomoelo": "modelo1"
+
+"nombresito": "Camiseta",
+"descripcionsita": "Camiseta de algodon",
+"precioaquel": 20,
+"cantidadparce": 12,
+"randomoelo": "modelo2"
+``` 
+
+Requiero que me ayudes generando una logica que permita extraer los 5 inserts y asignarlos a un string, de igual forma con las otras 2 estructuras extraerlas y 
+asignarlas a 2 strings independientes:
+
+Por favor realiza la extraccion de la response de gemini.
+
+Esta funcion es llamada desde esta funcion AddDummyData(), por favor crea las funciones necesarias para que desde AddDummyData puedan ser llamadas
+y extraer la informacion que relaciono
+
+
+func AddDummyData(class string, classMetadata [][]string) models.DummyDataResult {
+
 	dummyData := GenerateDummyData(class, classMetadata)
 
-	fmt.Println("DESDE ADDDUMMYDATA: (clase) \n", class)
+	//llamar las funciones para obtener los 3 strings extraidos
 
-	fmt.Println("\n")
-
-	fmt.Println("DESDE ADDDUMMYDATA: (clase) \n", classMetadata)
-
-	// Extraer solo las sentencias INSERT
-	return ExtractInsertStatements(dummyData)
+	return DummyDataResult{
+		Inserts:    "en construccion",
+		CreateJSON: "en construccion",
+		UpdateJSON: "en construccion",
+	}
+	
 }
 
-Podrias darme la respuesta en español
+package models
 
 
+type DummyDataResult struct {
+	Inserts    string
+	CreateJSON string
+	UpdateJSON string
+}
+
+
+Te aclaro que por favor no modifiques la consulta hacia a gemini, para los 5 inserts se requiere conservar created_at y updated_at pero para los otros 
+2 strings no. Reitero no modificar la query a gemini, gemini ya entrega la data generada solo es implementar la forma de extraerla y retronarla parseada.
+
+
+Podrias darme la respuesta en español.

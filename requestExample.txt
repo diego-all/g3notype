@@ -1,0 +1,24 @@
+
+
+
+curl --location 'http://localhost:9090/products' \
+--header 'Content-Type: application/json' \
+--data '{
+"nombresito": "trin",
+"descripcionsita": "trin",
+"precioaquel": 500,
+"cantidadparce": 5,
+"randomoelo": "trintrin"
+}'
+
+
+
+curl --location 'http://localhost:9090/products' \
+--header 'Content-Type: application/json' \
+--data '{
+"nombresito": "no me interesa",
+"descripcionsita": "no me interesa",
+"precioaquel": 100000,
+"cantidadparce":2,
+"randomoelo": "no me interesa" 
+}'

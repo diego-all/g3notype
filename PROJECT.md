@@ -25,3 +25,15 @@
     - [ ] Part II  
     - [ ] Part III
     - [ ] part IV
+
+
+
+|Feature |Description|  Notes |
+|-----|--------|-------|
+|Config module|go get github.com/lib/pq       | Libreria que sirve para trabajar con postgree.     |
+|Layer architecture  |go get github.com/nats-io/nats.go      | Cliente para el sistema de mensajería NATS      |
+|Certificates   |go get github.com/elastic/go-elasticsearch/v7      | Pendiente      |
+|Middleware  |go get github.com/gorilla/mux      | Pendiente      |
+|Egg  |go get github.com/segmentio/ksuid      | Pendiente      |
+|Egg  |go get -u github.com/gorilla/mux      | Pendiente      |
+|Egg  |go get github.com/gorilla/websocket      | Pendiente      |

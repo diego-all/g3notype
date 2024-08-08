@@ -147,7 +147,11 @@ func GenerateDummyData(class string, classMetadata [][]string) string {
 		parts = append(parts, candidate.Content.Parts...)
 	}
 
+	fmt.Println("PARTS:\n", parts)
+
 	// Unir las partes en una sola cadena de texto
+	fmt.Println("GENERATEDUMMYDATA SENTENCIAS INSERT: \n")
+	fmt.Println(fmt.Sprintf("%s", strings.Join(parts, "\n")))
 	return fmt.Sprintf("%s", strings.Join(parts, "\n"))
 }
 
@@ -160,43 +164,48 @@ func ExtractInsertStatements(data string) string {
 	return strings.Join(inserts, "\n")
 }
 
-// Crear una porción JSON a partir de un insert
-func CreateJSONPortionFromInsert(insert string) string {
-	re := regexp.MustCompile(`\(([^\)]+)\)\s+VALUES\s+\(([^\)]+)\)`)
-	matches := re.FindStringSubmatch(insert)
-	if len(matches) < 3 {
-		return ""
+// ExtractUpsertCollections extrae dos estructuras JSON del response de Gemini, eliminando los campos created_at y updated_at.
+func ExtractUpsertCollections(data string) (string, string) {
+	// Regex para encontrar los valores de los primeros dos INSERT
+	re := regexp.MustCompile(`(?i)INSERT INTO [^\(]+\(([^\)]+)\)\s+VALUES\s+\(([^\)]+)\);`)
+	matches := re.FindAllStringSubmatch(data, -1)
+
+	if len(matches) < 2 {
+		return "", ""
 	}
 
-	fields := strings.Split(matches[1], ", ")
-	values := strings.Split(matches[2], ", ")
+	// Convertir los dos primeros inserts a JSON sin los campos created_at y updated_at
+	createJSON := convertInsertToJSON(matches[0][2], matches[0][3])
+	updateJSON := convertInsertToJSON(matches[1][2], matches[1][3])
 
-	// Verificar que la longitud de fields y values coincida
-	if len(fields) != len(values) {
-		log.Printf("Longitud de campos y valores no coincide en la sentencia: %s", insert)
-		return ""
-	}
+	return createJSON, updateJSON
+}
 
-	var jsonPortion []string
-	for i, field := range fields {
-		field = strings.TrimSpace(field)
-		if field == "created_at" || field == "updated_at" {
-			continue
-		}
+// convertInsertToJSON convierte los valores de un INSERT a una estructura JSON
+func convertInsertToJSON(columns string, values string) string {
+	columnList := strings.Split(columns, ",")
+	valueList := strings.Split(values, ",")
 
-		value := strings.TrimSpace(strings.Trim(values[i], "'"))
-		if value != "null" {
-			if _, err := strconv.Atoi(value); err == nil {
-				jsonPortion = append(jsonPortion, fmt.Sprintf(`"%s": %s`, field, value))
+	var result []string
+	for i := range columnList {
+		column := strings.TrimSpace(columnList[i])
+		value := strings.TrimSpace(valueList[i])
+		if column != "created_at" && column != "updated_at" {
+			if isNumeric(value) {
+				result = append(result, fmt.Sprintf("\"%s\": %s", column, value))
 			} else {
-				jsonPortion = append(jsonPortion, fmt.Sprintf(`"%s": "%s"`, field, value))
+				result = append(result, fmt.Sprintf("\"%s\": \"%s\"", column, value))
 			}
-		} else {
-			jsonPortion = append(jsonPortion, fmt.Sprintf(`"%s": %s`, field, value))
 		}
 	}
 
-	return strings.Join(jsonPortion, ",\n")
+	return "{" + strings.Join(result, ", ") + "}"
+}
+
+// isNumeric verifica si una cadena representa un valor numérico
+func isNumeric(s string) bool {
+	_, err := strconv.ParseFloat(s, 64)
+	return err == nil
 }
 
 // PENDIENTE RECIBIR ESTE: class string, classMetadata [][]string, AL PARECER CONFIG NO ES GLOBAL.
@@ -219,9 +228,11 @@ func CreateJSONPortionFromInsert(insert string) string {
 func AddDummyData(class string, classMetadata [][]string) models.DummyDataResult {
 	// Llamar a GenerateDummyData para obtener los datos dummy
 	dummyData := GenerateDummyData(class, classMetadata)
-	inserts := ExtractInsertStatements(dummyData)
+	//insertStatements := ExtractInsertStatements(dummyData)
+	createJSON, updateJSON := ExtractUpsertCollections(dummyData)
+	//inserts := ExtractInsertStatements(dummyData)
 
-	fmt.Println("EXTRACTED INSERTS FROM ADDDUMMYDATA(): \n", inserts)
+	//fmt.Println("EXTRACTED INSERTS FROM ADDDUMMYDATA(): \n", inserts)
 
 	// var createJSON, updateJSON string
 	// if len(inserts) > 0 {
@@ -234,14 +245,17 @@ func AddDummyData(class string, classMetadata [][]string) models.DummyDataResult
 	fmt.Println("DESDE ADDDUMMYDATA: (clase) \n", class, classMetadata)
 	fmt.Println("\n")
 
+	fmt.Println("ESTRUCTURAS NUEVAS CREATEUPDATE: \n", createJSON, updateJSON)
+
 	//return ExtractInsertStatements(dummyData)
 	return models.DummyDataResult{
+		//Inserts: insertStatements,
 		Inserts: ExtractInsertStatements(dummyData),
 		//Inserts: dummyData,
 		//Inserts:    strings.Join(inserts, "\n"),
-		CreateJSON: "En construccion",
-		UpdateJSON: "En construccion",
-		// CreateJSON: createJSON,
-		// UpdateJSON: updateJSON,
+		// CreateJSON: "En construccion",
+		// UpdateJSON: "En construccion",
+		CreateJSON: createJSON,
+		UpdateJSON: updateJSON,
 	}
 }
