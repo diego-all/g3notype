@@ -17,3 +17,9 @@ type Config struct {
 	Tipo            string
 	MatrizAtributos [][]string
 }
+
+type DummyDataResult struct {
+	Inserts    string
+	CreateJSON string
+	UpdateJSON string
+}

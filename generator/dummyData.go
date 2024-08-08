@@ -10,6 +10,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/diego-all/run-from-gh/models"
 	"github.com/google/generative-ai-go/genai"
 	"github.com/joho/godotenv"
 	"google.golang.org/api/option"
@@ -40,18 +41,14 @@ type DDLData struct {
 	} `json:"UsageMetadata"`
 }
 
-type DummyDataResult struct {
-	Inserts    string `json:"inserts"`
-	CreateJSON string `json:"create_json"`
-	UpdateJSON string `json:"update_json"`
-}
-
 func GenerateDummyData(class string, classMetadata [][]string) string {
+	// Cargar variables de entorno desde el archivo .env
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatalf("Error loading .env file: %v", err)
 	}
 
+	// Obtener la clave de la API desde las variables de entorno
 	apiKey := os.Getenv("GEMINI_API_KEY")
 	if apiKey == "" {
 		log.Fatalf("GEMINI_API_KEY not found in environment variables")
@@ -65,39 +62,61 @@ func GenerateDummyData(class string, classMetadata [][]string) string {
 
 	model := client.GenerativeModel("gemini-1.5-flash")
 
+	// AL PARECER NO ES GLOBAL, VALIDAR!!!!
+	fmt.Println("CONSULTANDO A GEMINI: (clase) \n", class)
+
 	var formattedMetadata []string
+
 	for _, pair := range classMetadata {
 		if len(pair) == 2 {
 			formattedMetadata = append(formattedMetadata, fmt.Sprintf("%s|%s", pair[0], pair[1]))
 		}
+		//fmt.Println("valor de i:", i, "valor de j", j)
 	}
 	formattedMetadata = append(formattedMetadata, "created_at|DATETIME('now')")
 	formattedMetadata = append(formattedMetadata, "updated_at|DATETIME('now')")
 
+	// Unir todas las líneas en un solo string separado por saltos de línea
 	formattedMetadataString := strings.Join(formattedMetadata, "\n")
 
+	fmt.Println("FORMATTEDMETADATA: \n", formattedMetadata)
+
+	// Definir la consulta
 	query := `Tengo un modelo de datos: ` + class + ` con los siguientes atributos y su tipo de dato correspondiente:
 		` + formattedMetadataString + `
+				
 		Requiero construir basado en los datos anteriores las sentencias insert con data dummy, en total 5 sentencias para una base de datos sqlite, como las siguientes:
+				
 		-- DML statements [Dummy data]
 		INSERT INTO products (name, description, price, created_at, updated_at)
 			 VALUES ('Teléfono móvil', 'Smartphone de última generación', 799, DATETIME('now'), DATETIME('now'));
+		
 		INSERT INTO products (name, description, price, created_at, updated_at)
 			 VALUES ('Camiseta', 'Camiseta de algodón', 20, DATETIME('now'), DATETIME('now'));
+		
 		INSERT INTO products (name, description, price, created_at, updated_at)
 			 VALUES ('Sartén antiadherente', 'Sartén para cocinar', 35, DATETIME('now'), DATETIME('now'));
+		
 		INSERT INTO products (name, description, price, created_at, updated_at)
 			 VALUES ('Balón de fútbol', 'Balón oficial de la FIFA', 50, DATETIME('now'), DATETIME('now'));
+		
 		INSERT INTO products (name, description, price, created_at, updated_at)
 			 VALUES ('Muñeca', 'Muñeca de peluche para niños', 15, DATETIME('now'), DATETIME('now'));
-		Es necesario no utilizar caracteres especiales ni comas en los posesivos en caso de ser información en inglés.
-		Además considerar que la entidad para nombrar la tabla debe ser en plural en las sentencias insert.
+			  
+		Es necesario no utilizar caracteres especiales ni comas en los posesivos en la datadummy en caso de ser informacion en ingles.
+		Ademas considerar que la entidad para nombrar la tabla debe ser en plural en las sentencias insert.
 		
-		También requiero que generes a partir de los 2 primeros inserts la estructura de una request JSON. Es decir, 2 veces el siguiente ejemplo considerando el tipo de dato si son strings utilizar comillas, en caso de ser valores numéricos omitirlas.
+		También requiero que generes a partir de los 2 primeros inserts la estructura de una request JSON. Es decir 2 veces el siguiente
+		ejemplo considerando el tipo de dato si son strings utilizar comillas, en caso de ser valores numericos omitirlas.
+		Debes omitir agregar los campos created_at y updated_at en estos 2 nuevos strings a generar, tambien omitir las llaves {}, no será
+		un JSON, solo es una porcion del mismo.
+
 		"name": "value",
 		"description": "value",
 		"price": 100000
 		`
+
+	fmt.Println("QUERY:\n", query)
 
 	resp, err := model.GenerateContent(
 		ctx,
@@ -107,78 +126,122 @@ func GenerateDummyData(class string, classMetadata [][]string) string {
 		log.Fatalf("Failed to generate content: %v", err)
 	}
 
+	// Convertir la respuesta a JSON
 	respJSON, err := json.Marshal(resp)
 	if err != nil {
 		log.Fatalf("Failed to marshal response: %v", err)
 	}
 
+	// Deserializar la respuesta JSON en la estructura DDLData
 	var data DDLData
 	err = json.Unmarshal(respJSON, &data)
 	if err != nil {
 		log.Fatalf("Error al deserializar la respuesta: %v", err)
 	}
 
+	fmt.Println("DATA:\n", data) // No se ve
+
+	// Recopilar el contenido de Parts
 	var parts []string
 	for _, candidate := range data.Candidates {
 		parts = append(parts, candidate.Content.Parts...)
 	}
 
-	return strings.Join(parts, "\n")
+	// Unir las partes en una sola cadena de texto
+	return fmt.Sprintf("%s", strings.Join(parts, "\n"))
 }
 
 func ExtractInsertStatements(data string) string {
+	// Utilizar expresión regular para extraer las sentencias INSERT
 	re := regexp.MustCompile(`(?i)INSERT INTO [^\;]+;`)
 	inserts := re.FindAllString(data, -1)
+
+	// Unir todas las sentencias INSERT en un solo string
 	return strings.Join(inserts, "\n")
 }
 
-func ExtractCreateUpdate(data string) (string, string) {
-	re := regexp.MustCompile(`(?i)INSERT INTO ([^\(]+)\(([^\)]+)\)\s+VALUES\s+\(([^\)]+)\);`)
-	matches := re.FindAllStringSubmatch(data, -1)
-
-	if len(matches) < 2 {
-		return "", ""
+// Crear una porción JSON a partir de un insert
+func CreateJSONPortionFromInsert(insert string) string {
+	re := regexp.MustCompile(`\(([^\)]+)\)\s+VALUES\s+\(([^\)]+)\)`)
+	matches := re.FindStringSubmatch(insert)
+	if len(matches) < 3 {
+		return ""
 	}
 
-	create := convertInsertToCurlBody(matches[0][2], matches[0][3])
-	update := convertInsertToCurlBody(matches[1][2], matches[1][3])
+	fields := strings.Split(matches[1], ", ")
+	values := strings.Split(matches[2], ", ")
 
-	return create, update
-}
+	// Verificar que la longitud de fields y values coincida
+	if len(fields) != len(values) {
+		log.Printf("Longitud de campos y valores no coincide en la sentencia: %s", insert)
+		return ""
+	}
 
-func convertInsertToCurlBody(columns string, values string) string {
-	columnList := strings.Split(columns, ",")
-	valueList := strings.Split(values, ",")
+	var jsonPortion []string
+	for i, field := range fields {
+		field = strings.TrimSpace(field)
+		if field == "created_at" || field == "updated_at" {
+			continue
+		}
 
-	var result []string
-	for i := range columnList {
-		column := strings.TrimSpace(columnList[i])
-		value := strings.TrimSpace(valueList[i])
-		if column != "created_at" && column != "updated_at" {
-			if isNumeric(value) {
-				result = append(result, fmt.Sprintf("\"%s\": %s", column, value))
+		value := strings.TrimSpace(strings.Trim(values[i], "'"))
+		if value != "null" {
+			if _, err := strconv.Atoi(value); err == nil {
+				jsonPortion = append(jsonPortion, fmt.Sprintf(`"%s": %s`, field, value))
 			} else {
-				result = append(result, fmt.Sprintf("\"%s\": \"%s\"", column, value))
+				jsonPortion = append(jsonPortion, fmt.Sprintf(`"%s": "%s"`, field, value))
 			}
+		} else {
+			jsonPortion = append(jsonPortion, fmt.Sprintf(`"%s": %s`, field, value))
 		}
 	}
 
-	return strings.Join(result, ",\n")
+	return strings.Join(jsonPortion, ",\n")
 }
 
-func isNumeric(s string) bool {
-	_, err := strconv.ParseFloat(s, 64)
-	return err == nil
-}
+// PENDIENTE RECIBIR ESTE: class string, classMetadata [][]string, AL PARECER CONFIG NO ES GLOBAL.
 
-func AddDummyData(class string, classMetadata [][]string) DummyDataResult {
+// func AddDummyData(class string, classMetadata [][]string) string {
+// 	// Llamar a GenerateDummyData para obtener los datos dummy
+
+// 	dummyData := GenerateDummyData(class, classMetadata)
+
+// 	fmt.Println("DESDE ADDDUMMYDATA: (clase) \n", class)
+
+// 	fmt.Println("\n")
+
+// 	fmt.Println("DESDE ADDDUMMYDATA: (clase) \n", classMetadata)
+
+// 	// Extraer solo las sentencias INSERT
+// 	return ExtractInsertStatements(dummyData)
+// }
+
+func AddDummyData(class string, classMetadata [][]string) models.DummyDataResult {
+	// Llamar a GenerateDummyData para obtener los datos dummy
 	dummyData := GenerateDummyData(class, classMetadata)
-	insertStatements := ExtractInsertStatements(dummyData)
-	createJSON, updateJSON := ExtractCreateUpdate(dummyData)
+	inserts := ExtractInsertStatements(dummyData)
 
-	return DummyDataResult{
-		Inserts:    insertStatements,
-		CreateJSON: createJSON,
-		UpdateJSON: updateJSON,
+	fmt.Println("EXTRACTED INSERTS FROM ADDDUMMYDATA(): \n", inserts)
+
+	// var createJSON, updateJSON string
+	// if len(inserts) > 0 {
+	// 	createJSON = CreateJSONPortionFromInsert(inserts[0])
+	// }
+	// if len(inserts) > 1 {
+	// 	updateJSON = CreateJSONPortionFromInsert(inserts[1])
+	// }
+
+	fmt.Println("DESDE ADDDUMMYDATA: (clase) \n", class, classMetadata)
+	fmt.Println("\n")
+
+	//return ExtractInsertStatements(dummyData)
+	return models.DummyDataResult{
+		Inserts: ExtractInsertStatements(dummyData),
+		//Inserts: dummyData,
+		//Inserts:    strings.Join(inserts, "\n"),
+		CreateJSON: "En construccion",
+		UpdateJSON: "En construccion",
+		// CreateJSON: createJSON,
+		// UpdateJSON: updateJSON,
 	}
 }

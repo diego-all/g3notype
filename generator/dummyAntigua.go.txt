@@ -1,43 +1,3 @@
-tengo una funcion en golang que recibe como parametros un string y una matriz y retorna un string:
-
-
-func AddDummyData(class string, classMetadata [][]string) string {
-
-	dummyData := GenerateDummyData(class, classMetadata)
-
-	return ExtractInsertStatements(dummyData)
-}
-
-
-En GenerateDummyData() hay una logica que hace una consulta a traves de la API de gemini,
-
-func GenerateDummyData(class string, classMetadata [][]string) string {
-//Logica para hacer consulta a gemini
-	return fmt.Sprintf("%s", strings.Join(parts, "\n"))
-}
-
-En dicha consulta (query) se contatenan dos variables:
-class que es un string y classMetadata que es una matriz de strings.
-
-
-Actualmente el script lo que hace es construir 5 insert para una base de datos sqlite.
-Luego de esto hay una logica que a partir de una funcion con una expresion regular extrae los 5 insert y los retorna en forma de string.
-
-Ahora requiero modificar esta consulta para que gemini genere dummy data en forma o structura de JSON (Realmente no necesito un JSON), considerando los tipos de dato incluidos en los metadatos que recibe la funcion.
-
-Podrias ayudarme a modificar esta logica para que ahora con esta segunda parte que genera dummydata para construir el body de un JSON (considerando que siguen siendo strings) puedan ser extraidas. Una puede ser a partir del primer insert emularia una peticion request de CREATE y a partir del segundo insert crear un UPDATE.
-
-AHora luego de extraer los 3 valores solicitados:
-
-1. 5 inserts en un string
-2. 1 string que emule la porcion de un JSON create a partir del primer insert.
-3. 1 string que emule la porcion de un JSON update a partir del segundo insert
-
-Quiza AHora las funciones deban ser modificadas y su valor de retorno no seria solo un string como esta actualmente, sino otra estructura como un array o un map.
-
-Considerando nuevamente no retornar 3 strings sino un struct con los 3 strings.
-
-
 package generator
 
 import (
@@ -146,6 +106,8 @@ func GenerateDummyData(class string, classMetadata [][]string) string {
 		
 		También requiero que generes a partir de los 2 primeros inserts la estructura de una request JSON. Es decir 2 veces el siguiente
 		ejemplo considerando el tipo de dato si son strings utilizar comillas, en caso de ser valores numericos omitirlas.
+		Debes omitir agregar los campos created_at y updated_at en estos 2 nuevos strings a generar, tambien omitir las llaves {}, no será
+		un JSON, solo es una porcion del mismo.
 
 		"name": "value",
 		"description": "value",
@@ -214,7 +176,3 @@ func AddDummyData(class string, classMetadata [][]string) string {
 	// Extraer solo las sentencias INSERT
 	return ExtractInsertStatements(dummyData)
 }
-
-Podrias darme la respuesta en español
-
-
