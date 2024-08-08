@@ -7,7 +7,6 @@ import (
 	"log"
 	"os"
 	"regexp"
-	"strconv"
 	"strings"
 
 	"github.com/diego-all/run-from-gh/models"
@@ -164,48 +163,138 @@ func ExtractInsertStatements(data string) string {
 	return strings.Join(inserts, "\n")
 }
 
-// ExtractUpsertCollections extrae dos estructuras JSON del response de Gemini, eliminando los campos created_at y updated_at.
-func ExtractUpsertCollections(data string) (string, string) {
-	// Regex para encontrar los valores de los primeros dos INSERT
-	re := regexp.MustCompile(`(?i)INSERT INTO [^\(]+\(([^\)]+)\)\s+VALUES\s+\(([^\)]+)\);`)
-	matches := re.FindAllStringSubmatch(data, -1)
+// func extractCreateJSON(input string) (string, error) {
+// 	// Definir expresión regular para extraer el bloque createJSON
+// 	createPattern := regexp.MustCompile(`VALUES \((.*?)\);`)
+// 	match := createPattern.FindStringSubmatch(input)
+// 	if len(match) < 2 {
+// 		return "", fmt.Errorf("No se encontró createJSON en la entrada")
+// 	}
+// 	// Remover DATETIME('now') del createJSON
+// 	createJSON := match[1]
+// 	createJSON = regexp.MustCompile(`,\s*DATETIME\('now'\)`).ReplaceAllString(createJSON, "")
+// 	return createJSON, nil
+// }
 
+// func extractUpdateJSON(input string) (string, error) {
+// 	// Definir expresión regular para extraer el bloque updateJSON
+// 	updatePattern := regexp.MustCompile(`VALUES \((.*?)\);`)
+// 	match := updatePattern.FindStringSubmatch(input)
+// 	if len(match) < 2 {
+// 		return "", fmt.Errorf("No se encontró updateJSON en la entrada")
+// 	}
+// 	// Remover DATETIME('now') del updateJSON
+// 	updateJSON := match[1]
+// 	updateJSON = regexp.MustCompile(`,\s*DATETIME\('now'\)`).ReplaceAllString(updateJSON, "")
+// 	return updateJSON, nil
+// }
+
+// Función para extraer createJSON
+// func extractCreateJSON(input string) (string, error) {
+// 	// Definir expresión regular para extraer los campos y valores
+// 	pattern := regexp.MustCompile(`INSERT INTO \w+ \((.*?)\)\s*VALUES\s*\((.*?)\);`)
+// 	match := pattern.FindStringSubmatch(input)
+// 	if len(match) < 3 {
+// 		return "", fmt.Errorf("No se encontró createJSON en la entrada")
+// 	}
+
+// 	// Extraer nombres de los campos y valores correspondientes
+// 	fields := strings.Split(match[1], ", ")
+// 	values := strings.Split(match[2], ", ")
+
+// 	// Construir el string createJSON
+// 	var createJSONBuilder strings.Builder
+// 	for i, field := range fields {
+// 		if !strings.Contains(values[i], "DATETIME('now')") {
+// 			field = strings.TrimSpace(field)
+// 			value := strings.TrimSpace(values[i])
+
+// 			// Agregar comillas dobles a los valores de tipo string
+// 			if strings.HasPrefix(value, "'") && strings.HasSuffix(value, "'") {
+// 				value = fmt.Sprintf("\"%s\"", strings.Trim(value, "'"))
+// 			}
+// 			createJSONBuilder.WriteString(fmt.Sprintf("\"%s\": %s", field, value))
+// 			if i < len(fields)-1 {
+// 				createJSONBuilder.WriteString(", ")
+// 			}
+// 		}
+// 	}
+// 	return createJSONBuilder.String(), nil
+// }
+
+// func extractUpdateJSON(input string) (string, error) {
+// 	// Definir expresión regular para extraer los campos y valores
+// 	pattern := regexp.MustCompile(`INSERT INTO \w+ \((.*?)\)\s*VALUES\s*\((.*?)\);`)
+// 	match := pattern.FindStringSubmatch(input)
+// 	if len(match) < 3 {
+// 		return "", fmt.Errorf("No se encontró updateJSON en la entrada")
+// 	}
+
+// 	// Extraer nombres de los campos y valores correspondientes
+// 	fields := strings.Split(match[1], ", ")
+// 	values := strings.Split(match[2], ", ")
+
+// 	// Construir el string updateJSON
+// 	var updateJSONBuilder strings.Builder
+// 	for i, field := range fields {
+// 		if !strings.Contains(values[i], "DATETIME('now')") {
+// 			field = strings.TrimSpace(field)
+// 			value := strings.TrimSpace(values[i])
+
+// 			// Agregar comillas dobles a los valores de tipo string
+// 			if strings.HasPrefix(value, "'") && strings.HasSuffix(value, "'") {
+// 				value = fmt.Sprintf("\"%s\"", strings.Trim(value, "'"))
+// 			}
+// 			updateJSONBuilder.WriteString(fmt.Sprintf("\"%s\": %s", field, value))
+// 			if i < len(fields)-1 {
+// 				updateJSONBuilder.WriteString(", ")
+// 			}
+// 		}
+// 	}
+// 	return updateJSONBuilder.String(), nil
+// }
+
+// Función para extraer createJSON y updateJSON a partir de dos INSERTs
+func extractJSONFromInsert(input string) (string, string, error) {
+	// Definir expresión regular para extraer los campos y valores
+	pattern := regexp.MustCompile(`INSERT INTO \w+ \((.*?)\)\s*VALUES\s*\((.*?)\);`)
+	matches := pattern.FindAllStringSubmatch(input, -1)
 	if len(matches) < 2 {
-		return "", ""
+		return "", "", fmt.Errorf("No se encontraron suficientes INSERTs en la entrada")
 	}
 
-	// Convertir los dos primeros inserts a JSON sin los campos created_at y updated_at
-	createJSON := convertInsertToJSON(matches[0][2], matches[0][3])
-	updateJSON := convertInsertToJSON(matches[1][2], matches[1][3])
+	// Función interna para construir el JSON
+	buildJSON := func(fields, values []string) string {
+		var jsonBuilder strings.Builder
+		for i := 0; i < len(fields); i++ {
+			if !strings.Contains(values[i], "DATETIME('now')") {
+				field := strings.TrimSpace(fields[i])
+				value := strings.TrimSpace(values[i])
 
-	return createJSON, updateJSON
-}
-
-// convertInsertToJSON convierte los valores de un INSERT a una estructura JSON
-func convertInsertToJSON(columns string, values string) string {
-	columnList := strings.Split(columns, ",")
-	valueList := strings.Split(values, ",")
-
-	var result []string
-	for i := range columnList {
-		column := strings.TrimSpace(columnList[i])
-		value := strings.TrimSpace(valueList[i])
-		if column != "created_at" && column != "updated_at" {
-			if isNumeric(value) {
-				result = append(result, fmt.Sprintf("\"%s\": %s", column, value))
-			} else {
-				result = append(result, fmt.Sprintf("\"%s\": \"%s\"", column, value))
+				// Agregar comillas dobles a los valores de tipo string
+				if strings.HasPrefix(value, "'") && strings.HasSuffix(value, "'") {
+					value = fmt.Sprintf("\"%s\"", strings.Trim(value, "'"))
+				}
+				jsonBuilder.WriteString(fmt.Sprintf("\"%s\": %s", field, value))
+				if i < len(fields)-1 { // Evitar agregar coma después del último campo
+					jsonBuilder.WriteString(", ")
+				}
 			}
 		}
+		return jsonBuilder.String()
 	}
 
-	return "{" + strings.Join(result, ", ") + "}"
-}
+	// Obtener campos y valores del primer y segundo INSERT
+	fields1 := strings.Split(matches[0][1], ", ")
+	values1 := strings.Split(matches[0][2], ", ")
+	fields2 := strings.Split(matches[1][1], ", ")
+	values2 := strings.Split(matches[1][2], ", ")
 
-// isNumeric verifica si una cadena representa un valor numérico
-func isNumeric(s string) bool {
-	_, err := strconv.ParseFloat(s, 64)
-	return err == nil
+	// Construir createJSON y updateJSON
+	createJSON := buildJSON(fields1, values1)
+	updateJSON := buildJSON(fields2, values2)
+
+	return createJSON, updateJSON, nil
 }
 
 // PENDIENTE RECIBIR ESTE: class string, classMetadata [][]string, AL PARECER CONFIG NO ES GLOBAL.
@@ -228,8 +317,20 @@ func isNumeric(s string) bool {
 func AddDummyData(class string, classMetadata [][]string) models.DummyDataResult {
 	// Llamar a GenerateDummyData para obtener los datos dummy
 	dummyData := GenerateDummyData(class, classMetadata)
+
+	// createJSON, _ := extractCreateJSON(dummyData)
+
+	// updateJSON, _ := extractUpdateJSON(dummyData)
+
+	createJSON, updateJSON, _ := extractJSONFromInsert(dummyData)
+
+	fmt.Println("DUMMYDATA DUMMYDATA DUMMYDATA DUMMYDATA DUMMYDATA: \n", dummyData)
+	fmt.Println("\n")
+
+	// fmt.Println("CREATEJSON CREATEJSON CREATEJSON:", createJSON)
+
+	fmt.Println("updateJSON:")
 	//insertStatements := ExtractInsertStatements(dummyData)
-	createJSON, updateJSON := ExtractUpsertCollections(dummyData)
 	//inserts := ExtractInsertStatements(dummyData)
 
 	//fmt.Println("EXTRACTED INSERTS FROM ADDDUMMYDATA(): \n", inserts)
@@ -245,7 +346,7 @@ func AddDummyData(class string, classMetadata [][]string) models.DummyDataResult
 	fmt.Println("DESDE ADDDUMMYDATA: (clase) \n", class, classMetadata)
 	fmt.Println("\n")
 
-	fmt.Println("ESTRUCTURAS NUEVAS CREATEUPDATE: \n", createJSON, updateJSON)
+	//fmt.Println("ESTRUCTURAS NUEVAS CREATEUPDATE: \n", createJSON, updateJSON)
 
 	//return ExtractInsertStatements(dummyData)
 	return models.DummyDataResult{
