@@ -171,11 +171,101 @@ func ExtractInsertStatements(data string) string {
 	return strings.Join(inserts, "\n")
 }
 
+// func extractCreateJSON(input string) (string, error) {
+// 	// Definir expresión regular para extraer el bloque createJSON
+// 	createPattern := regexp.MustCompile(`VALUES \((.*?)\);`)
+// 	match := createPattern.FindStringSubmatch(input)
+// 	if len(match) < 2 {
+// 		return "", fmt.Errorf("No se encontró createJSON en la entrada")
+// 	}
+// 	// Remover DATETIME('now') del createJSON
+// 	createJSON := match[1]
+// 	createJSON = regexp.MustCompile(`,\s*DATETIME\('now'\)`).ReplaceAllString(createJSON, "")
+// 	return createJSON, nil
+// }
+
+// func extractUpdateJSON(input string) (string, error) {
+// 	// Definir expresión regular para extraer el bloque updateJSON
+// 	updatePattern := regexp.MustCompile(`VALUES \((.*?)\);`)
+// 	match := updatePattern.FindStringSubmatch(input)
+// 	if len(match) < 2 {
+// 		return "", fmt.Errorf("No se encontró updateJSON en la entrada")
+// 	}
+// 	// Remover DATETIME('now') del updateJSON
+// 	updateJSON := match[1]
+// 	updateJSON = regexp.MustCompile(`,\s*DATETIME\('now'\)`).ReplaceAllString(updateJSON, "")
+// 	return updateJSON, nil
+// }
+
+// Función para extraer createJSON
+// func extractCreateJSON(input string) (string, error) {
+// 	// Definir expresión regular para extraer los campos y valores
+// 	pattern := regexp.MustCompile(`INSERT INTO \w+ \((.*?)\)\s*VALUES\s*\((.*?)\);`)
+// 	match := pattern.FindStringSubmatch(input)
+// 	if len(match) < 3 {
+// 		return "", fmt.Errorf("No se encontró createJSON en la entrada")
+// 	}
+
+// 	// Extraer nombres de los campos y valores correspondientes
+// 	fields := strings.Split(match[1], ", ")
+// 	values := strings.Split(match[2], ", ")
+
+// 	// Construir el string createJSON
+// 	var createJSONBuilder strings.Builder
+// 	for i, field := range fields {
+// 		if !strings.Contains(values[i], "DATETIME('now')") {
+// 			field = strings.TrimSpace(field)
+// 			value := strings.TrimSpace(values[i])
+
+// 			// Agregar comillas dobles a los valores de tipo string
+// 			if strings.HasPrefix(value, "'") && strings.HasSuffix(value, "'") {
+// 				value = fmt.Sprintf("\"%s\"", strings.Trim(value, "'"))
+// 			}
+// 			createJSONBuilder.WriteString(fmt.Sprintf("\"%s\": %s", field, value))
+// 			if i < len(fields)-1 {
+// 				createJSONBuilder.WriteString(", ")
+// 			}
+// 		}
+// 	}
+// 	return createJSONBuilder.String(), nil
+// }
+
+// func extractUpdateJSON(input string) (string, error) {
+// 	// Definir expresión regular para extraer los campos y valores
+// 	pattern := regexp.MustCompile(`INSERT INTO \w+ \((.*?)\)\s*VALUES\s*\((.*?)\);`)
+// 	match := pattern.FindStringSubmatch(input)
+// 	if len(match) < 3 {
+// 		return "", fmt.Errorf("No se encontró updateJSON en la entrada")
+// 	}
+
+// 	// Extraer nombres de los campos y valores correspondientes
+// 	fields := strings.Split(match[1], ", ")
+// 	values := strings.Split(match[2], ", ")
+
+// 	// Construir el string updateJSON
+// 	var updateJSONBuilder strings.Builder
+// 	for i, field := range fields {
+// 		if !strings.Contains(values[i], "DATETIME('now')") {
+// 			field = strings.TrimSpace(field)
+// 			value := strings.TrimSpace(values[i])
+
+// 			// Agregar comillas dobles a los valores de tipo string
+// 			if strings.HasPrefix(value, "'") && strings.HasSuffix(value, "'") {
+// 				value = fmt.Sprintf("\"%s\"", strings.Trim(value, "'"))
+// 			}
+// 			updateJSONBuilder.WriteString(fmt.Sprintf("\"%s\": %s", field, value))
+// 			if i < len(fields)-1 {
+// 				updateJSONBuilder.WriteString(", ")
+// 			}
+// 		}
+// 	}
+// 	return updateJSONBuilder.String(), nil
+// }
+
 // Función para extraer createJSON y updateJSON a partir de dos INSERTs
 func extractJSONFromInsert(input string) (string, string, error) {
 	// Definir expresión regular para extraer los campos y valores
 	pattern := regexp.MustCompile(`INSERT INTO \w+ \((.*?)\)\s*VALUES\s*\((.*?)\);`)
-
 	matches := pattern.FindAllStringSubmatch(input, -1)
 	if len(matches) < 2 {
 		return "", "", fmt.Errorf("No se encontraron suficientes INSERTs en la entrada")
@@ -194,7 +284,7 @@ func extractJSONFromInsert(input string) (string, string, error) {
 					value = fmt.Sprintf("\"%s\"", strings.Trim(value, "'"))
 				}
 				jsonBuilder.WriteString(fmt.Sprintf("\"%s\": %s", field, value))
-				if i < len(fields)-3 { // Validation to avoid adding comma after last field
+				if i < len(fields)-1 { // Evitar agregar coma después del último campo
 					jsonBuilder.WriteString(", ")
 				}
 			}
@@ -215,19 +305,65 @@ func extractJSONFromInsert(input string) (string, string, error) {
 	return createJSON, updateJSON, nil
 }
 
+// PENDIENTE RECIBIR ESTE: class string, classMetadata [][]string, AL PARECER CONFIG NO ES GLOBAL.
+
+// func AddDummyData(class string, classMetadata [][]string) string {
+// 	// Llamar a GenerateDummyData para obtener los datos dummy
+
+// 	dummyData := GenerateDummyData(class, classMetadata)
+
+// 	fmt.Println("DESDE ADDDUMMYDATA: (clase) \n", class)
+
+// 	fmt.Println("\n")
+
+// 	fmt.Println("DESDE ADDDUMMYDATA: (clase) \n", classMetadata)
+
+// 	// Extraer solo las sentencias INSERT
+// 	return ExtractInsertStatements(dummyData)
+// }
+
 func AddDummyData(class string, classMetadata [][]string) models.DummyDataResult {
 	// Llamar a GenerateDummyData para obtener los datos dummy
 	dummyData := GenerateDummyData(class, classMetadata)
 
+	// createJSON, _ := extractCreateJSON(dummyData)
+
+	// updateJSON, _ := extractUpdateJSON(dummyData)
+
 	createJSON, updateJSON, _ := extractJSONFromInsert(dummyData)
 
-	fmt.Println("CREATEJSON \n", createJSON)
+	fmt.Println("DUMMYDATA DUMMYDATA DUMMYDATA DUMMYDATA DUMMYDATA: \n", dummyData)
+	fmt.Println("\n")
 
-	fmt.Println("UPDATEJSON \n", updateJSON)
+	// fmt.Println("CREATEJSON CREATEJSON CREATEJSON:", createJSON)
+
+	fmt.Println("updateJSON:")
+	//insertStatements := ExtractInsertStatements(dummyData)
+	//inserts := ExtractInsertStatements(dummyData)
+
+	//fmt.Println("EXTRACTED INSERTS FROM ADDDUMMYDATA(): \n", inserts)
+
+	// var createJSON, updateJSON string
+	// if len(inserts) > 0 {
+	// 	createJSON = CreateJSONPortionFromInsert(inserts[0])
+	// }
+	// if len(inserts) > 1 {
+	// 	updateJSON = CreateJSONPortionFromInsert(inserts[1])
+	// }
+
+	fmt.Println("DESDE ADDDUMMYDATA: (clase) \n", class, classMetadata)
+	fmt.Println("\n")
+
+	//fmt.Println("ESTRUCTURAS NUEVAS CREATEUPDATE: \n", createJSON, updateJSON)
 
 	//return ExtractInsertStatements(dummyData)
 	return models.DummyDataResult{
-		Inserts:    ExtractInsertStatements(dummyData),
+		//Inserts: insertStatements,
+		Inserts: ExtractInsertStatements(dummyData),
+		//Inserts: dummyData,
+		//Inserts:    strings.Join(inserts, "\n"),
+		// CreateJSON: "En construccion",
+		// UpdateJSON: "En construccion",
 		CreateJSON: createJSON,
 		UpdateJSON: updateJSON,
 	}

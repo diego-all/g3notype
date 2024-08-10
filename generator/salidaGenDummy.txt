@@ -1,0 +1,41 @@
+## Sentencias INSERT con Data Dummy
+
+```sql
+-- DML statements [Dummy data]
+INSERT INTO products (nombresito, descripcionsita, precioaquel, cantidadparce, randomoelo, created_at, updated_at)
+ VALUES ('Telefono Movil', 'Smartphone de ultima generacion', 799, 1, 'modelo1', DATETIME('now'), DATETIME('now'));
+
+INSERT INTO products (nombresito, descripcionsita, precioaquel, cantidadparce, randomoelo, created_at, updated_at)
+ VALUES ('Camiseta', 'Camiseta de algodon', 20, 2, 'modelo2', DATETIME('now'), DATETIME('now'));
+
+INSERT INTO products (nombresito, descripcionsita, precioaquel, cantidadparce, randomoelo, created_at, updated_at)
+ VALUES ('Sarten antiadherente', 'Sarten para cocinar', 35, 3, 'modelo3', DATETIME('now'), DATETIME('now'));
+
+INSERT INTO products (nombresito, descripcionsita, precioaquel, cantidadparce, randomoelo, created_at, updated_at)
+ VALUES ('Balon de futbol', 'Balon oficial de la FIFA', 50, 4, 'modelo4', DATETIME('now'), DATETIME('now'));
+
+INSERT INTO products (nombresito, descripcionsita, precioaquel, cantidadparce, randomoelo, created_at, updated_at)
+ VALUES ('Muneca', 'Muneca de peluche para ninos', 15, 5, 'modelo5', DATETIME('now'), DATETIME('now')); 
+```
+
+## JSON Request Structure
+
+### createBody:
+
+```json
+"nombresito": "Telefono Movil",
+"descripcionsita": "Smartphone de ultima generacion",
+"precioaquel": 799,
+"cantidadparce": 1,
+"randomoelo": "modelo1"
+```
+
+### updateBody:
+
+```json
+"nombresito": "Camiseta",
+"descripcionsita": "Camiseta de algodon",
+"precioaquel": 20,
+"cantidadparce": 2,
+"randomoelo": "modelo2"
+``` 

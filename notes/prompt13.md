@@ -18,20 +18,26 @@ INSERT INTO products (nombresito, descripcionsita, precioaquel, cantidadparce, r
  VALUES ('Muneca', 'Muneca de peluche para ninos', 15, 60, 'modelo5', DATETIME('now'), DATETIME('now'));
 ```
 
-## Estructura JSON para los dos primeros inserts
+## Estructura JSON para los 2 primeros inserts:
 
-```json
+**createBody:**
+
+```
 "nombresito": "Telefono movil",
 "descripcionsita": "Smartphone de ultima generacion",
 "precioaquel": 799,
 "cantidadparce": 12,
-"randomoelo": "modelo1"
+"randomoelo": "ModeloA"
+```
 
+**updateBody:**
+
+```
 "nombresito": "Camiseta",
 "descripcionsita": "Camiseta de algodon",
 "precioaquel": 20,
-"cantidadparce": 24,
-"randomoelo": "modelo2"
+"cantidadparce": 6,
+"randomoelo": "ModeloB"
 ``` 
 
 

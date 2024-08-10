@@ -1,3 +1,35 @@
+Tengo el siguiente script en golang, ahora si es capaz de extraer la data como debe de ser.
+
+Requiero que por favor realices una modificacion ya que actualmente entrega la data de la siguiente forma:
+
+"nombresito": "Telefono movil", "descripcionsita": "Smartphone de ultima generacion", "precioaquel": 799, "cantidadparce": 1, "randomoelo": "modelo1", 
+
+"nombresito": "Camiseta", "descripcionsita": "Camiseta de algodon", "precioaquel": 20, "cantidadparce": 1, "randomoelo": "modelo2", 
+
+Podrias agregar una validacion para que en el ultimo campo no agregue una coma, ya que es una porcion de un JSON y no la requiere.
+Ademas de agregar un salto de linea para separar cada campo y valor es decir, requiero que me entregues la data de la siguiente forma:
+
+"nombresito": "Telefono movil", 
+"descripcionsita": "Smartphone de ultima generacion",
+ "precioaquel": 799, 
+"cantidadparce": 1, 
+"randomoelo": "modelo1", 
+
+
+
+"nombresito": "Camiseta", 
+"descripcionsita": "Camiseta de algodon", 
+"precioaquel": 20, 
+"cantidadparce": 1, 
+"randomoelo": "modelo2", 
+
+
+Recuerda que debe ser generico, por favor no modifiques la query, ni la logica para extraer los INSERT (ExtractInsertStatements) ya que funciona de forma correcta. Tampoco modifiques la funcion GenerateDummyData() ya que entrega el response de la consulta a gemini. Tampoco modificar el struct DDLData, debe ser igual al que te entrego.
+
+Objetivo: Ajustar la coma en el ultimo campo y el salto de linea entre campo y valor para createJSON y updateJSON.
+
+Aca esta el script:
+
 package generator
 
 import (
@@ -17,27 +49,27 @@ import (
 
 type DDLData struct {
 	Candidates []struct {
-		Index   int `json:"Index"`
+		Index   int json:"Index"
 		Content struct {
-			Parts []string `json:"Parts"`
-			Role  string   `json:"Role"`
-		} `json:"Content"`
-		FinishReason  int `json:"FinishReason"`
+			Parts []string json:"Parts"
+			Role  string   json:"Role"
+		} json:"Content"
+		FinishReason  int json:"FinishReason"
 		SafetyRatings []struct {
-			Category    int  `json:"Category"`
-			Probability int  `json:"Probability"`
-			Blocked     bool `json:"Blocked"`
-		} `json:"SafetyRatings"`
-		CitationMetadata interface{} `json:"CitationMetadata"`
-		TokenCount       int         `json:"TokenCount"`
-	} `json:"Candidates"`
-	PromptFeedback interface{} `json:"PromptFeedback"`
+			Category    int  json:"Category"
+			Probability int  json:"Probability"
+			Blocked     bool json:"Blocked"
+		} json:"SafetyRatings"
+		CitationMetadata interface{} json:"CitationMetadata"
+		TokenCount       int         json:"TokenCount"
+	} json:"Candidates"
+	PromptFeedback interface{} json:"PromptFeedback"
 	UsageMetadata  struct {
-		PromptTokenCount        int `json:"PromptTokenCount"`
-		CachedContentTokenCount int `json:"CachedContentTokenCount"`
-		CandidatesTokenCount    int `json:"CandidatesTokenCount"`
-		TotalTokenCount         int `json:"TotalTokenCount"`
-	} `json:"UsageMetadata"`
+		PromptTokenCount        int json:"PromptTokenCount"
+		CachedContentTokenCount int json:"CachedContentTokenCount"
+		CandidatesTokenCount    int json:"CandidatesTokenCount"
+		TotalTokenCount         int json:"TotalTokenCount"
+	} json:"UsageMetadata"
 }
 
 func GenerateDummyData(class string, classMetadata [][]string) string {
@@ -81,8 +113,8 @@ func GenerateDummyData(class string, classMetadata [][]string) string {
 	fmt.Println("FORMATTEDMETADATA: \n", formattedMetadata)
 
 	// Definir la consulta
-	query := `Tengo un modelo de datos: ` + class + ` con los siguientes atributos y su tipo de dato correspondiente:
-		` + formattedMetadataString + `
+	query := Tengo un modelo de datos:  + class +  con los siguientes atributos y su tipo de dato correspondiente:
+		 + formattedMetadataString + 
 				
 		Requiero construir basado en los datos anteriores las sentencias insert con data dummy, en total 5 sentencias para una base de datos sqlite, como las siguientes:
 				
@@ -121,7 +153,7 @@ func GenerateDummyData(class string, classMetadata [][]string) string {
 		"name": "value2",
 		"description": "value2",
 		"price": 1000
-		`
+		
 
 	fmt.Println("QUERY:\n", query)
 
@@ -164,18 +196,18 @@ func GenerateDummyData(class string, classMetadata [][]string) string {
 
 func ExtractInsertStatements(data string) string {
 	// Utilizar expresión regular para extraer las sentencias INSERT
-	re := regexp.MustCompile(`(?i)INSERT INTO [^\;]+;`)
+	re := regexp.MustCompile((?i)INSERT INTO [^\;]+;)
 	inserts := re.FindAllString(data, -1)
 
 	// Unir todas las sentencias INSERT en un solo string
 	return strings.Join(inserts, "\n")
 }
 
+
 // Función para extraer createJSON y updateJSON a partir de dos INSERTs
 func extractJSONFromInsert(input string) (string, string, error) {
 	// Definir expresión regular para extraer los campos y valores
-	pattern := regexp.MustCompile(`INSERT INTO \w+ \((.*?)\)\s*VALUES\s*\((.*?)\);`)
-
+	pattern := regexp.MustCompile(INSERT INTO \w+ \((.*?)\)\s*VALUES\s*\((.*?)\);)
 	matches := pattern.FindAllStringSubmatch(input, -1)
 	if len(matches) < 2 {
 		return "", "", fmt.Errorf("No se encontraron suficientes INSERTs en la entrada")
@@ -194,7 +226,7 @@ func extractJSONFromInsert(input string) (string, string, error) {
 					value = fmt.Sprintf("\"%s\"", strings.Trim(value, "'"))
 				}
 				jsonBuilder.WriteString(fmt.Sprintf("\"%s\": %s", field, value))
-				if i < len(fields)-3 { // Validation to avoid adding comma after last field
+				if i < len(fields)-1 { // Evitar agregar coma después del último campo
 					jsonBuilder.WriteString(", ")
 				}
 			}
@@ -215,20 +247,18 @@ func extractJSONFromInsert(input string) (string, string, error) {
 	return createJSON, updateJSON, nil
 }
 
+
 func AddDummyData(class string, classMetadata [][]string) models.DummyDataResult {
 	// Llamar a GenerateDummyData para obtener los datos dummy
 	dummyData := GenerateDummyData(class, classMetadata)
 
 	createJSON, updateJSON, _ := extractJSONFromInsert(dummyData)
 
-	fmt.Println("CREATEJSON \n", createJSON)
-
-	fmt.Println("UPDATEJSON \n", updateJSON)
-
-	//return ExtractInsertStatements(dummyData)
 	return models.DummyDataResult{
-		Inserts:    ExtractInsertStatements(dummyData),
+		Inserts: ExtractInsertStatements(dummyData),
 		CreateJSON: createJSON,
 		UpdateJSON: updateJSON,
 	}
 }
+
+Podrias darme la respuesta en español

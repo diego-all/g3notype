@@ -95,9 +95,17 @@ func GenerateDummyData(class string, classMetadata [][]string) string {
 		Debes omitir agregar los campos created_at y updated_at en estos 2 nuevos strings a generar, tambien omitir las llaves {}, no será
 		un JSON, solo es una porcion del mismo.
 
-		"name": "value",
-		"description": "value",
+		Por favor utiliza para el tag createBody para el primero y updateBody para el segundo como se muestra a continuación:
+
+		createBody:
+		"name": "value1",
+		"description": "value1",
 		"price": 100000
+
+		updateBody:
+		"name": "value2",
+		"description": "value2",
+		"price": 1000
 		`
 
 	fmt.Println("QUERY:\n", query)
@@ -161,26 +169,32 @@ INSERT INTO products (nombresito, descripcionsita, precioaquel, cantidadparce, r
 VALUES ('Muneca', 'Muneca de peluche para ninos', 15, 6, 'modelo5', DATETIME('now'), DATETIME('now'));
 ```
 
-## Estructura JSON de los dos primeros inserts
+## Estructura JSON para los 2 primeros inserts:
 
-```json
+**createBody:**
+
+```
 "nombresito": "Telefono movil",
 "descripcionsita": "Smartphone de ultima generacion",
 "precioaquel": 799,
-"cantidadparce": 24,
-"randomoelo": "modelo1"
+"cantidadparce": 12,
+"randomoelo": "ModeloA"
+```
 
+**updateBody:**
+
+```
 "nombresito": "Camiseta",
 "descripcionsita": "Camiseta de algodon",
 "precioaquel": 20,
-"cantidadparce": 12,
-"randomoelo": "modelo2"
+"cantidadparce": 6,
+"randomoelo": "ModeloB"
 ``` 
 
 Requiero que me ayudes generando una logica que permita extraer los 5 inserts y asignarlos a un string, de igual forma con las otras 2 estructuras extraerlas y 
-asignarlas a 2 strings independientes:
+asignarlas a 2 strings independientes es decir createBody y updateBody.
 
-Por favor realiza la extraccion de la response de gemini.
+Por favor realiza la extraccion de la response de gemini, ten en cuenta que ya estan listas generadas y pueden extraerse de forma independiente.
 
 Esta funcion es llamada desde esta funcion AddDummyData(), por favor crea las funciones necesarias para que desde AddDummyData puedan ser llamadas
 y extraer la informacion que relaciono
@@ -211,7 +225,11 @@ type DummyDataResult struct {
 
 
 Te aclaro que por favor no modifiques la consulta hacia a gemini, para los 5 inserts se requiere conservar created_at y updated_at pero para los otros 
-2 strings no. Reitero no modificar la query a gemini, gemini ya entrega la data generada solo es implementar la forma de extraerla y retronarla parseada.
+2 strings no. Reitero no modificar la query a gemini, gemini ya entrega la data generada solo es implementar la forma de extraerla y retornarla parseada.
+
+Tambien se debe considerar que la expresion regular hace para los bodys hace match siempre con la primera ocurrencia es decir la misma data del primer insert.
+Debe generarse la forma de almacenar este registro que hace match e iterar una segunda vez con el fin de comparar el resultado.
+En caso de que sea el mismo volver a iterar hasta que sea diferente y las variables CreateJSON y UpdateJSON sean distintas o traigan data dummy distinta.
 
 
 Podrias darme la respuesta en español.

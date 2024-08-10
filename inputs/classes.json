@@ -16,6 +16,12 @@
       },
       "randomoelo": {
         "tipoDato": "string"
+      },
+      "propiedad": {
+      "tipoDato": "string"
+      },
+      "referencia": {
+      "tipoDato": "string"
       }
     }
   },

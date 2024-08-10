@@ -1,0 +1,47 @@
+[
+    {
+      "tipo": "Book",
+      "atributos": {
+        "nombre": {
+          "tipoDato": "string"
+        },
+        "descripcion": {
+          "tipoDato": "string"
+        },
+        "precio": {
+          "tipoDato": "int"
+        },
+        "cantidad": {
+          "tipoDato": "int"
+        },
+        "random": {
+          "tipoDato": "string"
+        }
+      }
+    },
+    {
+      "tipo": "Category",
+      "atributos": {
+        "propiedad1": {
+          "tipoDato": "string"
+        },
+        "propiedad2": {
+          "tipoDato": "string"
+        }
+      }
+    },
+    {
+        "tipo": "Order",
+        "atributos": {
+          "propiedad1": {
+            "tipoDato": "string"
+          },
+          "propiedad2": {
+            "tipoDato": "string"
+          },
+          "propiedad3": {
+            "tipoDato": "string"
+          }
+        }
+      }
+  ]
