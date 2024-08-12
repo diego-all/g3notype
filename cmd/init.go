@@ -17,7 +17,6 @@ var (
 )
 
 // init use a posicional argument (projectName)
-
 // Pendiente intentar pasar data structure to data structure (list of list to string' slice )
 
 var initCmd = &cobra.Command{
@@ -29,7 +28,6 @@ var initCmd = &cobra.Command{
 		start := time.Now()
 
 		projectName := args[0]
-		// generator.Generate(projectName, db)
 
 		buffer, err := extractor.CallPythonExtractor(jsonPath)
 		if err != nil {
@@ -60,18 +58,9 @@ var initCmd = &cobra.Command{
 		}
 
 		//Minimizar enviar todo directamente al struct
-
 		generator.Generate(projectName, db, configuration, dummy)
-		//generator.Generate(projectName, db, jsonPath)
 
 		// Ejecutar la función GenerateDummyData solo si el flag dummy está presente
-
-		// if dummy {
-
-		// 	//generator.GenerateDummyData(configuration)
-		// 	generator.AddDummyData()
-
-		// }
 
 		elapsed := time.Since(start)
 
@@ -79,19 +68,10 @@ var initCmd = &cobra.Command{
 	},
 }
 
-// func init() {
-// 	rootCmd.AddCommand(initCmd)
-// 	initCmd.Flags().StringVarP(&db, "db", "d", "", "Tipo de base de datos (requerido)")
-// 	//initCmd.Flags().StringVarP(&jsonPath, "config", "c", "", "Ruta del archivo JSON de configuración (opcional)")
-// 	initCmd.Flags().StringVarP(&jsonPath, "config", "c", "inputs/classes.json", "Ruta del archivo JSON de configuración (opcional)")
-// 	initCmd.MarkFlagRequired("db")
-// }
-
 func init() {
 	rootCmd.AddCommand(initCmd)
 	initCmd.Flags().StringVarP(&db, "db", "d", "", "Tipo de base de datos (requerido)")
 	initCmd.MarkFlagRequired("db")
-	// Validar "" o "/inputs/classes.json"
 	//initCmd.Flags().StringVarP(&jsonPath, "config", "c", "inputs/classes.json", "Ruta del archivo JSON de configuración")
 	initCmd.Flags().StringVarP(&jsonPath, "config", "c", "", "Ruta del archivo JSON de configuración")
 	initCmd.Flags().BoolVarP(&dummy, "dummy", "u", false, "Generar Dummy data usando Gemini (Requiere API Key)")

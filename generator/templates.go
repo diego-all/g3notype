@@ -22,7 +22,7 @@ var estructura = map[string]string{
 	"database/connection.go": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/database/connection.txt",
 	"database/up.sql":        "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/database/up.sql-generic.txt",
 	//"database/data.sqlite":   "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/database/data.sqlite",
-	"database/script.sh": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/database/script.sh",
+	"database/create-db.sh": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/database/create-db.sh",
 	//"data.sqlite":            "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/database/data.sqlite",
 	//"golang-CRUD-{{.Entity}}-API.postman_collection.json": "/base-templates",
 	"go.mod":      "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/go.mod.txt",

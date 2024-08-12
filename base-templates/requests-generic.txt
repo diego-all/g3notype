@@ -6,7 +6,7 @@
 curl --location 'http://localhost:9090/{{.LowerEntity}}s' \
 --header 'Content-Type: application/json' \
 --data '{
-{{.Collection_Create}}}'
+"name": "Teléfono móvil", "description": "Smartphone de última generación", "price": 799, "quantity": 10}'
 
 
 
@@ -21,7 +21,7 @@ curl --location 'http://localhost:9090/{{.LowerEntity}}s/get/6'
 curl --location --request PUT 'http://localhost:9090/{{.LowerEntity}}s/update/6' \
 --header 'Content-Type: application/json' \
 --data '{
-{{.Collection_Update}}}'
+"name": "Camiseta", "description": "Camiseta de algodón", "price": 20, "quantity": 50}'
 
 
 

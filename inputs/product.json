@@ -2,30 +2,27 @@
     {
       "tipo": "Product",
       "atributos": {
-        "nombresito": {
+        "name": {
           "tipoDato": "string"
         },
-        "descripcionsita": {
+        "description": {
           "tipoDato": "string"
         },
-        "precioaquel": {
+        "price": {
           "tipoDato": "int"
         },
-        "cantidadparce": {
+        "quantity": {
           "tipoDato": "int"
-        },
-        "randomoelo": {
-          "tipoDato": "string"
         }
       }
     },
     {
       "tipo": "Category",
       "atributos": {
-        "propiedad1": {
+        "property1": {
           "tipoDato": "string"
         },
-        "propiedad2": {
+        "property2": {
           "tipoDato": "string"
         }
       }
@@ -33,13 +30,13 @@
     {
         "tipo": "Order",
         "atributos": {
-          "propiedad1": {
+          "property1": {
             "tipoDato": "string"
           },
-          "propiedad2": {
+          "property2": {
             "tipoDato": "string"
           },
-          "propiedad3": {
+          "property3": {
             "tipoDato": "string"
           }
         }

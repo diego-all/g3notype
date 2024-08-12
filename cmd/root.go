@@ -7,8 +7,8 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "my-cli-app",
-	Short: "Una aplicación CLI para generar proyectos",
+	Use:   "g3notype",
+	Short: "CLI application to generate secure REST API projects from a domain model.",
 }
 
 func Execute() {
@@ -18,5 +18,7 @@ func Execute() {
 }
 
 func init() {
-	// Aquí puedes inicializar flags y configuraciones globales si es necesario
+
+	// Initialize flags and global settings if necessary
+
 }

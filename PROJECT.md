@@ -22,13 +22,23 @@
 |Prepared statements  |glorem ipsum      | lorem ipsum      |
 |Certificates   |lorem ipsum      | lorem ipsum      |
 |Middleware  |lorem ipsum      | lorem ipsum      |
-|lorem ipsum  |lorem ipsum      | lorem ipsum      |
+|iDp Authentication/Authorization  |lorem ipsum      | lorem ipsum      |
 |lorem ipsum  |lorem ipsum      | lorem ipsum      |
 |lorem ipsum |lorem ipsum     | lorem ipsum      |
 
 
 
-- [ ] 4. Documento
+- [ ] 4. Crear artefactos de despliegue.
+    - [ ] Crear docker-compose
+    - [ ] Crear manifiestos
+
+
+
+- [ ] 5. Probar la seguridad de la aplicación a nivel SAST
+    - [ ] Llevar a arquitectura de capas
+    - [ ] Llevar a arquitectura limpia
+
+- [ ] 6. Documento
 
     - [WIP] Introduccion
     - [WIP] Abstract
