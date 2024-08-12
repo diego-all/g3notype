@@ -2,21 +2,46 @@
     {
       "tipo": "Product",
       "atributos": {
-        "nombre": {
+        "nombresito": {
           "tipoDato": "string"
         },
-        "descripcion": {
+        "descripcionsita": {
           "tipoDato": "string"
         },
-        "precio": {
-          "tipoDato": "integer"
+        "precioaquel": {
+          "tipoDato": "int"
         },
-        "stock": {
-          "tipoDato": "integer"
+        "cantidadparce": {
+          "tipoDato": "int"
         },
-        "IVA": {
-          "tipoDato": "integer"
+        "randomoelo": {
+          "tipoDato": "string"
         }
       }
-    }
+    },
+    {
+      "tipo": "Category",
+      "atributos": {
+        "propiedad1": {
+          "tipoDato": "string"
+        },
+        "propiedad2": {
+          "tipoDato": "string"
+        }
+      }
+    },
+    {
+        "tipo": "Order",
+        "atributos": {
+          "propiedad1": {
+            "tipoDato": "string"
+          },
+          "propiedad2": {
+            "tipoDato": "string"
+          },
+          "propiedad3": {
+            "tipoDato": "string"
+          }
+        }
+      }
   ]

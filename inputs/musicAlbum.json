@@ -1,0 +1,22 @@
+[
+    {
+      "tipo": "Album",
+      "atributos": {
+        "title": {
+          "tipoDato": "string"
+        },
+        "description": {
+          "tipoDato": "string"
+        },
+        "genre": {
+          "tipoDato": "string"
+        },
+        "year": {
+          "tipoDato": "int"
+        },
+        "artist": {
+          "tipoDato": "string"
+        }
+      }
+    }
+]

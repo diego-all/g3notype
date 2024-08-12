@@ -1,5 +1,19 @@
 # G3notype (run-from-gh)
 
+
+Generate a API REST with Go from domain model. 
+
+
+
+## Requeriments
+
+
+
+## Generated project's structure
+
+
+
+
 ## Para su ejecución se debe especificar:
 
 init       (Iniciar la generación del scaffolding.)
@@ -77,19 +91,7 @@ projectTest  (Nombre del proyecto)
 ## Ajuste descriptivo (book.Name vs book.nombre) crear tipos (Nombre)
 
 
-## Se pierden las identaciones o tabulaciones en algunos casos (Ya ajustados)
-Funciona bien, al parecer vscode organiza el script.
 
-
-## Llenar los inserts
-
-  Se hizo con Gemini (enpalmar con el generador o solicitar al usuario si desea crearlos)
-
-
-## 
-
-
-## 
 
 lsof -i:9090
 
@@ -112,33 +114,6 @@ lsof -i:9090
   .tables
   SELECT * FROM books;
 
-
-
-## Tiempo de ejecucion
-
-  El tiempo de ejecución es: 13.435069ms
-  El tiempo de ejecución es: 12.930049ms
-  El tiempo de ejecución es: 12.957422ms
-  El tiempo de ejecución es: 14.075117ms
-  El tiempo de ejecución es: 12.814421ms
-
-
-  dummyData.go (independiente)
-
-  El tiempo de ejecución es: 4.799758713s
-  El tiempo de ejecución es: 5.610740169s
-  El tiempo de ejecución es: 3.801896691s
-  El tiempo de ejecución es: 5.126581685s
-  El tiempo de ejecución es: 5.268949742s
-  El tiempo de ejecución es: 6.398674133s
-  El tiempo de ejecución es: 5.195210352s
-  El tiempo de ejecución es: 4.689731216s
-
-
-
-  Tiempo completo de ejecucion de generator y dummyData
-
-  El tiempo de ejecución es: 5.370131241s
 
 
 ## Agregar feature Generate dummy Data

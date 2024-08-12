@@ -85,6 +85,8 @@ func GenerateDummyData(class string, classMetadata [][]string) string {
 		` + formattedMetadataString + `
 				
 		Requiero construir basado en los datos anteriores las sentencias insert con data dummy, en total 5 sentencias para una base de datos sqlite, como las siguientes:
+
+		Nota: Debes tomar estos inserts como referencia pero los nombres de los campos son los mencionados anteriormente.
 				
 		-- DML statements [Dummy data]
 		INSERT INTO products (name, description, price, created_at, updated_at)
