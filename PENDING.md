@@ -13,3 +13,9 @@
 - -- DML statements [Dummy data] by Gemini
 -- Tener cuidado con caracteres especiales que no acepta SQL lite como apostrofe por ejemplo para posesivo sajon
 - Logica de request update sin gemini
+- Al parecer es necesario crear una estructura temporal ya que TemplateData no puede modificarse en tiempo de ejecucion con el fin de generar los tipos para Request y Response
+- Natural ID (Name)
+- 	// //Error al ejecutar la plantilla: template: fileContent:8:2: executing "fileContent" at <.handlers_typeEntityRequest>: handlers_typeEntityRequest is an unexported field of struct type generator.preTemplateData
+- 		//entity:  "{{.entity}}",   // NO funciona con minusculas seguir indagando
+- 	// Pilas con "name,omitempty"`
+- Debug mode with datatypes and generated data

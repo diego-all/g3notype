@@ -9,35 +9,26 @@ import (
 	"text/template"
 )
 
-// Estructura de archivos y carpetas
+// File and folder structure
 var estructura = map[string]string{
-	"cmd/api/handlers.go": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/handlers.txt",
-	//"cmd/api/handlers-{{.Entity}}.go": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/handlers-entity.txt",
+	"cmd/api/handlers.go":             "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/handlers.txt",
 	"cmd/api/handlers-{{.Entity}}.go": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/handlers-entity-generic.txt",
-	//"cmd/api/handlers-{{.Entity}}.go": "/home/diegoall/base-templates/cmd/api/handlers-{{.Entity}}.txt",
-	//"cmd/api/handlers-{{.Entity}}.go": "/base-templates/cmd/api/handlers-{{.Entity}}.txt",
-	"cmd/api/main.go":        "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/main.txt",
-	"cmd/api/routes.go":      "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/routes.txt",
-	"cmd/api/util.go":        "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/util.txt",
-	"database/connection.go": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/database/connection.txt",
-	"database/up.sql":        "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/database/up.sql-generic.txt",
-	//"database/data.sqlite":   "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/database/data.sqlite",
-	"database/create-db.sh": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/database/create-db.sh",
-	//"data.sqlite":            "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/database/data.sqlite",
-	//"golang-CRUD-{{.Entity}}-API.postman_collection.json": "/base-templates",
+	"cmd/api/main.go":                 "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/main.txt",
+	"cmd/api/routes.go":               "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/routes.txt",
+	"cmd/api/util.go":                 "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/util.txt",
+	"database/connection.go":          "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/database/connection.txt",
+	"database/up.sql":                 "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/database/up.sql-generic.txt",
+	"database/create-db.sh":           "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/database/create-db.sh",
+	//"golang-CRUD-{{.Entity}}-API.postman_collection.json": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/CRUD-API-collection.txt",
 	"go.mod":      "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/go.mod.txt",
 	"go.sum":      "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/go.sum.txt",
 	"requests.md": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/requests-generic.txt",
 
 	"internal/models.go":            "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/internal/models.txt",
 	"internal/{{.EntityPlural}}.go": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/internal/entities-generic.txt", //la acabo de cambiar
-	//"product_classDiagram.png":      "/base-templates",
-	"README.md": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/README.txt",
+	"README.md":                     "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/README.txt",
 }
 
-// Datos para las plantillas
-// !!!!!!!!!!!!!!!!!!!!! Al parecer es necesario crear una estructura temporal ya que TemplateData no puede modificarse en tiempo de ejecucion con el fin de generar los tipos para Request y Response
-// generateClassTags(class, classMetadata)
 type TemplateData struct {
 	Entity        string
 	LowerEntity   string
@@ -48,41 +39,34 @@ type TemplateData struct {
 }
 
 func createFolderStructure(appName string, class string, classMetadata [][]string) {
-	//func createFolderStructure(appName string, class string, classMetadata map[string]string, generatedType string) {
 
-	// Convertir la entidad a plural
+	// Convert the entity to plural
 	entityPlural := class + "s"
 	fmt.Println("Imprimiendo el plural de la entidad", entityPlural)
 	lowerEntity := strings.ToLower(class)
 
-	// strings.ToUpper(string(attribute[0])) + string(attribute[1:])
-
-	//fmt.Println("GENERATED TYPE ES desde createFolder:", generatedType)
-
-	// TODO Class ClassMetadata
-	//metadata := classMetadata
-
-	// Datos para las plantillas
+	// Data for templates
 	data := TemplateData{
 		Entity:       class,
 		LowerEntity:  lowerEntity,
 		EntityPlural: entityPlural,
 		AppName:      appName,
-		//ClassMetadata: classMetadata, // recien comentada
+		//ClassMetadata: classMetadata,
 		//GeneratedType: generatedType,
 	}
 
-	// Crear la estructura de archivos y carpetas
+	// Create the file and folder structure
 	for projectFile, templatePath := range estructura {
-		// Reemplazar los valores en el path
+		// Replace values ​​in path
+		// Debugging important!
 		fmt.Println("Path y Content es: ", projectFile, templatePath)
 
-		//readTemplate(content)
+		// Read template(content)
 		path := strings.Replace(projectFile, "{{.Entity}}", class, -1)
 		path = strings.Replace(path, "{{.EntityPlural}}", entityPlural, -1)
 		fullPath := filepath.Join(appName, path)
 
-		// Crear las carpetas necesarias
+		// Create the necessary folders
 		dir := filepath.Dir(fullPath)
 		if err := os.MkdirAll(dir, 0777); err != nil {
 			//if err := os.MkdirAll(dir, 0755); err != nil {
@@ -90,7 +74,7 @@ func createFolderStructure(appName string, class string, classMetadata [][]strin
 			continue
 		}
 
-		// Crear el archivo
+		// Create the file
 		file, err := os.Create(fullPath)
 		fmt.Println("Creando archivo: ", file, fullPath)
 		if err != nil {
@@ -99,7 +83,7 @@ func createFolderStructure(appName string, class string, classMetadata [][]strin
 		}
 		defer file.Close()
 
-		// Si hay contenido de plantilla, procesarlo
+		// If there is template content, process it
 		if templatePath != "" {
 
 			content, err := ioutil.ReadFile(templatePath)

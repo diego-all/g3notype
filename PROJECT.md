@@ -34,7 +34,7 @@
 
 
 
-- [ ] 5. Probar la seguridad de la aplicación a nivel SAST
+- [ ] 5. Probar la seguridad de la aplicación a nivel SAST usando GitLab
     - [ ] Llevar a arquitectura de capas
     - [ ] Llevar a arquitectura limpia
 
