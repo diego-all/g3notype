@@ -9,3 +9,7 @@
 - Ajuste descriptivo (book.Name vs book.nombre) crear tipos (Nombre)
 - Funciona sin repositorio. Analizar como hacer que funcione con repositorio y crearlo con git. (analizar como crea el repo git init y demas
     cmd/api/handlers-Book.go:8:2: no required module provides package github.com/diego-all/books-API/internal; to add it:
+- createFolderStructure(projectName, class, classMetadata, generateClassTags(class, classMetadata)) //recordar que no funciono mandando una funcion pero si el valor , tipoGenerado
+- -- DML statements [Dummy data] by Gemini
+-- Tener cuidado con caracteres especiales que no acepta SQL lite como apostrofe por ejemplo para posesivo sajon
+- Logica de request update sin gemini

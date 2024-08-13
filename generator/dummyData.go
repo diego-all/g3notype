@@ -41,13 +41,14 @@ type DDLData struct {
 }
 
 func GenerateDummyData(class string, classMetadata [][]string) string {
-	// Cargar variables de entorno desde el archivo .env
+
+	// Load environment variables from .env file
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatalf("Error loading .env file: %v", err)
 	}
 
-	// Obtener la clave de la API desde las variables de entorno
+	// Get API key from environment variables
 	apiKey := os.Getenv("GEMINI_API_KEY")
 	if apiKey == "" {
 		log.Fatalf("GEMINI_API_KEY not found in environment variables")
@@ -70,17 +71,16 @@ func GenerateDummyData(class string, classMetadata [][]string) string {
 		if len(pair) == 2 {
 			formattedMetadata = append(formattedMetadata, fmt.Sprintf("%s|%s", pair[0], pair[1]))
 		}
-		//fmt.Println("valor de i:", i, "valor de j", j)
 	}
 	formattedMetadata = append(formattedMetadata, "created_at|DATETIME('now')")
 	formattedMetadata = append(formattedMetadata, "updated_at|DATETIME('now')")
 
-	// Unir todas las líneas en un solo string separado por saltos de línea
+	// Join all lines into a single string separated by line breaks
 	formattedMetadataString := strings.Join(formattedMetadata, "\n")
 
 	fmt.Println("FORMATTEDMETADATA: \n", formattedMetadata)
 
-	// Definir la consulta
+	// Define the query
 	query := `Tengo un modelo de datos: ` + class + ` con los siguientes atributos y su tipo de dato correspondiente:
 		` + formattedMetadataString + `
 				
@@ -135,13 +135,13 @@ func GenerateDummyData(class string, classMetadata [][]string) string {
 		log.Fatalf("Failed to generate content: %v", err)
 	}
 
-	// Convertir la respuesta a JSON
+	// Convert response to JSON
 	respJSON, err := json.Marshal(resp)
 	if err != nil {
 		log.Fatalf("Failed to marshal response: %v", err)
 	}
 
-	// Deserializar la respuesta JSON en la estructura DDLData
+	// Deserialize JSON response into DDLData structure
 	var data DDLData
 	err = json.Unmarshal(respJSON, &data)
 	if err != nil {
@@ -150,7 +150,7 @@ func GenerateDummyData(class string, classMetadata [][]string) string {
 
 	fmt.Println("DATA:\n", data) // No se ve
 
-	// Recopilar el contenido de Parts
+	// Collect Parts content
 	var parts []string
 	for _, candidate := range data.Candidates {
 		parts = append(parts, candidate.Content.Parts...)
@@ -158,24 +158,24 @@ func GenerateDummyData(class string, classMetadata [][]string) string {
 
 	fmt.Println("PARTS:\n", parts)
 
-	// Unir las partes en una sola cadena de texto
+	// Join the parts into a single text string
 	fmt.Println("GENERATEDUMMYDATA SENTENCIAS INSERT: \n")
 	fmt.Println(fmt.Sprintf("%s", strings.Join(parts, "\n")))
 	return fmt.Sprintf("%s", strings.Join(parts, "\n"))
 }
 
 func ExtractInsertStatements(data string) string {
-	// Utilizar expresión regular para extraer las sentencias INSERT
+	// Use regular expression to extract INSERT statements
 	re := regexp.MustCompile(`(?i)INSERT INTO [^\;]+;`)
 	inserts := re.FindAllString(data, -1)
 
-	// Unir todas las sentencias INSERT en un solo string
+	// Join all INSERT statements into a single string
 	return strings.Join(inserts, "\n")
 }
 
-// Función para extraer createJSON y updateJSON a partir de dos INSERTs
+// Function to extract createJSON and updateJSON from two INSERTs
 func extractJSONFromInsert(input string) (string, string, error) {
-	// Definir expresión regular para extraer los campos y valores
+	// Define regular expression to extract fields and values
 	pattern := regexp.MustCompile(`INSERT INTO \w+ \((.*?)\)\s*VALUES\s*\((.*?)\);`)
 
 	matches := pattern.FindAllStringSubmatch(input, -1)
@@ -183,7 +183,7 @@ func extractJSONFromInsert(input string) (string, string, error) {
 		return "", "", fmt.Errorf("No se encontraron suficientes INSERTs en la entrada")
 	}
 
-	// Función interna para construir el JSON
+	// Internal function to build the JSON
 	buildJSON := func(fields, values []string) string {
 		var jsonBuilder strings.Builder
 		for i := 0; i < len(fields); i++ {
@@ -191,12 +191,13 @@ func extractJSONFromInsert(input string) (string, string, error) {
 				field := strings.TrimSpace(fields[i])
 				value := strings.TrimSpace(values[i])
 
-				// Agregar comillas dobles a los valores de tipo string
+				// Add double quotes to string values
 				if strings.HasPrefix(value, "'") && strings.HasSuffix(value, "'") {
 					value = fmt.Sprintf("\"%s\"", strings.Trim(value, "'"))
 				}
 				jsonBuilder.WriteString(fmt.Sprintf("\"%s\": %s", field, value))
-				if i < len(fields)-3 { // Validation to avoid adding comma after last field
+				// Validation to avoid adding comma after last field
+				if i < len(fields)-3 {
 					jsonBuilder.WriteString(", ")
 				}
 			}
@@ -204,13 +205,13 @@ func extractJSONFromInsert(input string) (string, string, error) {
 		return jsonBuilder.String()
 	}
 
-	// Obtener campos y valores del primer y segundo INSERT
+	// Get fields and values ​​from first and second INSERT
 	fields1 := strings.Split(matches[0][1], ", ")
 	values1 := strings.Split(matches[0][2], ", ")
 	fields2 := strings.Split(matches[1][1], ", ")
 	values2 := strings.Split(matches[1][2], ", ")
 
-	// Construir createJSON y updateJSON
+	// Build createJSON and updateJSON
 	createJSON := buildJSON(fields1, values1)
 	updateJSON := buildJSON(fields2, values2)
 
@@ -218,14 +219,13 @@ func extractJSONFromInsert(input string) (string, string, error) {
 }
 
 func AddDummyData(class string, classMetadata [][]string) models.DummyDataResult {
-	// Llamar a GenerateDummyData para obtener los datos dummy
+	// Call GenerateDummyData to get the dummy data
 	dummyData := GenerateDummyData(class, classMetadata)
 
 	createJSON, updateJSON, _ := extractJSONFromInsert(dummyData)
 
-	fmt.Println("CREATEJSON \n", createJSON)
-
-	fmt.Println("UPDATEJSON \n", updateJSON)
+	//fmt.Println("CREATEJSON \n", createJSON)
+	//fmt.Println("UPDATEJSON \n", updateJSON)
 
 	//return ExtractInsertStatements(dummyData)
 	return models.DummyDataResult{

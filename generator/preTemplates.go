@@ -9,9 +9,8 @@ import (
 	"text/template"
 )
 
-// Los que no son Req o Res van para la DB
-
 var TypesVars = map[string]string{
+	// handlers
 	"handlers-typeEntityRequest":     "",
 	"handlers-typeEntityResponse":    "",
 	"handlers-varCreateEntityModels": "",
@@ -23,7 +22,6 @@ var TypesVars = map[string]string{
 	//Database_DDL_statement
 	"database-DDL-statement": "",
 	"database-DummyData":     "",
-	// 	TypeVars["dummyData"] = DummyData
 
 	// EntityModels
 	"models-typeEntityStruct":  "",
@@ -35,14 +33,12 @@ var TypesVars = map[string]string{
 	"models-UpdateErr":         "",
 	"models-GetAllQuery":       "",
 	"models-GetAllErrRowsScan": "",
-	"models-DeleteStmt":        "", // validar si realmente es necesario
+	"models-DeleteStmt":        "", // validate if it is really necessary
 
 	// Requests (Collections)
 	"requests-Create": "",
 	"requests-Update": "",
 }
-
-// RECORDAR EL CAMBIASO DE BASE A GENERIC SOLO FUR POR ORDEN ALFABETICO PERO AL KEY NO SE CAMBIO, DEBERIA SER entity-generic.go
 
 var preTemplates = map[string]string{
 	"cmd/api/handlers-entity-base.go": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/handlers-entity-generic.txt",
@@ -65,8 +61,6 @@ func SetNaturalID(id string) {
 	NaturalID = id
 }
 
-//var naturalId string
-
 type PreTemplateData struct {
 	Handlers_typeEntityRequest     string
 	Handlers_typeEntityResponse    string
@@ -76,8 +70,6 @@ type PreTemplateData struct {
 	Handlers_payloadCreateResponse string
 	Handlers_payloadUpdateResponse string
 
-	//TypesVars["handlers-varUpdateEntityModels"] = Database_DDL_statement
-	//"database-DDL-statement": "",
 	Database_DDL_statement string
 	Database_DummyData     string
 
@@ -92,7 +84,6 @@ type PreTemplateData struct {
 	Models_GetAllErrRowsScan string
 	Models_DeleteStmt        string
 
-	// Requests
 	Collection_Create string
 	Collection_Update string
 
@@ -100,15 +91,9 @@ type PreTemplateData struct {
 	LowerEntity string
 }
 
-// quizas sea generar Tipos o algo asi, todas las estructuras que dependen de la metadata de clases (atributos)
-// structs or vars// {{.Entity}}Request  {{.Entity}}Response
-// INTENTAR GENERANDO LOS TIPOS PRIMERO DE HANDLERS, LUEGO PARA MODELS U OTROS DE SER NECESARIO MANEJARLOS EN UN MAP
-
 // func generateClassTags(class string, classMetadata map[string]string) (string) {
 // func generateClassTags(class string, classMetadata map[string]string) map[string]string {
 func generateClassTags(class string, classMetadata [][]string) map[string]string {
-
-	fmt.Println("Desde generateClassTags")
 
 	fmt.Println("Class metadata", classMetadata)
 	longitud := len(classMetadata)
@@ -116,7 +101,7 @@ func generateClassTags(class string, classMetadata [][]string) map[string]string
 	fmt.Println("\n")
 
 	var auxReqRes string
-	var auxCreateEntModels string //Se uso para Update, solo se adicionan 2 campos
+	var auxCreateEntModels string // It was used for Update, only 2 fields are added
 	var auxGetEntResponse string
 
 	var reqResTypes []string
@@ -705,13 +690,8 @@ func generateEntityModels(class string, classMetadata [][]string) map[string]str
 	fmt.Println("\n")
 
 	// Generate models-GetAllQuery
-	// Finding!!! order  by name depends JSON config file for order by nombre
-
 	models_GetAllQuery = "query := `select id, " + auxGetOneQuery + "created_at, updated_at from {{.LowerEntity}}s order by " + strings.ToLower(NaturalID) + "`"
-	// query := `select id, name, description, price, created_at, updated_at from products where id = $1`
-	// query := `select id, nombre, descripcion, precio, cantidad, random, created_at, updated_at from {{.LowerEntity}} where id = $1`
-	fmt.Println("models_GetAllQuery es: \n ", models_GetAllQuery)
-	fmt.Println("\n")
+	//fmt.Println("models_GetAllQuery es: \n ", models_GetAllQuery)
 
 	TypesVars["models-typeEntityStruct"] = models_typeEntityStruct
 	TypesVars["models-InsertStmt"] = models_InsertStmt
@@ -722,9 +702,7 @@ func generateEntityModels(class string, classMetadata [][]string) map[string]str
 	TypesVars["models-UpdateErr"] = models_UpdateErr
 	TypesVars["models-GetAllQuery"] = models_GetAllQuery
 	TypesVars["models-GetAllErrRowsScan"] = models_GetAllErrRowsScan
-
-	// GENERANDO TIPOS
-	TypesVars["models-DeleteStmt"] = "" // validar si realmente es necesario
+	TypesVars["models-DeleteStmt"] = ""
 
 	return TypesVars
 
