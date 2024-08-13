@@ -10,19 +10,9 @@ import (
 	"github.com/go-chi/chi"
 )
 
-type {{.LowerEntity}}Request struct {
-	Name	string	`json:"name"`
-	Description	string	`json:"description"`
-	Price	int	`json:"price"`
-	Quantity	int	`json:"quantity"`
-}
+{{.Handlers_typeEntityRequest}}
 
-type {{.LowerEntity}}Response struct {
-	Name	string	`json:"name"`
-	Description	string	`json:"description"`
-	Price	int	`json:"price"`
-	Quantity	int	`json:"quantity"`
-}
+{{.Handlers_typeEntityResponse}}
 
 
 func (app *application) Create{{.Entity}}(w http.ResponseWriter, r *http.Request) {
@@ -39,12 +29,7 @@ func (app *application) Create{{.Entity}}(w http.ResponseWriter, r *http.Request
 	}
 
 
-	var {{.LowerEntity}} = models.{{.Entity}}{
-	Name:	{{.LowerEntity}}Req.Name,
-	Description:	{{.LowerEntity}}Req.Description,
-	Price:	{{.LowerEntity}}Req.Price,
-	Quantity:	{{.LowerEntity}}Req.Quantity,
-}
+	{{.Handlers_varCreateEntityModels}}
 
 	_, err = app.models.{{.Entity}}.Insert({{.LowerEntity}})
 	if err != nil {
@@ -53,11 +38,7 @@ func (app *application) Create{{.Entity}}(w http.ResponseWriter, r *http.Request
 	}
 
 
-	payload = jsonResponse{
-	    Error:   false,
-	    Message: "{{.Entity}} successfully created",
-	    Data:    envelope{"{{.LowerEntity}}": {{.LowerEntity}}.Name},
-	}
+	{{.Handlers_payloadCreateResponse}}
 
 	_ = app.writeJSON(w, http.StatusAccepted, payload)
 }
@@ -75,12 +56,7 @@ func (app *application) Get{{.Entity}}(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var {{.LowerEntity}}Response = {{.LowerEntity}}Response{
-	Name:	{{.LowerEntity}}.Name,
-	Description:	{{.LowerEntity}}.Description,
-	Price:	{{.LowerEntity}}.Price,
-	Quantity:	{{.LowerEntity}}.Quantity,
-}
+	{{.Handlers_varGetEntResponse}}
 
 	payload := jsonResponse{
 		Error:   false,
@@ -117,14 +93,7 @@ func (app *application) Update{{.Entity}}(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	var {{.LowerEntity}} = models.{{.Entity}}{
-	Name:	{{.LowerEntity}}Req.Name,
-	Description:	{{.LowerEntity}}Req.Description,
-	Price:	{{.LowerEntity}}Req.Price,
-	Quantity:	{{.LowerEntity}}Req.Quantity,
-	UpdatedAt:   time.Now(),
- 	Id:          {{.LowerEntity}}ID,
-}
+	{{.Handlers_varUpdateEntityModels}}
 
 	_, err = app.models.{{.Entity}}.Update({{.LowerEntity}})
 	if err != nil {
@@ -133,11 +102,7 @@ func (app *application) Update{{.Entity}}(w http.ResponseWriter, r *http.Request
 	}
 
 
-	payload = jsonResponse{
-	    Error:   false,
-	    Message: "{{.Entity}} successfully updated",
-	    Data:    envelope{"{{.LowerEntity}}": {{.LowerEntity}}.Name},
-	}
+	{{.Handlers_payloadUpdateResponse}}
 
 	_ = app.writeJSON(w, http.StatusOK, payload)
 }

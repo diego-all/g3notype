@@ -17,7 +17,6 @@ var (
 )
 
 // init use a posicional argument (projectName)
-// Pendiente intentar pasar data structure to data structure (list of list to string' slice )
 
 var initCmd = &cobra.Command{
 	Use:   "init [nombre del proyecto]",
@@ -35,7 +34,7 @@ var initCmd = &cobra.Command{
 			return
 		}
 
-		// Parsear los datos
+		// Parse the data
 		tipo, matrizAtributos, err := extractor.ParseData(buffer)
 		if err != nil {
 			fmt.Printf("Error al parsear los datos: %v\n", err)
@@ -57,10 +56,8 @@ var initCmd = &cobra.Command{
 			MatrizAtributos: matrizAtributos,
 		}
 
-		//Minimizar enviar todo directamente al struct
+		// Improvement: Send the entire configuration directly from the struct
 		generator.Generate(projectName, db, configuration, dummy)
-
-		// Ejecutar la función GenerateDummyData solo si el flag dummy está presente
 
 		elapsed := time.Since(start)
 

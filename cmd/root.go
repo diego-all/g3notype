@@ -8,7 +8,7 @@ import (
 
 var rootCmd = &cobra.Command{
 	Use:   "g3notype",
-	Short: "CLI application to generate secure REST API projects from a domain model.",
+	Short: "CLI application to generate secure REST API projects from a domain model",
 }
 
 func Execute() {
