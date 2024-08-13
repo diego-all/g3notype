@@ -1,79 +1,32 @@
 # G3notype
 
-Generate a API REST with Go from domain model. 
+Generate a REST API scaffold with Golang from domain model specification.
+
+Soon, it will offer features to create a secure REST API."
 
 
 ## Requirements
 
-Golang > 1.22 and python > 3.7
-
-### Extractor (Python)
-
-  Needs python > 3.7
-
-  Uso: python3 extractor/readMap.py <ruta_del_json>
-
-  Uso: python3 extractor/readMap.py /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/classes.json
+Golang 1.22 or newer and Python 3.7 or later are required.
 
 
-## Use
-
-## Para su ejecución se debe especificar:
-
-
-Available Commands:
-  completion  Generate the autocompletion script for the specified shell
-  help        Help about any command
-  init        Inicializa un nuevo proyecto
-  rollback    Restaura los archivos genéricos a partir de los archivos base
-
-
-init       (Iniciar la generación del scaffolding.)
---config  (Ruta al archivo de configuración JSON con el modelo)
---db sqlite  (Base de datos a utilizar)
-projectTest  (Nombre del proyecto)
-
-
-Flags:
-  -c, --config string   Ruta del archivo JSON de configuración
-  -d, --db string       Tipo de base de datos (requerido)
-  -u, --dummy           Generar Dummy data usando Gemini (Requiere API Key)
-  -h, --help            help for init
-
-
+## Getting started
 
 ### Run from remote repository
 
-    go run github.com/diego-all/run-from-gh@v0.1.1 init --db sqlite --config inputs/product.json exampleAPI
+    go run github.com/diego-all/run-from-gh@v0.1.1 init --db sqlite --dummy --config inputs/product.json exampleAPI
 
+### Run locally
 
-### Run local 
+    go build -o g3notype .  && ./g3notype init --db sqlite --dummy --config inputs/product.json exampleAPI
 
-    go build -o g3notype .  && ./g3notype
+    go run main.go init --db sqlite --dummy --config inputs/product.json exampleAPI
 
-    go run main.go init --db sqlite --dummy --config inputs/product.json projectTest
+Note: To use the --dummy flag, configure a Gemini API Key. If you don't need this feature or don't have an API Key, you can omit the flag.
 
-    go run github.com/diego-all/run-from-gh@latest init
+<details><summary><code> Input JSON example </code></summary>
 
-    go run github.com/diego-all/run-from-gh@latest init -h
-
-
-
-## Agregar feature Generate dummy Data
-
-  go run main.go init --db sqlite --config /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/classes.json projectTest
-
-  go run main.go init --db sqlite --config inputs/classes.json projectTest
-
-  go run main.go init --db sqlite --dummy --config /home/diegoall/MAESTRIA_ING/CLI/run-from-gh/inputs/classes.json projectTest
-
-  go run main.go init --db sqlite --dummy --config inputs/classes.json projectTest
-
-
-
-
-
-### Input JSON (--config)
+###  (--config)
 
     [
         {
@@ -95,19 +48,78 @@ Flags:
         }
     ]
 
+</summary></details>
 
-## Generate Dummy Data
+## Setup and usage
 
-Gemini API Key
+<details><summary><code> Extractor (Python) </code></summary>
 
-https://aistudio.google.com/app/apikey
+## 
+
+  Uso: python3 extractor/readMap.py <ruta_del_json>
+
+</summary></details>
+
+-----------------------------------------------------------
+<details><summary><code> Available Commands   </code></summary>
+
+##
+Available commands
+
+    go run github.com/diego-all/run-from-gh@latest init
+
+    Available Commands:
+      completion  Generate the autocompletion script for the specified shell
+      help        Help about any command
+      init        Inicializa un nuevo proyecto
+      rollback    Restaura los archivos genéricos a partir de los archivos base
+
+</summary></details>
+
+-----------------------------------------------------------
+<details><summary><code> Create a new project   </code></summary>
+
+##
+Options
+
+    go run github.com/diego-all/run-from-gh@latest init -h
+
+    Flags:
+      -c, --config string   Ruta del archivo JSON de configuración
+      -d, --db string       Tipo de base de datos (requerido)
+      -u, --dummy           Generar Dummy data usando Gemini (Requiere API Key)
+      -h, --help            help for init
 
 
+</summary></details>
 
-## Rollback (Copy generic to base)
+-----------------------------------------------------------
+
+<details><summary><code> Generate dummy data using Gemini  </code></summary>
+
+##
+Generate Gemini API Key [Gemini](https://aistudio.google.com/app/apikey)
+
+</summary></details>
+
+-----------------------------------------------------------
+<details><summary><code> Create the database </code></summary>
+
+## 
+
+    sh create-db.sh
+
+</summary></details>
+
+-----------------------------------------------------------
+<details><summary><code> Rollback (Copy generic to base) </code></summary>
+
+## 
 
     go run main.go rollback   (Reestablecer las Pre-Templates a su estado original)
 
+</summary></details>
+    
 
 ## Generated project's structure
 
@@ -131,37 +143,10 @@ https://aistudio.google.com/app/apikey
     ├── README.md
     └── requests.md
 
-
-## Crear la base de datos
-
-    sh create-db.sh
-
-
-## Analizar el tema del repositorio
+## Generated API use
 
     go run ./cmd/api
     go build ./cmd/api
-    go build -o productsAPI ./cmd/api
-
-    cmd/api/handlers-Book.go:8:2: no required module provides package github.com/diego-all/books-API/internal; to add it:
-
-    Quiza deba cambirse el nombre para poder probar y no busque modulo.
-
-    Funciona sin repositorio. Analizar como hacer que funcione con repositorio y crearlo con git. (analizar como crea el repo git init y demas)
+    go build -o exampleAPI ./cmd/api
 
 
-
-## Instalacion
-
-## Comandos disponibles
-
-
-## Configuracion
-
-## Soporte
-
-## FAQ o problemas conocidos
-
-## Changelog
-
-## Licencia
