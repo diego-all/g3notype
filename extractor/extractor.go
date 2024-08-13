@@ -30,7 +30,7 @@ func ParseData(buffer bytes.Buffer) (string, [][]string, error) {
 	// Read python script output
 	output := buffer.String()
 	lines := strings.Split(output, "\n")
-	fmt.Println("LINES: \n", lines, "\n")
+	//fmt.Println("Lines: \n", lines, "\n")
 
 	// The first element is the string type
 	if len(lines) < 1 {

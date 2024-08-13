@@ -17,26 +17,26 @@ type Entity struct {
 
 func Generate(projectName string, dbType string, config models.Config, dummy bool) {
 	fmt.Printf("Generando proyecto '%s' con base de datos '%s'\n", projectName, dbType)
+	fmt.Print("\n")
 
-	fmt.Println("CONFIG from Generatex (output python): ", config)
+	// fmt.Println("Config from Generate (output python): ", config)
 
-	for _, trin := range config.MatrizAtributos {
+	// for _, trin := range config.MatrizAtributos {
+	// 	fmt.Println(trin)
+	// }
 
-		fmt.Println(trin)
-	}
+	//fmt.Println(config.Tipo)
 
-	fmt.Println(config.Tipo)
+	//generatedDatabaseDDL := generateDatabaseDDL(config.Tipo, config.MatrizAtributos, dummy)
+	//fmt.Println("El DDL es: \n", generatedDatabaseDDL)
+	generateDatabaseDDL(config.Tipo, config.MatrizAtributos, dummy)
 
-	tiposGenerados := generateClassTags(config.Tipo, config.MatrizAtributos)
-	fmt.Println("Longitud de tiposGenerados: (generator/Generate)", len(tiposGenerados))
+	//generatedModels := generateEntityModels(config.Tipo, config.MatrizAtributos)
+	generateEntityModels(config.Tipo, config.MatrizAtributos)
+	//fmt.Println("Generated Models es: ", generatedModels)
 
-	fmt.Println("\n")
-
-	generatedDatabaseDDL := generateDatabaseDDL(config.Tipo, config.MatrizAtributos, dummy)
-	fmt.Println("El DDL es: \n", generatedDatabaseDDL)
-
-	generatedModels := generateEntityModels(config.Tipo, config.MatrizAtributos)
-	fmt.Println("Generated Models es: ", generatedModels)
+	tiposGenerados := generateHandlers(config.Tipo, config.MatrizAtributos)
+	//fmt.Println("Longitud de tiposGenerados: (generator/Generate)", len(tiposGenerados))
 
 	modifyBaseTemplates(tiposGenerados)
 

@@ -62,8 +62,7 @@ func GenerateDummyData(class string, classMetadata [][]string) string {
 
 	model := client.GenerativeModel("gemini-1.5-flash")
 
-	// AL PARECER NO ES GLOBAL, VALIDAR!!!!
-	fmt.Println("CONSULTANDO A GEMINI: (clase) \n", class)
+	fmt.Println("Consultando dummy data a Gemini:\n", class, "\n")
 
 	var formattedMetadata []string
 
@@ -78,7 +77,7 @@ func GenerateDummyData(class string, classMetadata [][]string) string {
 	// Join all lines into a single string separated by line breaks
 	formattedMetadataString := strings.Join(formattedMetadata, "\n")
 
-	fmt.Println("FORMATTEDMETADATA: \n", formattedMetadata)
+	//fmt.Println("formattedMetadata: \n", formattedMetadata)
 
 	// Define the query
 	query := `Tengo un modelo de datos: ` + class + ` con los siguientes atributos y su tipo de dato correspondiente:
@@ -125,7 +124,7 @@ func GenerateDummyData(class string, classMetadata [][]string) string {
 		"price": 1000
 		`
 
-	fmt.Println("QUERY:\n", query)
+	//fmt.Println("Query:\n", query)
 
 	resp, err := model.GenerateContent(
 		ctx,
@@ -148,7 +147,7 @@ func GenerateDummyData(class string, classMetadata [][]string) string {
 		log.Fatalf("Error al deserializar la respuesta: %v", err)
 	}
 
-	fmt.Println("DATA:\n", data) // No se ve
+	//fmt.Println("data:\n", data)
 
 	// Collect Parts content
 	var parts []string
@@ -156,11 +155,11 @@ func GenerateDummyData(class string, classMetadata [][]string) string {
 		parts = append(parts, candidate.Content.Parts...)
 	}
 
-	fmt.Println("PARTS:\n", parts)
+	//fmt.Println("Parts:\n", parts)
 
 	// Join the parts into a single text string
-	fmt.Println("GENERATEDUMMYDATA SENTENCIAS INSERT: \n")
-	fmt.Println(fmt.Sprintf("%s", strings.Join(parts, "\n")))
+
+	//fmt.Println(fmt.Sprintf("%s", strings.Join(parts, "\n")))
 	return fmt.Sprintf("%s", strings.Join(parts, "\n"))
 }
 

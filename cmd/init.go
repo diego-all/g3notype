@@ -41,13 +41,14 @@ var initCmd = &cobra.Command{
 			return
 		}
 
-		// Imprimir los resultados
-		fmt.Printf("Tipo: %s\n", tipo)
-		fmt.Println()
-		for _, atributo := range matrizAtributos {
-			fmt.Printf("Atributo: %s, Tipo de dato: %s\n", atributo[0], atributo[1])
-
-		}
+		// //Imprimir los resultados
+		// fmt.Printf("Tipo: %s\n", tipo)
+		// fmt.Println()
+		// for _, atributo := range matrizAtributos {
+		// 	fmt.Printf("Atributo: %s, Tipo de dato: %s\n", atributo[0], atributo[1])
+		// }
+		fmt.Print("\n")
+		fmt.Println("Leyendo configuración ... \n")
 
 		configuration := models.Config{
 			ProjectName: projectName,
@@ -61,7 +62,9 @@ var initCmd = &cobra.Command{
 
 		elapsed := time.Since(start)
 
+		//fmt.Print("\n")
 		fmt.Printf("El tiempo de ejecución es: %s\n", elapsed)
+		fmt.Print("\n")
 	},
 }
 

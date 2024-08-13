@@ -42,7 +42,7 @@ func createFolderStructure(appName string, class string, classMetadata [][]strin
 
 	// Convert the entity to plural
 	entityPlural := class + "s"
-	fmt.Println("Imprimiendo el plural de la entidad", entityPlural)
+	//fmt.Println("Imprimiendo el plural de la entidad", entityPlural)
 	lowerEntity := strings.ToLower(class)
 
 	// Data for templates
@@ -59,7 +59,7 @@ func createFolderStructure(appName string, class string, classMetadata [][]strin
 	for projectFile, templatePath := range estructura {
 		// Replace values ​​in path
 		// Debugging important!
-		fmt.Println("Path y Content es: ", projectFile, templatePath)
+		//fmt.Println("Path y Content es: ", projectFile, templatePath)
 
 		// Read template(content)
 		path := strings.Replace(projectFile, "{{.Entity}}", class, -1)
@@ -76,7 +76,7 @@ func createFolderStructure(appName string, class string, classMetadata [][]strin
 
 		// Create the file
 		file, err := os.Create(fullPath)
-		fmt.Println("Creando archivo: ", file, fullPath)
+		//fmt.Println("Creando archivo: ", file, fullPath)
 		if err != nil {
 			fmt.Println("Error al crear el archivo:", err)
 			continue
@@ -93,7 +93,8 @@ func createFolderStructure(appName string, class string, classMetadata [][]strin
 			}
 
 			tmpl, err := template.New("fileContent").Parse(string(content))
-			fmt.Println("tmpl es:", tmpl)
+			// Important for debugging
+			//fmt.Println("tmpl es:", tmpl)
 			if err != nil {
 				fmt.Println("Error al parsear la plantilla:", err)
 				continue
@@ -104,5 +105,5 @@ func createFolderStructure(appName string, class string, classMetadata [][]strin
 			}
 		}
 	}
-	fmt.Println("Estructura de archivos y carpetas generada con éxito en la carpeta", appName)
+	fmt.Println("Estructura de archivos y carpetas generada con éxito en la carpeta", appName, "\n")
 }

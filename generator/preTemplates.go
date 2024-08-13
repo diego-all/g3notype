@@ -83,13 +83,13 @@ type PreTemplateData struct {
 	LowerEntity string
 }
 
-// func generateClassTags(class string, classMetadata map[string]string) (string) {
-func generateClassTags(class string, classMetadata [][]string) map[string]string {
+// func generateHandlers(class string, classMetadata map[string]string) (string) {
+func generateHandlers(class string, classMetadata [][]string) map[string]string {
 
-	fmt.Println("Class metadata", classMetadata)
-	longitud := len(classMetadata)
-	fmt.Println("longitud del map es:", longitud)
-	fmt.Println("\n")
+	//fmt.Println("Class metadata", classMetadata)
+	//longitud := len(classMetadata)
+	//fmt.Println("longitud del map es:", longitud)
+	//fmt.Println("\n")
 
 	var auxReqRes string
 	var auxCreateEntModels string // It was used for Update, only 2 fields are added
@@ -132,7 +132,7 @@ func generateClassTags(class string, classMetadata [][]string) map[string]string
 		}
 	}
 
-	fmt.Println("SetNaturalID Global: \n ", naturalID)
+	fmt.Println("naturalID for model: \n ", naturalID)
 
 	// They are verticalized, I think it look better with a while
 	for i, _ := range reqResTypes {
@@ -141,10 +141,10 @@ func generateClassTags(class string, classMetadata [][]string) map[string]string
 	}
 
 	handlers_typeEntityRequest = "type {{.LowerEntity}}Request struct {" + "\n" + multilineAuxReqResTypes + "}"
-	fmt.Println("handlers_typeEntityRequest: \n ", handlers_typeEntityRequest)
+	//fmt.Println("handlers_typeEntityRequest: \n ", handlers_typeEntityRequest)
 
 	handlers_typeEntityResponse = "type {{.LowerEntity}}Response struct {" + "\n" + multilineAuxReqResTypes + "}"
-	fmt.Println("handlers_typeEntityResponse: \n ", handlers_typeEntityResponse)
+	//fmt.Println("handlers_typeEntityResponse: \n ", handlers_typeEntityResponse)
 
 	// For createEntModels
 	for i, _ := range createEntModels {
@@ -153,25 +153,24 @@ func generateClassTags(class string, classMetadata [][]string) map[string]string
 
 	// For create handlers_varCreateEntityModels
 	handlers_varCreateEntityModels = "var {{.LowerEntity}} = models.{{.Entity}}{" + "\n" + multilineAuxCEntModels + "}"
-	fmt.Println("\n")
-	fmt.Println("handlers_varCreateEntityModels: \n ", handlers_varCreateEntityModels)
+	//fmt.Println("handlers_varCreateEntityModels: \n ", handlers_varCreateEntityModels)
 
 	// Para update handlers_varUpdateEntResponse
 	handlers_varUpdateEntityModels = "var {{.LowerEntity}} = models.{{.Entity}}{" + "\n" + multilineAuxCEntModels + "\t" + "UpdatedAt:   time.Now()," + "\n \t" + "Id:          {{.LowerEntity}}ID," + "\n" + "}"
-	fmt.Println("handlers_varUpdateEntityModels: \n ", handlers_varUpdateEntityModels)
+	//fmt.Println("handlers_varUpdateEntityModels: \n ", handlers_varUpdateEntityModels)
 
 	for i, _ := range getEntResponse {
 		multilineAuxGEntResponse = multilineAuxGEntResponse + getEntResponse[i] + "\n"
 	}
 
 	handlers_varGetEntResponse = "var {{.LowerEntity}}Response = {{.LowerEntity}}Response{\n" + multilineAuxGEntResponse + "}"
-	fmt.Println("handlers_varGetEntResponse: \n ", handlers_varGetEntResponse)
+	//fmt.Println("handlers_varGetEntResponse: \n ", handlers_varGetEntResponse)
 
 	handlers_payloadCreateResponse = "payload = jsonResponse{\n" + "\t    Error:   false,\n" + "\t    Message: \"{{.Entity}} successfully created\",\n" + "\t    Data:    envelope{\"{{.LowerEntity}}\": {{.LowerEntity}}." + NaturalID + "},\n" + "\t}"
-	fmt.Println("handlers_payloadCreateResponse: \n ", handlers_payloadCreateResponse)
+	//fmt.Println("handlers_payloadCreateResponse: \n ", handlers_payloadCreateResponse)
 
 	handlers_payloadUpdateResponse = "payload = jsonResponse{\n" + "\t    Error:   false,\n" + "\t    Message: \"{{.Entity}} successfully updated\",\n" + "\t    Data:    envelope{\"{{.LowerEntity}}\": {{.LowerEntity}}." + NaturalID + "},\n" + "\t}"
-	fmt.Println("handlers_payloadUpdateResponse: \n ", handlers_payloadUpdateResponse)
+	//fmt.Println("handlers_payloadUpdateResponse: \n ", handlers_payloadUpdateResponse)
 
 	// Generated Types and Vars
 	TypesVars["handlers-typeEntityRequest"] = handlers_typeEntityRequest
@@ -187,8 +186,8 @@ func generateClassTags(class string, classMetadata [][]string) map[string]string
 
 func modifyBaseTemplates(preGeneratedTypes map[string]string) {
 
-	fmt.Println("PREGENERATED TYPES en modifyBaseTemplates: \n", preGeneratedTypes)
-	fmt.Println("LONGITUD DE PREREGENERATED TYPES en modifyBaseTemplates", len(preGeneratedTypes))
+	//fmt.Println("PREGENERATED TYPES en modifyBaseTemplates: \n", preGeneratedTypes)
+	//fmt.Println("LONGITUD DE PREREGENERATED TYPES en modifyBaseTemplates", len(preGeneratedTypes))
 
 	count := 0
 	for _, value := range preGeneratedTypes {
@@ -197,7 +196,7 @@ func modifyBaseTemplates(preGeneratedTypes map[string]string) {
 			count++
 		}
 	}
-	fmt.Println("Número de keys llenas en preGeneratedTypes:", count)
+	//fmt.Println("Número de keys llenas en preGeneratedTypes:", count)
 
 	preData := PreTemplateData{
 		Handlers_typeEntityRequest:     preGeneratedTypes["handlers-typeEntityRequest"],
@@ -232,7 +231,7 @@ func modifyBaseTemplates(preGeneratedTypes map[string]string) {
 
 	for projectFile, templatePath := range preTemplates {
 
-		fmt.Println("Path y Content es: ", projectFile, templatePath)
+		//fmt.Println("Path y Content es: ", projectFile, templatePath)
 
 		// If there is template content, process it
 		if templatePath != "" {
@@ -244,7 +243,8 @@ func modifyBaseTemplates(preGeneratedTypes map[string]string) {
 			}
 
 			tmpl, err := template.New("fileContent").Parse(string(content))
-			fmt.Println("tmpl es:", tmpl)
+			//Important for debugging
+			//fmt.Println("tmpl es:", tmpl)
 			if err != nil {
 				fmt.Println("Error al parsear la plantilla:", err)
 				continue
@@ -267,17 +267,20 @@ func modifyBaseTemplates(preGeneratedTypes map[string]string) {
 		}
 
 	}
+	fmt.Print("\n")
+	fmt.Println("Procesando templates genéricas ... \n")
 
 }
 
 // Generate Create table
-func generateDatabaseDDL(class string, classMetadata [][]string, dummy bool) map[string]string {
+// func generateDatabaseDDL(class string, classMetadata [][]string, dummy bool) map[string]string {
+func generateDatabaseDDL(class string, classMetadata [][]string, dummy bool) {
 
-	fmt.Println("Desde generateDDLStatement", class)
+	//fmt.Println("Desde generateDDLStatement", class)
 
-	fmt.Println("Class metadata", classMetadata)
-	longitud := len(classMetadata)
-	fmt.Println("longitud del map es:", longitud)
+	//fmt.Println("Class metadata", classMetadata)
+	//longitud := len(classMetadata)
+	//fmt.Println("longitud del map es:", longitud)
 
 	var auxDDL, auxCollection string
 	var ddlStatement, collectionRequest []string
@@ -339,7 +342,7 @@ func generateDatabaseDDL(class string, classMetadata [][]string, dummy bool) map
 		Collection_Create = Collection_Create + collectionRequest[i] + "\n"
 	}
 
-	fmt.Println("DUMMY ES: \n", dummy)
+	//fmt.Println("Dummy: \n", dummy)
 
 	if dummy {
 
@@ -349,9 +352,9 @@ func generateDatabaseDDL(class string, classMetadata [][]string, dummy bool) map
 		Collection_Create = dummyDataResult.CreateJSON
 		Collection_Update = dummyDataResult.UpdateJSON
 
-		fmt.Println("El valor de Database_DummyData es:\n", dummyDataResult.Inserts)
-		fmt.Println("El valor del JSON para CREATE es:\n", dummyDataResult.CreateJSON)
-		fmt.Println("El valor del JSON para UPDATE es:\n", dummyDataResult.UpdateJSON)
+		// fmt.Println("El valor de Database_DummyData es:\n", dummyDataResult.Inserts)
+		// fmt.Println("El valor del JSON para CREATE es:\n", dummyDataResult.CreateJSON)
+		// fmt.Println("El valor del JSON para UPDATE es:\n", dummyDataResult.UpdateJSON)
 	}
 
 	TypesVars["database-DDL-statement"] = Database_DDL_statement
@@ -367,17 +370,15 @@ func generateDatabaseDDL(class string, classMetadata [][]string, dummy bool) map
 
 	TypesVars["requests-Update"] = Collection_Update
 
-	return TypesVars
+	//return TypesVars
 }
 
 // Generate
 func generateEntityModels(class string, classMetadata [][]string) map[string]string {
-	fmt.Println("Desde generateEntityModels", class)
 
-	fmt.Println("Class metadata", classMetadata)
+	//fmt.Println("Class metadata", classMetadata)
 	longitud := len(classMetadata)
-	fmt.Println("longitud del map es:", longitud)
-	fmt.Println("\n")
+	//fmt.Println("longitud del map es:", longitud)
 
 	// Generate models-typeEntityStruct
 	// Attention with "name,omitempty"`
@@ -425,14 +426,12 @@ func generateEntityModels(class string, classMetadata [][]string) map[string]str
 	}
 
 	models_typeEntityStruct = "type {{.Entity}} struct {" + "\n \t" + "Id	int	`json:\"id\"`" + "\n" + multilineAuxTypeEntityStructs + "\t" + "CreatedAt   time.Time `json:\"created_at\"`" + "\n \t" + "UpdatedAt   time.Time `json:\"updated_at\"`" + "\n" + "}"
-	fmt.Println("models_typeEntityStruct: \n ", models_typeEntityStruct)
-	fmt.Println("\n")
+	//fmt.Println("models_typeEntityStruct: \n ", models_typeEntityStruct)
 
 	// Generate models-InsertStmt
 	generateStmtValues(longitud + 2) // created_at, updated_at
 	models_InsertStmt = "\tstmt := `insert into {{.LowerEntity}}s (" + auxInsertStmt + "created_at, updated_at)\n \t" + "values (" + generateStmtValues(longitud+2) + ")" + " returning  id`"
-	fmt.Println("models_InsertStmt es: \n", models_InsertStmt)
-	fmt.Println("\n")
+	//fmt.Println("models_InsertStmt es: \n", models_InsertStmt)
 
 	// Generate models-InsertErr
 	for i, _ := range InsertErrs {
@@ -441,30 +440,23 @@ func generateEntityModels(class string, classMetadata [][]string) map[string]str
 
 	models_InsertErr = "err := db.QueryRowContext(ctx, stmt," + "\n" + multilineAuxInsertErr + "\t" + "time.Now()," + "\n" + "\t" + "time.Now()," + "\n" + ").Scan(&newID)"
 
-	fmt.Println("models_InsertErr es: \n ", models_InsertErr)
-	fmt.Println("\n")
+	//fmt.Println("models_InsertErr es: \n ", models_InsertErr)
 
 	// Generate models-GetOneQuery
-
 	models_GetOneQuery = "\tquery := `select id, " + auxGetOneQuery + "created_at, updated_at from {{.LowerEntity}}s where id = $1`"
-
-	fmt.Println("models_GetOneQuery es: \n ", models_GetOneQuery)
+	//fmt.Println("models_GetOneQuery es: \n ", models_GetOneQuery)
 
 	// Generate models-GetOneErr
 	for i, _ := range GetOneErrs {
-		///fmt.Println("Valor de i", i, "Valor de j", j)
-
 		multilineAuxGetOneErr = multilineAuxGetOneErr + GetOneErrs[i] + "\n"
 	}
 
 	models_GetOneErr = "err := row.Scan(" + "\n" + "\t" + "&{{.LowerEntity}}.Id," + multilineAuxGetOneErr + "\n \t" + "&{{.LowerEntity}}.CreatedAt," + "\n" + "\t" + "&{{.LowerEntity}}.UpdatedAt," + "\n" + ")"
-	fmt.Println("models_GetOneErr es: \n ", models_GetOneErr)
-
-	fmt.Println("\n")
+	//fmt.Println("models_GetOneErr es: \n ", models_GetOneErr)
 
 	// Generate models-GetAllErrRowsScan
 	models_GetAllErrRowsScan = "err := rows.Scan(" + "\n" + "\t" + "&{{.LowerEntity}}.Id," + multilineAuxGetOneErr + "\n \t" + "&{{.LowerEntity}}.CreatedAt," + "\n" + "\t" + "&{{.LowerEntity}}.UpdatedAt," + "\n" + ")"
-	fmt.Println("models_GetAllErrRowsScan es: \n ", models_GetAllErrRowsScan)
+	//fmt.Println("models_GetAllErrRowsScan es: \n ", models_GetAllErrRowsScan)
 
 	// Generate models-UpdateStmt
 	for i, _ := range UpdateStmt {
@@ -472,8 +464,7 @@ func generateEntityModels(class string, classMetadata [][]string) map[string]str
 	}
 
 	models_UpdateStmt = "stmt := `update {{.LowerEntity}}s set" + "\n" + " " + multilineAuxUpdateStmt + "\t" + "updated_at = $" + strconv.Itoa(i+1) + "\n \t" + "where id = $" + strconv.Itoa(i+2) + "`"
-
-	fmt.Println("models_UpdateStmt: \n ", models_UpdateStmt)
+	//fmt.Println("models_UpdateStmt: \n ", models_UpdateStmt)
 
 	// Generate models-UpdateErr
 	for i, _ := range UpdateErr {
@@ -481,9 +472,7 @@ func generateEntityModels(class string, classMetadata [][]string) map[string]str
 	}
 
 	models_UpdateErr = "_, err := db.ExecContext(ctx, stmt," + "\n" + multilineAuxUpdateErr + "\t" + "time.Now()," + "\n \t" + "{{.LowerEntity}}.Id," + "\n" + ")"
-
-	fmt.Println("models_UpdateErr: \n ", models_UpdateErr)
-	fmt.Println("\n")
+	//fmt.Println("models_UpdateErr: \n ", models_UpdateErr)
 
 	// Generate models-GetAllQuery
 	models_GetAllQuery = "query := `select id, " + auxGetOneQuery + "created_at, updated_at from {{.LowerEntity}}s order by " + strings.ToLower(NaturalID) + "`"
