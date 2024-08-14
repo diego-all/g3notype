@@ -62,7 +62,8 @@ func GenerateDummyData(class string, classMetadata [][]string) string {
 
 	model := client.GenerativeModel("gemini-1.5-flash")
 
-	fmt.Println("Consultando dummy data a Gemini:\n", class, "\n")
+	//fmt.Println("Consultando dummy data a Gemini:\n", class, "\n")
+	fmt.Println("Consultando dummy data a Gemini: \n")
 
 	var formattedMetadata []string
 

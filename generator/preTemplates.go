@@ -111,7 +111,7 @@ func generateHandlers(class string, classMetadata [][]string) map[string]string 
 	var handlers_payloadCreateResponse string
 	var handlers_payloadUpdateResponse string
 
-	var naturalID string
+	//var naturalID string
 
 	for k, attribute := range classMetadata {
 
@@ -132,7 +132,7 @@ func generateHandlers(class string, classMetadata [][]string) map[string]string 
 		}
 	}
 
-	fmt.Println("naturalID for model: \n ", naturalID)
+	//fmt.Println("naturalID for model: \n ", naturalID)
 
 	// They are verticalized, I think it look better with a while
 	for i, _ := range reqResTypes {
@@ -172,7 +172,6 @@ func generateHandlers(class string, classMetadata [][]string) map[string]string 
 	handlers_payloadUpdateResponse = "payload = jsonResponse{\n" + "\t    Error:   false,\n" + "\t    Message: \"{{.Entity}} successfully updated\",\n" + "\t    Data:    envelope{\"{{.LowerEntity}}\": {{.LowerEntity}}." + NaturalID + "},\n" + "\t}"
 	//fmt.Println("handlers_payloadUpdateResponse: \n ", handlers_payloadUpdateResponse)
 
-	fmt.Println("NATURAL ID AFTER CREATEUPDATE: \n", NaturalID)
 	// Generated Types and Vars
 	TypesVars["handlers-typeEntityRequest"] = handlers_typeEntityRequest
 	TypesVars["handlers-typeEntityResponse"] = handlers_typeEntityResponse
@@ -477,8 +476,6 @@ func generateEntityModels(class string, classMetadata [][]string) map[string]str
 
 	// Generate models-GetAllQuery
 	models_GetAllQuery = "query := `select id, " + auxGetOneQuery + "created_at, updated_at from {{.LowerEntity}}s order by " + strings.ToLower(NaturalID) + "`"
-
-	fmt.Println("NATURAL ID ES: \n", NaturalID)
 
 	TypesVars["models-typeEntityStruct"] = models_typeEntityStruct
 	TypesVars["models-InsertStmt"] = models_InsertStmt
