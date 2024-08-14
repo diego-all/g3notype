@@ -1,0 +1,41 @@
+    root@pho3nix:/home/diegoall/MAESTRIA_ING/CLI/g3no-python# go run github.com/diego-all/run-from-gh@v0.1.2 init --db sqlite --dummy --config inputs/produc
+    t.json exampleAPI
+
+    Leyendo configuración ... 
+
+    Generando proyecto 'exampleAPI' con base de datos 'sqlite'
+
+    2024/08/14 02:53:56 Error loading .env file: open .env: no such file or directory
+    exit status 1
+    root@pho3nix:/home/diegoall/MAESTRIA_ING/CLI/g3no-python# go run github.com/diego-all/run-from-gh@v0.1.2 init --db sqlite --dummy --config inputs/product.json exampleAPI
+
+    Leyendo configuración ... 
+
+    Generando proyecto 'exampleAPI' con base de datos 'sqlite'
+
+    Consultando dummy data a Gemini: 
+
+    Archivo procesado correctamente: cmd/api/handlers-entity-base.go
+    Archivo procesado correctamente: database/up.sql
+    Archivo procesado correctamente: internal/entities-base.go
+    Archivo procesado correctamente: requests-base.txt
+
+    Procesando templates genéricas ... 
+
+    Estructura de archivos y carpetas generada con éxito en la carpeta exampleAPI 
+
+    El tiempo de ejecución es: 4.299273433s
+
+
+Error 2
+
+
+    Error al ejecutar el script de Python: error ejecutando el script de Python: exit status 2
+    (base) CO000WW4K3P2N7Q:g3notype-test dposada$ go run github.com/diego-all/run-from-gh@v0.1.2 init --db sqlite --dummy --config inputs/product.json exampleAPI
+    go: github.com/diego-all/run-from-gh@v0.1.2 requires go >= 1.22.1; switching to go1.22.6
+    Error al ejecutar el script de Python: error ejecutando el script de Python: exit status 2
+
+
+Fundamental el .env
+Fundamental una version de Golang estable compatible para todos.
+
