@@ -172,6 +172,7 @@ func generateHandlers(class string, classMetadata [][]string) map[string]string 
 	handlers_payloadUpdateResponse = "payload = jsonResponse{\n" + "\t    Error:   false,\n" + "\t    Message: \"{{.Entity}} successfully updated\",\n" + "\t    Data:    envelope{\"{{.LowerEntity}}\": {{.LowerEntity}}." + NaturalID + "},\n" + "\t}"
 	//fmt.Println("handlers_payloadUpdateResponse: \n ", handlers_payloadUpdateResponse)
 
+	fmt.Println("NATURAL ID AFTER CREATEUPDATE: \n", NaturalID)
 	// Generated Types and Vars
 	TypesVars["handlers-typeEntityRequest"] = handlers_typeEntityRequest
 	TypesVars["handlers-typeEntityResponse"] = handlers_typeEntityResponse
@@ -476,6 +477,8 @@ func generateEntityModels(class string, classMetadata [][]string) map[string]str
 
 	// Generate models-GetAllQuery
 	models_GetAllQuery = "query := `select id, " + auxGetOneQuery + "created_at, updated_at from {{.LowerEntity}}s order by " + strings.ToLower(NaturalID) + "`"
+
+	fmt.Println("NATURAL ID ES: \n", NaturalID)
 
 	TypesVars["models-typeEntityStruct"] = models_typeEntityStruct
 	TypesVars["models-InsertStmt"] = models_InsertStmt

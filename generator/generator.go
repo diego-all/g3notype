@@ -27,6 +27,10 @@ func Generate(projectName string, dbType string, config models.Config, dummy boo
 
 	//fmt.Println(config.Tipo)
 
+	// The NaturalID used in generateEntityModels is calculated
+	tiposGenerados := generateHandlers(config.Tipo, config.MatrizAtributos)
+	//fmt.Println("Longitud de tiposGenerados: (generator/Generate)", len(tiposGenerados))
+
 	//generatedDatabaseDDL := generateDatabaseDDL(config.Tipo, config.MatrizAtributos, dummy)
 	//fmt.Println("El DDL es: \n", generatedDatabaseDDL)
 	generateDatabaseDDL(config.Tipo, config.MatrizAtributos, dummy)
@@ -34,9 +38,6 @@ func Generate(projectName string, dbType string, config models.Config, dummy boo
 	//generatedModels := generateEntityModels(config.Tipo, config.MatrizAtributos)
 	generateEntityModels(config.Tipo, config.MatrizAtributos)
 	//fmt.Println("Generated Models es: ", generatedModels)
-
-	tiposGenerados := generateHandlers(config.Tipo, config.MatrizAtributos)
-	//fmt.Println("Longitud de tiposGenerados: (generator/Generate)", len(tiposGenerados))
 
 	modifyBaseTemplates(tiposGenerados)
 
