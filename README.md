@@ -156,3 +156,7 @@ Instalar golang-go depende de la version del SO que se use:
     con Ubuntu: Jammy JellyFish 22.04 go version go.18.1 linux/amd64
 
     brew install (validar)
+
+
+    FUNCIONA EN ASUS NO EN MAC
+    go run github.com/diego-all/run-from-gh@latest init --db sqlite --dummy --config inputs/product.json exampleAPI
