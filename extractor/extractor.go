@@ -25,6 +25,8 @@ func CallPythonExtractor(jsonPath string) (bytes.Buffer, error) {
 		return out, fmt.Errorf("error ejecutando el script de Python: %v, salida de error: %s", err, stderr.String())
 	}
 
+	fmt.Println("parcero que se dice")
+
 	return out, err
 }
 
