@@ -14,12 +14,15 @@ func CallPythonExtractor(jsonPath string) (bytes.Buffer, error) {
 	cmd := exec.Command("python3", "extractor/readMap.py", jsonPath)
 
 	var out bytes.Buffer
+	var stderr bytes.Buffer
 
 	cmd.Stdout = &out
+	cmd.Stderr = &stderr
 
 	err := cmd.Run()
 	if err != nil {
-		return out, fmt.Errorf("error ejecutando el script de Python: %v", err)
+		//return out, fmt.Errorf("error ejecutando el script de Python: %v", err)
+		return out, fmt.Errorf("error ejecutando el script de Python: %v, salida de error: %s", err, stderr.String())
 	}
 
 	return out, err
