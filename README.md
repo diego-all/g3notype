@@ -150,3 +150,9 @@ Generate Gemini API Key [Gemini](https://aistudio.google.com/app/apikey)
     go build -o exampleAPI ./cmd/api
 
 
+Instalar golang-go depende de la version del SO que se use:
+
+    con Kali: Rolling 2024.1 : go version go.22.5 linux/amd64
+    con Ubuntu: Jammy JellyFish 22.04 go version go.18.1 linux/amd64
+
+    brew install (validar)
