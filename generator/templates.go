@@ -11,22 +11,22 @@ import (
 
 // File and folder structure
 var estructura = map[string]string{
-	"cmd/api/handlers.go":             "base-templates/cmd/api/handlers.txt",
-	"cmd/api/handlers-{{.Entity}}.go": "base-templates/cmd/api/handlers-entity-generic.txt",
-	"cmd/api/main.go":                 "base-templates/cmd/api/main.txt",
-	"cmd/api/routes.go":               "base-templates/cmd/api/routes.txt",
-	"cmd/api/util.go":                 "base-templates/cmd/api/util.txt",
-	"database/connection.go":          "base-templates/database/connection.txt",
-	"database/up.sql":                 "base-templates/database/up.sql-generic.txt",
-	"database/create-db.sh":           "base-templates/database/create-db.sh",
+	"cmd/api/handlers.go":             "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/handlers.txt",
+	"cmd/api/handlers-{{.Entity}}.go": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/handlers-entity-generic.txt",
+	"cmd/api/main.go":                 "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/main.txt",
+	"cmd/api/routes.go":               "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/routes.txt",
+	"cmd/api/util.go":                 "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/util.txt",
+	"database/connection.go":          "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/database/connection.txt",
+	"database/up.sql":                 "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/database/up.sql-generic.txt",
+	"database/create-db.sh":           "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/database/create-db.sh",
 	//"golang-CRUD-{{.Entity}}-API.postman_collection.json": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/CRUD-API-collection.txt",
-	"go.mod":      "base-templates/go.mod.txt",
-	"go.sum":      "base-templates/go.sum.txt",
-	"requests.md": "base-templates/requests-generic.txt",
+	"go.mod":      "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/go.mod.txt",
+	"go.sum":      "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/go.sum.txt",
+	"requests.md": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/requests-generic.txt",
 
-	"internal/models.go":            "base-templates/internal/models.txt",
-	"internal/{{.EntityPlural}}.go": "base-templates/internal/entities-generic.txt", //la acabo de cambiar
-	"README.md":                     "base-templates/README.txt",
+	"internal/models.go":            "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/internal/models.txt",
+	"internal/{{.EntityPlural}}.go": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/internal/entities-generic.txt", //la acabo de cambiar
+	"README.md":                     "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/README.txt",
 }
 
 type TemplateData struct {
