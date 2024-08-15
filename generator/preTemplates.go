@@ -38,10 +38,10 @@ var TypesVars = map[string]string{
 }
 
 var preTemplates = map[string]string{
-	"cmd/api/handlers-entity-base.go": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/handlers-entity-generic.txt",
-	"database/up.sql":                 "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/database/up.sql-generic.txt",
-	"internal/entities-base.go":       "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/internal/entities-generic.txt",
-	"requests-base.txt":               "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/requests-generic.txt",
+	"cmd/api/handlers-entity-base.go": "base-templates/cmd/api/handlers-entity-generic.txt",
+	"database/up.sql":                 "base-templates/database/up.sql-generic.txt",
+	"internal/entities-base.go":       "base-templates/internal/entities-generic.txt",
+	"requests-base.txt":               "base-templates/requests-generic.txt",
 	//"cmd/api/handlers-{{.Entity}}.go": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/handlers-entity-base.txt",
 }
 

@@ -160,3 +160,4 @@ Instalar golang-go depende de la version del SO que se use:
 
     FUNCIONA EN ASUS NO EN MAC
     go run github.com/diego-all/run-from-gh@latest init --db sqlite --dummy --config inputs/product.json exampleAPI
+
