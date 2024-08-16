@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 
-	models "github.com/diego-all/{{.LowerEntity}}s-API/internal"
+	models "{{.LowerEntity}}s-API/internal"
 
 	"github.com/go-chi/chi"
 )

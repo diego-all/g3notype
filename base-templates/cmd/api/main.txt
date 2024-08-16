@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 
-	models "github.com/diego-all/{{.LowerEntity}}s-API/internal"
+	models "{{.LowerEntity}}s-API/internal"
 
-	"github.com/diego-all/{{.LowerEntity}}s-API/database"
+	"{{.LowerEntity}}s-API/database"
 	
 
 	"log"

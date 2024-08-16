@@ -1,4 +1,4 @@
-module github.com/diego-all/{{.LowerEntity}}s-API
+module {{.LowerEntity}}s-API
 
 go 1.22.1
 
