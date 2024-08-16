@@ -19,11 +19,11 @@
 |Feature |Description|  Notes |
 |-----|--------|-------|
 |Config module|lorem ipsum       | lorem ipsum     |
-|Prepared statements  |glorem ipsum      | lorem ipsum      |
+|Prepared statements  |lorem ipsum      | lorem ipsum      |
 |Certificates   |lorem ipsum      | lorem ipsum      |
 |Middleware  |lorem ipsum      | lorem ipsum      |
-|iDp Authentication/Authorization  |lorem ipsum      | lorem ipsum      |
-|lorem ipsum  |lorem ipsum      | lorem ipsum      |
+|idP Authentication/Authorization  |lorem ipsum      | lorem ipsum      |
+|others  |lorem ipsum      | lorem ipsum      |
 |lorem ipsum |lorem ipsum     | lorem ipsum      |
 
 
@@ -35,11 +35,11 @@
 
 
 - [ ] 5. Probar la seguridad de la aplicación a nivel SAST usando GitLab
-    - [ ] Llevar a arquitectura de capas
-    - [ ] Llevar a arquitectura limpia
+    - [ ] Estimar resultados.
+    - [ ] Concluir.
 
 - [ ] 6. Documento
 
-    - [WIP] Introduccion
-    - [WIP] Abstract
-    - [WIP] Other
+    - [WIP] lorem ipsum
+    - [WIP] lorem ipsum
+    - [WIP] lorem ipsum

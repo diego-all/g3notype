@@ -2,7 +2,10 @@
 
 Generate a REST API scaffold with Golang from domain model specification.
 
-Soon, it will offer features to create a secure REST API."
+Soon, it will offer features to create a secure REST API.
+
+
+<img src="g3notype_use.gif" align="center"/>
 
 
 ## Requirements
@@ -12,21 +15,33 @@ Golang 1.21 or newer and Python 3.7 or later are required.
 
 ## Getting started
 
-### Run from remote repository
-
-    go run github.com/diego-all/g3notype@v0.1.1 init --db sqlite --dummy --config inputs/product.json exampleAPI
 
 ### Run locally
 
+    git clone https://github.com/diego-all/g3notype.git && cd g3notype
+
+#### Build the project
+
     go build -o g3notype .  && ./g3notype init --db sqlite --dummy --config inputs/product.json exampleAPI
 
+#### Only run the project
+
+    go run github.com/diego-all/g3notype@v0.1.13 init --db sqlite --dummy --config inputs/product.json exampleAPI
     go run main.go init --db sqlite --dummy --config inputs/product.json exampleAPI
 
 Note: To use the --dummy flag, configure a Gemini API Key. If you don't need this feature or don't have an API Key, you can omit the flag.
 
+
+### Run from remote repository
+
+    Under construction
+
+
 <details><summary><code> Input JSON example </code></summary>
 
-###  (--config)
+### --config parameter
+
+This is the input to define the model to be generated. The path of a JSON file must be assigned with the following structure:
 
     [
         {
@@ -52,15 +67,6 @@ Note: To use the --dummy flag, configure a Gemini API Key. If you don't need thi
 
 ## Setup and usage
 
-<details><summary><code> Extractor (Python) </code></summary>
-
-## 
-
-  Uso: python3 extractor/readMap.py <ruta_del_json>
-
-</summary></details>
-
------------------------------------------------------------
 <details><summary><code> Available Commands   </code></summary>
 
 ##
@@ -106,17 +112,19 @@ Generate Gemini API Key [Gemini](https://aistudio.google.com/app/apikey)
 <details><summary><code> Create the database </code></summary>
 
 ## 
+You need to have sqlite3 installed on your computer.
 
     sh create-db.sh
 
 </summary></details>
 
 -----------------------------------------------------------
-<details><summary><code> Rollback (Copy generic to base) </code></summary>
+<details><summary><code> Rollback </code></summary>
 
-## 
+##
+After using genotype the templates must be reset for next use.
 
-    go run main.go rollback   (Reestablecer las Pre-Templates a su estado original)
+    go run main.go rollback
 
 </summary></details>
     
@@ -149,14 +157,4 @@ Generate Gemini API Key [Gemini](https://aistudio.google.com/app/apikey)
     go build ./cmd/api
     go build -o exampleAPI ./cmd/api
 
-
-Instalar golang-go depende de la version del SO que se use:
-
-    con Kali: Rolling 2024.1 : go version go.22.5 linux/amd64
-    con Ubuntu: Jammy JellyFish 22.04 go version go.18.1 linux/amd64
-
-    brew install (validar)
-
-    FUNCIONA EN ASUS NO EN MAC
-    go run github.com/diego-all/g3notype@latest init --db sqlite --dummy --config inputs/product.json exampleAPI
 

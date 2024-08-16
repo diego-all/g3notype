@@ -15,30 +15,5 @@
           "tipoDato": "int"
         }
       }
-    },
-    {
-      "tipo": "Category",
-      "atributos": {
-        "property1": {
-          "tipoDato": "string"
-        },
-        "property2": {
-          "tipoDato": "string"
-        }
-      }
-    },
-    {
-        "tipo": "Order",
-        "atributos": {
-          "property1": {
-            "tipoDato": "string"
-          },
-          "property2": {
-            "tipoDato": "string"
-          },
-          "property3": {
-            "tipoDato": "string"
-          }
-        }
-      }
-  ]
+    }
+]
