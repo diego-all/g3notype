@@ -1,4 +1,4 @@
-module github.com/diego-all/run-from-gh
+module github.com/diego-all/g3notype
 
 go 1.21
 

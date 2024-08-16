@@ -9,7 +9,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/diego-all/run-from-gh/models"
+	"github.com/diego-all/g3notype/models"
 	"github.com/google/generative-ai-go/genai"
 	"github.com/joho/godotenv"
 	"google.golang.org/api/option"

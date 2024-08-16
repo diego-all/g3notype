@@ -1,6 +1,6 @@
 package main
 
-import "github.com/diego-all/run-from-gh/cmd"
+import "github.com/diego-all/g3notype/cmd"
 
 func main() {
 	//cmd.Execute()

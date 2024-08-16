@@ -19,7 +19,7 @@ var estructura = map[string]string{
 	"database/connection.go":          "base-templates/database/connection.txt",
 	"database/up.sql":                 "base-templates/database/up.sql-generic.txt",
 	"database/create-db.sh":           "base-templates/database/create-db.sh",
-	//"golang-CRUD-{{.Entity}}-API.postman_collection.json": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/CRUD-API-collection.txt",
+	//"golang-CRUD-{{.Entity}}-API.postman_collection.json": "/home/diegoall/MAESTRIA_ING/CLI/g3notype/base-templates/CRUD-API-collection.txt",
 	"go.mod":      "base-templates/go.mod.txt",
 	"go.sum":      "base-templates/go.sum.txt",
 	"requests.md": "base-templates/requests-generic.txt",

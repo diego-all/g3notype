@@ -3,7 +3,7 @@ package generator
 import (
 	"fmt"
 
-	"github.com/diego-all/run-from-gh/models"
+	"github.com/diego-all/g3notype/models"
 )
 
 type Attribute struct {

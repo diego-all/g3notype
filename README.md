@@ -14,7 +14,7 @@ Golang 1.21 or newer and Python 3.7 or later are required.
 
 ### Run from remote repository
 
-    go run github.com/diego-all/run-from-gh@v0.1.1 init --db sqlite --dummy --config inputs/product.json exampleAPI
+    go run github.com/diego-all/g3notype@v0.1.1 init --db sqlite --dummy --config inputs/product.json exampleAPI
 
 ### Run locally
 
@@ -66,7 +66,7 @@ Note: To use the --dummy flag, configure a Gemini API Key. If you don't need thi
 ##
 Available commands
 
-    go run github.com/diego-all/run-from-gh@latest init
+    go run github.com/diego-all/g3notype@latest init
 
     Available Commands:
       completion  Generate the autocompletion script for the specified shell
@@ -82,7 +82,7 @@ Available commands
 ##
 Options
 
-    go run github.com/diego-all/run-from-gh@latest init -h
+    go run github.com/diego-all/g3notype@latest init -h
 
     Flags:
       -c, --config string   Ruta del archivo JSON de configuración
@@ -158,5 +158,5 @@ Instalar golang-go depende de la version del SO que se use:
     brew install (validar)
 
     FUNCIONA EN ASUS NO EN MAC
-    go run github.com/diego-all/run-from-gh@latest init --db sqlite --dummy --config inputs/product.json exampleAPI
+    go run github.com/diego-all/g3notype@latest init --db sqlite --dummy --config inputs/product.json exampleAPI
 

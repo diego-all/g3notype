@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/diego-all/run-from-gh/extractor"
-	"github.com/diego-all/run-from-gh/generator"
-	"github.com/diego-all/run-from-gh/models"
+	"github.com/diego-all/g3notype/extractor"
+	"github.com/diego-all/g3notype/generator"
+	"github.com/diego-all/g3notype/models"
 	"github.com/spf13/cobra"
 )
 

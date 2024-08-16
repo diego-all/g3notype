@@ -7,7 +7,7 @@
 
 
 - [ ] 2. Crear generador para API de referencia
-    - [ x ] G3notype CLI [g3notype](https://github.com/diego-all/run-from-gh/)
+    - [ x ] G3notype CLI [g3notype](https://github.com/diego-all/g3notype/)
     - [   ] other  
 
 

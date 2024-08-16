@@ -42,7 +42,7 @@ var preTemplates = map[string]string{
 	"database/up.sql":                 "base-templates/database/up.sql-generic.txt",
 	"internal/entities-base.go":       "base-templates/internal/entities-generic.txt",
 	"requests-base.txt":               "base-templates/requests-generic.txt",
-	//"cmd/api/handlers-{{.Entity}}.go": "/home/diegoall/MAESTRIA_ING/CLI/run-from-gh/base-templates/cmd/api/handlers-entity-base.txt",
+	//"cmd/api/handlers-{{.Entity}}.go": "/home/diegoall/MAESTRIA_ING/CLI/g3notype/base-templates/cmd/api/handlers-entity-base.txt",
 }
 
 var (
