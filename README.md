@@ -7,7 +7,7 @@ Soon, it will offer features to create a secure REST API."
 
 ## Requirements
 
-Golang 1.22 or newer and Python 3.7 or later are required.
+Golang 1.21 or newer and Python 3.7 or later are required.
 
 
 ## Getting started
